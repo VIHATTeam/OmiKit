@@ -24,8 +24,6 @@ Pod::Spec.new do |s|
 
   s.libraries = 'stdc++'
   s.pod_target_xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
-  s.source_files = 'OmiKit.framework/Headers/*.h'
-  s.public_header_files = 'OmiKit.framework/Headers/*.h'
 
   s.vendored_frameworks = "OmiKit.xcframework"
   s.frameworks = 'CoreFoundation', 'VideoToolbox', 'AudioToolbox', 'AVFoundation', 'GLKit', 'CFNetwork',  'CoreMedia'
