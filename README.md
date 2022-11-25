@@ -43,7 +43,48 @@ Init use
 
 To make call to Number (Phone or Agent number)
  ```ruby
-[OmiClient startCall:self.callPhoneNumberTextField.text];
+[OmiClient startCall:phoneNumber];
+
+```
+
+To make VideoCall to Number (Phone or Agent number)
+ ```ruby
+[OmiClient startVideoCall:phoneNumber];
+
+```
+
+To listen event of Call we setting notification:
+ ```ruby
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateChanged:) name:OMICallStateChangedNotification object:nil];
+
+```
+
+Declare function to get notification:
+ ```ruby
+
+- (void)callStateChanged: (NSNotification *)notification {
+    
+    __weak typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __weak OMICall *call = [[notification userInfo] objectForKey:OMINotificationUserInfoCallKey];
+        switch(call.callState)
+        {
+            case OMICallStateEarly:
+                break;
+            case OMICallStateCalling:
+                break;
+            case OMICallStateIncoming:
+                break;
+            case OMICallStateConnecting:
+                break;
+            case OMICallStateConfirmed:
+                break;
+            case OMICallStateDisconnected:
+                break;
+
+        }
+    });
+}
 
 ```
 
