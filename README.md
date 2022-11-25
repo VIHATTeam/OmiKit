@@ -43,7 +43,7 @@ Include the library
 
 Init use
 ```ruby
-[OmiClient initWithUsername:MY_PHONE_NUMBER password:MY_PHONE_PASSWORD realm:MY_REALM];
+[OmiClient initWithUsername:MY_USERNAME password:MY_PASSWORD realm:MY_REALM];
 
 ```
 
