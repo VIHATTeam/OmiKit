@@ -1,6 +1,6 @@
 //
 //  OMIEndPointConfiguration.h
-//  Copyright © 2020 OMICALL. All rights reserved.
+//  Copyright © 2015 Devhouse Spindle. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -80,7 +80,7 @@
  *
  * Default: NO
  */
-@property (nonatomic) BOOL disableVideoSupport;
+@property (nonatomic) BOOL disableVideo;
 
 /**
  * The available STUN configuration

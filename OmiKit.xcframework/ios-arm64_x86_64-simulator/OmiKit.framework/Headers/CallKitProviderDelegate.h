@@ -12,7 +12,7 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
 
 @import CallKit;
 
-@class VSLCallManager, VSLCall;
+@class OMICallManager, OMICall;
 
 @interface CallKitProviderDelegate : NSObject <CXProviderDelegate>
 
@@ -26,9 +26,9 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
 /**
  * Designated initializer
  *
- * @param callManager A instance of VSLCallManager.
+ * @param callManager A instance of OMICallManager.
  */
-- (instancetype _Nonnull)initWithCallManager:(VSLCallManager * _Nonnull)callManager NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nonnull)initWithCallManager:(OMICallManager * _Nonnull)callManager NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)isCallActive:(NSString *)uuidString;
 
@@ -37,6 +37,6 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
  *
  * @param call The incoming call
  */
-- (void)reportIncomingCall:(VSLCall * _Nonnull)call;
+- (void)reportIncomingCall:(OMICall * _Nonnull)call;
 
 @end

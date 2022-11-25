@@ -1,6 +1,6 @@
 //
 //  OMICallManager.h
-//  Copyright © 2020 OMICALL. All rights reserved.
+//  Copyright © 2016 Devhouse Spindle. All rights reserved.
 //
 //
 
@@ -122,8 +122,6 @@
  *  @param call The OMICall instance to add.
  */
 - (void)addCall:(OMICall * _Nonnull)call;
-
-- (void)endCurrentCall;
 
 /**
  *  Remove the given call from the Call Manager.

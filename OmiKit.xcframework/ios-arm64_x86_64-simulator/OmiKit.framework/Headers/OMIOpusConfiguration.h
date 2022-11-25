@@ -1,6 +1,6 @@
 //
 //  OMIOpusConfiguration.h
-//  Copyright © 2020 OMICALL. All rights reserved.
+//  Copyright © 2018 Devhouse Spindle. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

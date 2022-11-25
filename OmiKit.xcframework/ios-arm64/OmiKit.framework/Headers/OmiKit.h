@@ -31,16 +31,18 @@
 #import "OMIRingback.h"
 #import "OMIRingtone.h"
 #import "OMISIPLib.h"
-#import "OMISIPUtils.h"
+#import "OmiClient.h"
 #import "OMIStunConfiguration.h"
 #import "OMITransportConfiguration.h"
 #import "OMITurnConfiguration.h"
 #import "OMIVideoCodecs.h"
-#import "PjSipVideo.h"
-#import "PjSipVideoViewManager.h"
 #import "PushKitManager.h"
 #import "SipInvite.h"
 #import "VoIPPushHandler.h"
+#import "OMIVideoCallViewController.h"
+#import "OMIVideoPreviewView.h"
+#import "OMIVideoViewManager.h"
+
 
 FOUNDATION_EXPORT double OmiKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];

@@ -9,45 +9,27 @@
 @interface OmiClient : NSObject
 
 /**
- *  Init client after that we can make call
- *   @param userName it's Sip User ( not omicall user )
- *   @param password  it's Sip password
- *   @param realm its Sip domain
- *    we can get those params at web admin *omicrm.io/config/switchboard/internal-number/list
- *
- */
-
-+ (void) initWithUsername:(NSString * _Nonnull) userName password:(NSString * _Nonnull) password realm:(NSString * _Nonnull) realm ;
-/**
- *  Make call to a number.
- *   @param toNumber number callee, will be phone number or extension number
- */
-+ (void)startCall:(NSString * _Nonnull) toNumber ;
-
-/**
  *  Setup the SIP endpoint with the OMISIPLib.
  *
  *  @return BOOL
  */
-+ (BOOL)startOmiService;
+@property OMICall * currentCall;
+
+
++ (BOOL)setupSIPEndpoint;
++ (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm ;
++ (BOOL)startOmiService:(BOOL) isVideo  ;
++ (void)startCall:(NSString * _Nonnull) toNumber;
++ (void)startVideoCall:(NSString * _Nonnull) toNumber;
+
 
 /**
  *  Remove the SIP endpoint.
  */
 + (void)removeSIPEndpoint;
-/**
- *  Remove all call , if call is calling it's will be cancel.
- */
 + (void) removeAllCall;
-/**
- *  Remove call by uuid.
- */
 + (void) removeCallByUUid:(NSUUID * _Nonnull) uuid;
-/**
- *  Remove all call except call have uuid same with params uuid
- *   @param uuid : uuid of call need to keep
- */
-+ (void) removeCallExceptCall:(NSUUID * _Nonnull) uuid;
++ (void) removeCallExcepCall:(NSUUID * _Nonnull) uuid;
 
 /*
  * Remove the SIP endpoint if there are no active calls.
@@ -71,6 +53,7 @@
 /**
  *  Register the sip account with the endpoint.
  *
+ *  @return BOOL YES if the registration was a success.
  */
 + (void)registerSIPAccountWithEndpointWithCompletion:(void (^_Nonnull)(BOOL success, OMIAccount *_Nullable account))completion;
 
@@ -105,20 +88,10 @@
  *  @return a OMICodecConfiguration instance.
  */
 + (OMICodecConfiguration * _Nonnull)codecConfiguration;
-
-/**
- *  Update user notification for listen event push cancel.
- *
- *  @return a void.
- */
-+ (void) setUserPushNotificationToken:(NSString * _Nonnull ) token;
-/**
- *  Update user notification for listen event push cancel.
- *  @param enviroment : 1: production , 2 for development
- *  @return a void.
- */
 + (void) setEnviroment:(NSString *_Nonnull) enviroment;
++ (void) registerAccount;
 
 + (void) refreshMiddlewareRegistration ;
++ (void) setUserPushNotificationToken:(NSString * ) token ;
 
 @end

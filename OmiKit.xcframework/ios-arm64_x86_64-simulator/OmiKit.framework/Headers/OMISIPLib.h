@@ -1,6 +1,6 @@
 //
 //  OMISIPLib.h
-//  Copyright © 2020 OMICALL. All rights reserved.
+//  Copyright © 2015 Devhouse Spindle. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -265,6 +265,11 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  */
 - (NSArray * _Nullable)accounts;
 
+/*
+ *  @return Returns current active call
+ */
+
+- (OMICall * _Nullable )getCurrentCall;
 /**
  *  Set the incoming call block for a incoming call.
  *
@@ -319,5 +324,6 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *  @param codecConfiguration OMICodecConfiguration Instance of an OMICodecConfiguration
  */
 - (BOOL)updateCodecConfiguration:(OMICodecConfiguration * _Nonnull)codecConfiguration;
+
 
 @end
