@@ -35,6 +35,12 @@ pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 
 ### Use
 
+Include the library
+
+```ruby
+#import <OmiKit/OmiKit.h>
+```
+
 Init use
 ```ruby
 [OmiClient initWithUsername:MY_PHONE_NUMBER password:MY_PHONE_PASSWORD realm:MY_REALM];
