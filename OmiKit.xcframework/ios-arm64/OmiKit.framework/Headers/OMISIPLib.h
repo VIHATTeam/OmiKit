@@ -219,6 +219,8 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
 
 @property (readonly, nonatomic) OMIEndpoint * _Nonnull endpoint;
 
+@property (copy, nonatomic) void (^ _Nonnull onIncomingCall)(OMICall * _Nullable call);
+
 /**
  *  The shared instance for the sip library.
  */

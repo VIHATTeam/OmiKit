@@ -22,7 +22,6 @@
 + (void)startCall:(NSString * _Nonnull) toNumber;
 + (void)startVideoCall:(NSString * _Nonnull) toNumber;
 
-
 /**
  *  Remove the SIP endpoint.
  */
@@ -93,5 +92,7 @@
 
 + (void) refreshMiddlewareRegistration ;
 + (void) setUserPushNotificationToken:(NSString * ) token ;
+
+
 
 @end
