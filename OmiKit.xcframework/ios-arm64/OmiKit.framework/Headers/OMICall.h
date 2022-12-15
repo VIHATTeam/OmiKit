@@ -119,6 +119,19 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  Session is terminated.
      */
     OMICallStateDisconnected = 6,
+    /**
+     *  User toggle hold
+     */
+    OMICallStateHold = 7,
+    /**
+     *  User toggle muted
+     */
+    OMICallStateMuted = 8,
+
+    /**
+     *  User toggle muted
+     */
+    
 };
 #define OMICallStateString(OMICallState) [@[@"OMICallStateNull", @"OMICallStateCalling", @"OMICallStateIncoming", @"OMICallStateEarly", @"OMICallStateConnecting", @"OMICallStateConfirmed", @"OMICallStateDisconnected"] objectAtIndex:OMICallState]
 
