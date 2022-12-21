@@ -77,21 +77,53 @@ Declare function to get notification:
         {
             case OMICallStateEarly:
                 break;
-            case OMICallStateCalling:
-                break;
-            case OMICallStateIncoming:
-                break;
-            case OMICallStateConnecting:
-                break;
-            case OMICallStateConfirmed:
-                break;
-            case OMICallStateDisconnected:
-                break;
-
+            ....
         }
     });
 }
 
+State:
+    /**
+     *   Before INVITE is sent or received.
+     */
+    OMICallStateNull = 0,
+    /**
+     *   After INVITE is sent.
+     */
+    OMICallStateCalling = 1,
+    /**
+     *  After INVITE is received.
+     */
+    OMICallStateIncoming = 2,
+    /**
+     *  After response with To tag.
+     */
+    OMICallStateEarly = 3,
+    /**
+     *  After 2xx is sent/received.
+     */
+    OMICallStateConnecting = 4,
+    /**
+     *  After ACK is sent/received.
+     */
+    OMICallStateConfirmed = 5,
+    /**
+     *  Session is terminated.
+     */
+    OMICallStateDisconnected = 6,
+    /**
+     *  User toggle hold
+     */
+    OMICallStateHold = 7,
+    /**
+     *  User toggle muted
+     */
+    OMICallStateMuted = 8,
+
+    /**
+     *  User toggle muted
+     */
+     
 ```
 
 
