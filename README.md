@@ -18,14 +18,14 @@ Currently active maintained
 Install via CocoaPods:
 
 ```ruby
-platform :ios, '9.0'
+platform :ios, '13.0'
 pod 'OmiKit'
 ```
 
 Install via Github:
 
 ```ruby
-platform :ios, '9.0'
+platform :ios, '13.0'
 pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 ```
 

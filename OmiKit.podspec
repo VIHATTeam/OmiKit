@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name                  = 'OmiKit'
-  s.version               = '1.0.11'
+  s.version               = '1.0.12'
   s.homepage           = "https://omicall.com/"
   s.summary            = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -20,6 +20,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '13.0'
   s.source           = { :git => 'https://github.com/VIHATTeam/OmiKit.git', :tag => s.version.to_s }
+
+  s.source_files = 'OmiKit.xcframework/**/OmiKit.framework/Headers/*.h'
+  s.public_header_files =  'OmiKit.xcframework/**/OmiKit.framework/Headers/*.h'
 
 
   s.libraries = 'stdc++'
