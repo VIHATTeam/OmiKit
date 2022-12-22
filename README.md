@@ -120,9 +120,6 @@ State:
      */
     OMICallStateMuted = 8,
 
-    /**
-     *  User toggle muted
-     */
      
 ```
 
