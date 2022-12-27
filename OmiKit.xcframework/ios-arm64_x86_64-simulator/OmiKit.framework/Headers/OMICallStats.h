@@ -1,6 +1,6 @@
 //
 //  OMICallStats.h
-//  Copyright © 2017 Devhouse Spindle. All rights reserved.
+//  Copyright © 2017 OMICALL. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 

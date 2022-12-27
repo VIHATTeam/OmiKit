@@ -1,6 +1,6 @@
 //
 //  OMIEndPointConfiguration.h
-//  Copyright © 2015 Devhouse Spindle. All rights reserved.
+//  Copyright © 2015 OMICALL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

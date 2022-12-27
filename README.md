@@ -82,7 +82,11 @@ Declare function to get notification:
     });
 }
 
-State:
+     
+```
+
+Call State:
+ ```ruby
     /**
      *   Before INVITE is sent or received.
      */

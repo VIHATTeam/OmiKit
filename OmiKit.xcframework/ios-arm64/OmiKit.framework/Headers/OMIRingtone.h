@@ -1,6 +1,6 @@
 //
 //  OMIRingtone.h
-//  Copyright © 2015 Devhouse Spindle. All rights reserved.
+//  Copyright © 2015 OMICALL. All rights reserved.
 //  Code based on https://github.com/petester42/swig/blob/master/Pod/Classes/Call/SWRingtone.h
 //
 

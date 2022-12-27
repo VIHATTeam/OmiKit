@@ -1,6 +1,6 @@
 //
 //  OMICodecConfiguration.h
-//  Copyright © 2018 Devhouse Spindle. All rights reserved.
+//  Copyright © 2018 OMICALL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

@@ -44,3 +44,14 @@ Released on Monday, June 15, 2020.
 #### Changed
 
 - Fix bug video call
+#### Changed
+
+- Fix bug multi call incomming
+## [1.0.15](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+
+Released on Monday, June 15, 2020.
+
+#### Changed
+
+- Fix bug get CurrentCall
+- Add Get newest call

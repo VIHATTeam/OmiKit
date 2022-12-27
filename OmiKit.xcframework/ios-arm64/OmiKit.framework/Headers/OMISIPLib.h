@@ -1,6 +1,6 @@
 //
 //  OMISIPLib.h
-//  Copyright © 2015 Devhouse Spindle. All rights reserved.
+//  Copyright © 2015 OMICALL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -272,6 +272,12 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  */
 
 - (OMICall * _Nullable )getCurrentCall;
+
+/*
+ *  @return Returns newest call incomming or call out
+ */
+- (OMICall *)getNewestCall;
+
 /**
  *  Set the incoming call block for a incoming call.
  *

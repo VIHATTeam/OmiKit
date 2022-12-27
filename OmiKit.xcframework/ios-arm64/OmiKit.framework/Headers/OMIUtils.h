@@ -1,6 +1,6 @@
 //
 //  OMIUtils.h
-//  Copyright © 2016 Devhouse Spindle. All rights reserved.
+//  Copyright © 2016 OMICALL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

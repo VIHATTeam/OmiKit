@@ -1,6 +1,6 @@
 //
 //  OMICall.h
-//  Copyright © 2015 Devhouse Spindle. All rights reserved.
+//  Copyright © 2015 OMICALL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -249,6 +249,12 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *  The last status code the call had.
  */
 @property (readonly, nonatomic) NSInteger lastStatus;
+
+/**
+ *  True if the microphone is muted.
+ */
+@property ( nonatomic) long createDate;
+
 
 /**
  *  The last status text the call had.
