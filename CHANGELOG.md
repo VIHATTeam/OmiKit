@@ -30,6 +30,7 @@ Released on Monday, June 15, 2020.
 
 - add callback call directly
 - Fix bug
+
 ## [1.0.7](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
 
 Released on Monday, June 15, 2020.
@@ -37,6 +38,7 @@ Released on Monday, June 15, 2020.
 #### Changed
 
 - Fix bug multi call incomming
+
 ## [1.0.8](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
 
 Released on Monday, June 15, 2020.
@@ -47,6 +49,7 @@ Released on Monday, June 15, 2020.
 #### Changed
 
 - Fix bug multi call incomming
+
 ## [1.0.15](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
 
 Released on Monday, June 15, 2020.
@@ -55,3 +58,12 @@ Released on Monday, June 15, 2020.
 
 - Fix bug get CurrentCall
 - Add Get newest call
+
+## [1.0.16](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+
+Released on Monday, June 15, 2020.
+
+#### Changed
+
+- Fix bug get Newest call
+- Fix event Toggle Muted 
