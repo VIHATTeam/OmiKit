@@ -67,3 +67,11 @@ Released on Monday, June 15, 2020.
 
 - Fix bug get Newest call
 - Fix event Toggle Muted 
+
+## [1.0.20](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+
+Released on Monday, June 15, 2020.
+
+#### Changed
+
+- Update version IOS
