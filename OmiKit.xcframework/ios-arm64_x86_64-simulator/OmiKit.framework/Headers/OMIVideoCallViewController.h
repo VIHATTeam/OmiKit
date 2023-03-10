@@ -2,7 +2,7 @@
 //  OMIVideoCallViewController.h
 //  OmiKit
 //
-//  Created by Dongdong Gao on 2022/11/14.
+//  Created by VietHQ on 2022/11/14.
 //
 
 #import <UIKit/UIKit.h>

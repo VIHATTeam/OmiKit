@@ -262,6 +262,12 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  */
 - (OMIAccount * _Nullable)firstAccount;
 
+
+/*
+ *
+ *  @return current active call.
+ */
+- (OMICall * _Nullable)getCurrentConfirmCall;
 /*
  *  @return Returns all accounts registerd with the EndPoint
  */

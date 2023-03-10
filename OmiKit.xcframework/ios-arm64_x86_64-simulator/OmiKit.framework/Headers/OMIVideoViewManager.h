@@ -2,7 +2,7 @@
 //  OMIVideoViewManager.h
 //  Pods
 //
-//  Created by Dongdong Gao on 2022/11/5.
+//  Created by VietHQ on 2022/11/5.
 //
 
 #ifndef OMIVideoViewManager_h

@@ -2,7 +2,7 @@
 //  OMIVideoPreviewView.h
 //  OmiKit
 //
-//  Created by Dongdong Gao on 2022/11/6.
+//  Created by VietHQ on 2022/11/6.
 //
 
 #import <UIKit/UIKit.h>

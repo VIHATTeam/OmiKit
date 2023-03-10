@@ -4,10 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Assets.car</key>
-		<data>
-		WY0aK7xpY3VkWGO6jZg5abt0HgQ=
-		</data>
 		<key>disconnected.wav</key>
 		<data>
 		EKYMq5S5VExGpTGFvZ+0IogfFwI=
@@ -15,17 +11,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Assets.car</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			WY0aK7xpY3VkWGO6jZg5abt0HgQ=
-			</data>
-			<key>hash2</key>
-			<data>
-			O1F4tZbMIAKN5rXcrzlI/6Glo9oDHhkG6d4HR0fCGrI=
-			</data>
-		</dict>
 		<key>disconnected.wav</key>
 		<dict>
 			<key>hash</key>

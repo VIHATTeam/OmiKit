@@ -82,6 +82,16 @@
  */
 @property (nonatomic) BOOL disableVideo;
 
+
+/**
+ * use noise cancel.
+ *
+ * Default: NO
+ */
+@property (nonatomic) BOOL isUseNoiseSuppression;
+
+
+
 /**
  * The available STUN configuration
  */
@@ -126,6 +136,7 @@
  * @return BOOL
  */
 -(BOOL)hasUDPConfiguration;
+
 
 /**
  * Optional user agent string (default empty). If it's empty, no

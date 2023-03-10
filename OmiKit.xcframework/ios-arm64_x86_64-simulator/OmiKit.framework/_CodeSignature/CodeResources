@@ -4,17 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Assets.car</key>
-		<data>
-		WY0aK7xpY3VkWGO6jZg5abt0HgQ=
-		</data>
 		<key>Headers/CallKitProviderDelegate.h</key>
 		<data>
 		nV++fBNrrv2zf/kZEgi0bnLjDwY=
 		</data>
 		<key>Headers/Constants.h</key>
 		<data>
-		Jo/klwM0T/X+ljdf6rG19TmoOcU=
+		1XWl8G/l5CG40HBD5f6Kyx+ncoM=
 		</data>
 		<key>Headers/OMIAccount.h</key>
 		<data>
@@ -34,11 +30,11 @@
 		</data>
 		<key>Headers/OMICall.h</key>
 		<data>
-		OiXg745WckIpHmXhngEFHPu3Uq8=
+		9iL+8+U+DoFu3qbpcoZHqhDOZ1k=
 		</data>
 		<key>Headers/OMICallManager.h</key>
 		<data>
-		4ci8YNs4UDEqgk4/ufWpnDwrIig=
+		S3YL9oMBoanqZxSzT07VuTdmLfI=
 		</data>
 		<key>Headers/OMICallStats.h</key>
 		<data>
@@ -54,7 +50,7 @@
 		</data>
 		<key>Headers/OMIEndpointConfiguration.h</key>
 		<data>
-		b1VR5SNac0Ofxl+d2fVHus8WSeQ=
+		EfXnpmQQ2rVWlHGCYzOfMi4ljqk=
 		</data>
 		<key>Headers/OMIIceConfiguration.h</key>
 		<data>
@@ -86,7 +82,7 @@
 		</data>
 		<key>Headers/OMISIPLib.h</key>
 		<data>
-		zO0XNdUs57Qz5mBOkBv7rmsNdN4=
+		50r6LgfJUUzqlnsiaKn5VhNoPio=
 		</data>
 		<key>Headers/OMIStunConfiguration.h</key>
 		<data>
@@ -106,7 +102,7 @@
 		</data>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<data>
-		kM8D6kK9AWa5RBM67GgxAWBO/Qo=
+		y1iGEaNJ9jt9mwszopwBErkZBLs=
 		</data>
 		<key>Headers/OMIVideoCodecs.h</key>
 		<data>
@@ -114,15 +110,15 @@
 		</data>
 		<key>Headers/OMIVideoPreviewView.h</key>
 		<data>
-		EBQb/8NJT7bM29HnDWaBoRu0IRc=
+		7fxdY6dPKTwZ9hMkGcGGxQNZ3Ac=
 		</data>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<data>
-		jeQHwB2gsEkYdmmTWpHRvo+byhY=
+		MUHnVrZMzh6RrJ08u3fIjZzzakU=
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		KgWDkmW3q2edEqyqeHFroH7W11s=
+		7mXs03zKs0p74KW7ab8nhHOtuMQ=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
@@ -152,17 +148,13 @@
 		<data>
 		K0FW4fXE9OjB52QrFsLk0dase0E=
 		</data>
-		<key>OmiKit.bundle/Assets.car</key>
-		<data>
-		WY0aK7xpY3VkWGO6jZg5abt0HgQ=
-		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
 		+0gT4IKD/6TBwfwMpWRErTNlQnw=
 		</data>
 		<key>OmiKit.bundle/_CodeSignature/CodeDirectory</key>
 		<data>
-		TFY+YdrtCPt4Az9GX28Jvbm0938=
+		QWI5HjN/VYugR7J3qmtubN1ikTk=
 		</data>
 		<key>OmiKit.bundle/_CodeSignature/CodeRequirements</key>
 		<data>
@@ -170,11 +162,11 @@
 		</data>
 		<key>OmiKit.bundle/_CodeSignature/CodeRequirements-1</key>
 		<data>
-		4cyn+lFg29YfWtNI9neR3kLUptU=
+		bLooJ41760b1YKttPdnFd8dMrHw=
 		</data>
 		<key>OmiKit.bundle/_CodeSignature/CodeResources</key>
 		<data>
-		s2k1KMsE4vSJ/uQ6eZmunZueeu4=
+		yG45dugREbptSiXZg1e7PMp8dNo=
 		</data>
 		<key>OmiKit.bundle/_CodeSignature/CodeSignature</key>
 		<data>
@@ -187,13 +179,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Assets.car</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			O1F4tZbMIAKN5rXcrzlI/6Glo9oDHhkG6d4HR0fCGrI=
-			</data>
-		</dict>
 		<key>Headers/CallKitProviderDelegate.h</key>
 		<dict>
 			<key>hash2</key>
@@ -205,7 +190,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fuo9xqrj4XVTdPZRMtRnvNg4hX/oN3EPNZqdS4bExF4=
+			bnCHUcZdhGKiqTbqYl52/kvI4y2I4DaWgbSF3DYRZkg=
 			</data>
 		</dict>
 		<key>Headers/OMIAccount.h</key>
@@ -240,14 +225,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GjwyK3y1xNguBbRz/A65/tzyelPztAwH1EhRmwHw28E=
+			8jARYXEdrQVKFi9ucCUAguDYD/NPMGT8GxNQmmpDWjI=
 			</data>
 		</dict>
 		<key>Headers/OMICallManager.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SXk8PacVfN3rvAIq04DKfO1zqp00nLsAPtmiqw2kqts=
+			UX8lmKZmuknepMJPB/G5nUkvhVY7PM0Gii8tJ2EpvWo=
 			</data>
 		</dict>
 		<key>Headers/OMICallStats.h</key>
@@ -275,7 +260,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Pr+MpYtti/IUmMuSUWUZDYSFJqHaqNTmHpK4/34SABI=
+			WREtF143yMX8jVsMn2HKkM9N/WyasURVID+0wz8mqvQ=
 			</data>
 		</dict>
 		<key>Headers/OMIIceConfiguration.h</key>
@@ -331,7 +316,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Eeg7wWqZ3SPU2co+aVJTBsBLNilGMeWzWsxtBl/S+rs=
+			9isJ88I9AQjZ+KSm83DjHNyLDpiB0X+jKxSjNXGt2Kc=
 			</data>
 		</dict>
 		<key>Headers/OMIStunConfiguration.h</key>
@@ -366,7 +351,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1kMaoBB3PUMeY0HUb8noxtsk8r8p/NezGB1Ex0L+wxU=
+			dFOHJsQavh4R7we8GMjLHeH0C1NDajrXK/y8IK/7Dyc=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoCodecs.h</key>
@@ -380,21 +365,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			yKPZsc9Y6+jbkRqYRwTqYDm9sCE7I7svbrjRIgOWstg=
+			DVKkYIEEHxsGnmT0Wc4XT8hn/sQf4seY6EuEkHhqkd0=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			H/8OIla7C6f6kILi5Oz601hS6ukpUyWiT8ppDwWp9wI=
+			4EYc/i92CSpRLgD1nHa4N4+aPEX/5+XfeguPsWv1sIE=
 			</data>
 		</dict>
 		<key>Headers/OmiClient.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fk2k5Qv9d8J9Fcy6orSq4Fxkxd08u7fLAIxwi9fUr9g=
+			1p22JZTUJS1Wxji8Jml3IY3em1yrPgrt+fPez0a4WF8=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
@@ -439,13 +424,6 @@
 			Wvimp7NReaMJfEeGxUndTXpmFabLkojYKkxBpTjB1Ms=
 			</data>
 		</dict>
-		<key>OmiKit.bundle/Assets.car</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			O1F4tZbMIAKN5rXcrzlI/6Glo9oDHhkG6d4HR0fCGrI=
-			</data>
-		</dict>
 		<key>OmiKit.bundle/Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -457,7 +435,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pf/JOePjh7Kg9/FmQAGMxRw5cTsphOKuPYg/bFqYQsA=
+			xYk6xXo6xYf6LQ40vaFqJHh15cyZvC8FGMltfJNhgwM=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/_CodeSignature/CodeRequirements</key>
@@ -471,14 +449,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6NJSZ2DEtHbb3YMm3mkdHw4SrffbPYgs5Qo+2X1pDr8=
+			C6kw0bp0ph2gm589Qrx2pWoMYlWojVPwc+4BMwFRYb4=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			l4gbj/zutraCp4nIFiZrlzQN9iC/VGqT+UgYnvB2UZg=
+			jZKoYA9Tzb5foVep4+Wox1ARCsr/svpBuCqmAXtDuXM=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/_CodeSignature/CodeSignature</key>

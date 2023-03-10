@@ -9,12 +9,23 @@
 @interface OmiClient : NSObject
 
 /**
- *  Setup the SIP endpoint with the OMISIPLib.
+ *  Get current active call.
  *
- *  @return BOOL
+ *  @return current confirm call
  */
 @property OMICall * currentCall;
 
+/**
+ *  state using noise cancel.
+ *
+ */
+@property OMICall * isUsingNoiseCancel;
+
+/**
+ *  state using noise cancel.
+ *
+ */
++ (void)setNoiseSuppression:(BOOL) isUseNoiseSuppression;
 
 + (BOOL)setupSIPEndpoint;
 + (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm ;

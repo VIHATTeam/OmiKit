@@ -131,12 +131,25 @@
 - (void)removeCall:(OMICall * _Nonnull)call;
 
 - (void)removeAllCall;
+
+/**
+ *  End active calling call
+ */
+- (void)endActiveCall;
+
+
+/**
+ *  End all calls.
+ *  Notice this function just use to hangup SIP Call not End Callkit
+ */
+- (void)endAllCalls;
+
+
 - (NSMutableArray *)getAllCalls;
 
 /**
  *  End all calls.
  */
-- (void)endAllCalls;
 
 /**
  *  End all calls for the given account.
@@ -172,6 +185,13 @@
  */
 - (OMICall * _Nullable)lastCallForAccount:(OMIAccount * _Nonnull)account;
 
+/**
+ *  Returns the current confirm call
+ * *
+ */
+- (OMICall * _Nullable)getCurrentConfirmCall;
+
+    
 /**
  *  Reinvite all active calls for the given account.
  *
