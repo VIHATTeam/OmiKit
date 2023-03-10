@@ -127,6 +127,13 @@ Call State:
      
 ```
 
+Using noise cancel
+ ```ruby
+
+    [OmiClient setNoiseSuppression:true];
+
+```
+
 
 ## Get in touch with a developer
 
