@@ -83,4 +83,4 @@ Released on Monday, June 15, 2020.
 #### Changed
 
 - Fix bug video call
-- Fixing bud multicall cause get wrong active
+- Fixing bud multicall cause get wrong active2
