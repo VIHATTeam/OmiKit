@@ -39,7 +39,7 @@ Released on Monday, June 15, 2020.
 
 - Fix bug multi call incomming
 
-## [1.0.8](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+## [1.0.8](https://github.com/VIHATTeam/OmiKit.git) (03/05/2022)
 
 Released on Monday, June 15, 2020.
 
@@ -50,7 +50,7 @@ Released on Monday, June 15, 2020.
 
 - Fix bug multi call incomming
 
-## [1.0.15](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+## [1.0.15](https://github.com/VIHATTeam/OmiKit.git) (08/08/2022)
 
 Released on Monday, June 15, 2020.
 
@@ -59,7 +59,7 @@ Released on Monday, June 15, 2020.
 - Fix bug get CurrentCall
 - Add Get newest call
 
-## [1.0.16](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+## [1.0.16](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
 
 Released on Monday, June 15, 2020.
 
@@ -68,10 +68,19 @@ Released on Monday, June 15, 2020.
 - Fix bug get Newest call
 - Fix event Toggle Muted 
 
-## [1.0.20](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
+## [1.0.20](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
 
 Released on Monday, June 15, 2020.
 
 #### Changed
 
 - Update version IOS
+
+## [1.5.2](https://github.com/VIHATTeam/OmiKit.git) (21/03/2023)
+
+Released on Monday, June 15, 2020.
+
+#### Changed
+
+- Fix bug video call
+- Fixing bud multicall cause get wrong active

@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 @property int udpTransportId;
 @property int tcpTransportId;
 @property int tlsTransportId;
+@property BOOL * isSupportVideo;
 
 
 /**
@@ -119,6 +120,11 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  *  This will remove the pjsua configuration.
  */
 - (void)destroyPJSUAInstance;
+
+/**
+ *  Adjust config realtime of Opus
+ */
+-(void) adjustOpusConfig:(float)mos sampleRate:(int) sampleRate bitRate:(int) bitRate;
 
 /**
  *  This will configure the endpoint with pjsua.

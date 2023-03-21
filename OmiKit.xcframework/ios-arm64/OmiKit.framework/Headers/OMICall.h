@@ -216,9 +216,14 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic) NSInteger callId;
 
 /**
+ * OmiID is unique id of call in 2 leg A & B
+ */
+@property (nonatomic) NSString * _Nullable omiId;
+
+/**
  *  if call is Video call or normal VOIP Call
  */
-@property (nonatomic) NSInteger isVideo;
+@property (nonatomic) BOOL isVideo;
 
 /**
  * The Call-ID that is present in the SIP messages.

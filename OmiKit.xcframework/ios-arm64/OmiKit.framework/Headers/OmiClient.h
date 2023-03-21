@@ -21,6 +21,7 @@
  */
 @property OMICall * isUsingNoiseCancel;
 
+
 /**
  *  state using noise cancel.
  *
@@ -90,7 +91,7 @@
  *
  *  @return A OMICall instance or nil.
  */
-+ (OMICall * _Nullable)getFirstActiveCall;
++ (OMICall * _Nullable)getCurrentConfirmCall;
 
 /**
  *  The codec configuration that is going to be used.

@@ -262,6 +262,10 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  */
 - (OMIAccount * _Nullable)firstAccount;
 
+/**
+ * OmiID is unique id of call in 2 leg A & B
+ */
+- (void)setOmiID:(NSString * _Nonnull) omiId callID:(NSInteger) callId;
 
 /*
  *

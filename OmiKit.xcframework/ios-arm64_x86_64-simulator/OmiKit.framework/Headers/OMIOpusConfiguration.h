@@ -10,7 +10,13 @@ typedef NS_ENUM(NSUInteger, OMIOpusConfigurationSampleRate) {
     OMIOpusConfigurationSampleRateSuperWideBand = 24000,
     OMIOpusConfigurationSampleRateWideBand = 16000,
     OMIOpusConfigurationSampleRateMediumBand = 12000,
-    OMIOpusConfigurationSampleRateNarrowBand = 8000
+    OMIOpusConfigurationSampleRateNarrowBand = 8000,
+    OMIOpusConfigurationSampleRateFullBand_BitRate = 48000,
+    OMIOpusConfigurationSampleRateSuperWideBand_BitRate = 24000,
+    OMIOpusConfigurationSampleRateWideBand_BitRate = 16000,
+    OMIOpusConfigurationSampleRateMediumBand_BitRate = 12000,
+    OMIOpusConfigurationSampleRateNarrowBand_BitRate = 8000,
+
 };
 
 typedef NS_ENUM(NSUInteger, OMIOpusConfigurationFrameDuration) {
@@ -46,6 +52,14 @@ typedef NS_ENUM(NSUInteger, OMIOpusConfigurationFrameDuration) {
  *  Default: 5
  */
 @property (nonatomic) NSUInteger complexity;
+
+/**
+ *  Bit rate in bps of codec
+ *
+ *  Default: 0
+ */
+@property (nonatomic) NSUInteger bitRate;
+
 
 /**
  *  YES for Constant bitrate (CBR) and no to use Variable bitrate (VBR)
