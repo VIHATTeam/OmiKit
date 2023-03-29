@@ -27,6 +27,9 @@
 /// got current active call's remote camera preview view from PJSIP apis
 - (void)remoteView: (void(^)(UIView *view))handler;
 
+- (UIView *)createPreviewViewWith:(CGRect)frame;
+- (UIView *)createVideoWindowWithFrame:(CGRect)frame;
+
 @end
 
 

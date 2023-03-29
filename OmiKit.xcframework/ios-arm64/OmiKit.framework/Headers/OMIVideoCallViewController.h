@@ -6,10 +6,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <OmiKit/OmiKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OMIVideoCallViewController : UIViewController
+-(id)initWithCall:( OMICall *)call;
 
 @end
 

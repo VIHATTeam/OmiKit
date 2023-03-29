@@ -23,43 +23,41 @@
 
 
 /**
- *  state using noise cancel.
+ *  state using noise cancel. Notice that user will slow down or add latency with noise cancel
  *
  */
 + (void)setNoiseSuppression:(BOOL) isUseNoiseSuppression;
 
-+ (BOOL)setupSIPEndpoint;
 + (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm ;
+/**
+ *  Start Service OMI - User ussually dont call this function
+ */
 + (BOOL)startOmiService:(BOOL) isVideo  ;
-+ (void)startCall:(NSString * _Nonnull) toNumber;
-+ (void)startVideoCall:(NSString * _Nonnull) toNumber;
+/**
+ *  Start call if call is normal Call
+ */
++ (BOOL)startCall:(NSString * _Nonnull) toNumber;
+/**
+ *  Start call if call is Video Call
+ */
++ (BOOL)startVideoCall:(NSString * _Nonnull) toNumber;
+/**
+ *  Answer by function call, dont neet user interactive with callkit
+ */
++ (void) answerIncommingCall:(NSUUID *) uuid;
 
 /**
- *  Remove the SIP endpoint.
+ *  Remove all current call this app is holding include : incomming call/ outbound call
  */
-+ (void)removeSIPEndpoint;
 + (void) removeAllCall;
+/**
+ *  Remove one call by UUID
+ */
 + (void) removeCallByUUid:(NSUUID * _Nonnull) uuid;
+/**
+ *  Remove all call exept this call
+ */
 + (void) removeCallExcepCall:(NSUUID * _Nonnull) uuid;
-
-/*
- * Remove the SIP endpoint if there are no active calls.
- */
-+ (BOOL)safelyRemoveSipEndpoint;
-
-+ (BOOL)isSafeToRemoveSipEndpoint;
-
-/**
- *  Only update the codecs on the SIP endpoint.
- */
-+ (BOOL)updateCodecs;
-
-/**
- *  Add the sipAccount of the current OmiSipUser to the endpoint.
- *
- *  @return BOOL YES if the adding of the account was a success.
- */
-+ (OMIAccount * _Nullable)addSIPAccountToEndpoint;
 
 /**
  *  Register the sip account with the endpoint.
@@ -99,10 +97,19 @@
  *  @return a OMICodecConfiguration instance.
  */
 + (OMICodecConfiguration * _Nonnull)codecConfiguration;
-+ (void) setEnviroment:(NSString *_Nonnull) enviroment;
-+ (void) registerAccount;
 
-+ (void) refreshMiddlewareRegistration ;
+/**
+ *Set Enviroment for product
+ *PRODUCTION = 1;
+ *SANDBOX = 2;
+ */
+
++ (void) setEnviroment:(NSString *_Nonnull) enviroment;
+
+/**
+ *Use to set APNS Normal push notification by application
+ *This push notification will use to make SDK able to push cancel call, chat, another infomation
+ */
 + (void) setUserPushNotificationToken:(NSString * ) token ;
 
 
