@@ -111,7 +111,16 @@
  *This push notification will use to make SDK able to push cancel call, chat, another infomation
  */
 + (void) setUserPushNotificationToken:(NSString * ) token ;
+/**
+ *Use this function to set love level 0 - 5
+ *  1 - OMILogVerbose
+ *  2 - OMILogDebug
+ *  3 - OMILogInfo
+ *  4 - OMILogWarning
+ *  5 - OMILogError
 
+ */
++ (void) setLogLevel:(int) level ;
 
 
 @end

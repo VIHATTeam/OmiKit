@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 /**
  *  The state in which the call currently has.
  */
-@property (readonly, nonatomic) OMICallState callState;
+@property ( nonatomic) OMICallState callState;
 
 /**
  *  There state in which the audio is for the call.

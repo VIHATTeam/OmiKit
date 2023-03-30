@@ -26,8 +26,13 @@
 
 /// got current active call's remote camera preview view from PJSIP apis
 - (void)remoteView: (void(^)(UIView *view))handler;
-
+/**
+ *  create view for local camera capture & stream to another leg
+*/
 - (UIView *)createPreviewViewWith:(CGRect)frame;
+/**
+ * create view for remote stream
+*/
 - (UIView *)createVideoWindowWithFrame:(CGRect)frame;
 
 @end

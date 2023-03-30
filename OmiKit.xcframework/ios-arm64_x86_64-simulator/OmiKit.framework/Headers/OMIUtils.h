@@ -26,6 +26,7 @@
 + (NSString *_Nullable)cleanPhoneNumber:(NSString *_Nonnull)phoneNumber;
 
 + (NSString*) getOmiID;
++ (int)getAvailableBandwidth ;
 
 
 @end
