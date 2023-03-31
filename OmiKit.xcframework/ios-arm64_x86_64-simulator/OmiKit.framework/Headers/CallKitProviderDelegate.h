@@ -37,6 +37,6 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
  *
  * @param call The incoming call
  */
-- (void)reportIncomingCall:(OMICall * _Nonnull)call;
+- (void)reportIncomingCall:(__weak OMICall * _Nonnull)call;
 
 @end

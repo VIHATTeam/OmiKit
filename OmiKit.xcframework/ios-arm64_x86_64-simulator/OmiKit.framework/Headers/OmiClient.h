@@ -8,18 +8,12 @@
 
 @interface OmiClient : NSObject
 
-/**
- *  Get current active call.
- *
- *  @return current confirm call
- */
-@property OMICall * currentCall;
 
 /**
  *  state using noise cancel.
  *
  */
-@property OMICall * isUsingNoiseCancel;
+@property __weak OMICall * isUsingNoiseCancel;
 
 
 /**
@@ -47,10 +41,6 @@
 + (void) answerIncommingCall:(NSUUID *) uuid;
 
 /**
- *  Remove all current call this app is holding include : incomming call/ outbound call
- */
-+ (void) removeAllCall;
-/**
  *  Remove one call by UUID
  */
 + (void) removeCallByUUid:(NSUUID * _Nonnull) uuid;
@@ -73,7 +63,7 @@
  *
  *  @return OMICall instance or nil.
  */
-+ (OMICall * _Nullable)getCallWithId:(NSString *_Nonnull)callId __attribute__((unavailable("Deprecated, use OMICallManager -callWithCallId: instead")));
++ (__weak OMICall * _Nullable)getCallWithId:(NSString *_Nonnull)callId __attribute__((unavailable("Deprecated, use OMICallManager -callWithCallId: instead")));
 
 /**
  *  Check if there is another call in progress.
@@ -82,14 +72,14 @@
  *
  *  @return BOOL YES if there is another call in progress.
  */
-+ (BOOL)anotherCallInProgress:(OMICall * _Nonnull)receivedCall;
++ (BOOL)anotherCallInProgress:(__weak OMICall * _Nonnull)receivedCall;
 
 /**
  *  Get the first active call.
  *
  *  @return A OMICall instance or nil.
  */
-+ (OMICall * _Nullable)getCurrentConfirmCall;
++ (__weak OMICall * _Nullable)getCurrentConfirmCall;
 
 /**
  *  The codec configuration that is going to be used.

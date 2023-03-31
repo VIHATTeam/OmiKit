@@ -162,14 +162,14 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *  @param number     The phonenumber which will be called.
  *  @param completion Completion block which will be executed when everything has been setup. May contain a outbound call or an error object.
  */
-- (void)callNumber:(NSString * _Nonnull)number completion:(void(^_Nonnull)(OMICall * _Nullable call, NSError * _Nullable error))completion;
+- (void)callNumber:(NSString * _Nonnull)number completion:(void(^_Nonnull)(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
 /**
  *  This will add the call to the account.
  *
  *  @param call The call instance that should be added.
  */
-- (void)addCall:(OMICall * _Nonnull)call __attribute__((unavailable("Deprecated, use OMICallManager -addCall: instead")));
+- (void)addCall:(__weak OMICall * _Nonnull)call __attribute__((unavailable("Deprecated, use OMICallManager -addCall: instead")));
 
 /**
  *  This will check if there is a call present on this account given the callId.
@@ -178,14 +178,14 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *
  *  @return OMICall instance.
  */
-- (OMICall * _Nullable)lookupCall:(NSInteger)callId;
+- (__weak OMICall * _Nullable)lookupCall:(NSInteger)callId;
 
 /**
  *  This will remove the call from the account.
  *
  *  @param call OMICall instance that should be removed from the account.
  */
-- (void)removeCall:(OMICall * _Nonnull)call __attribute__((unavailable("Deprecated, use OMICallManager -removeCall: instead")));;
+- (void)removeCall:(__weak OMICall * _Nonnull)call __attribute__((unavailable("Deprecated, use OMICallManager -removeCall: instead")));;
 
 /**
  *  Remove all calls connected to account.
@@ -197,13 +197,13 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  *
  *  @return OMICall instance can also return nil.
  */
-- (OMICall * _Nullable)firstCall;
+- (__weak OMICall * _Nullable)firstCall;
 
 /**
  *  Get the first active call available to this account.
  *
  *  @return OMICall instance can also return nil.
  */
-- (OMICall * _Nullable)firstActiveCall;
+- (__weak OMICall * _Nullable)firstActiveCall;
 
 @end

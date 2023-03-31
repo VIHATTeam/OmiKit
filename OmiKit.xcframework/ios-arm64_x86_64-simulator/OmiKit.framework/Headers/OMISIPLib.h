@@ -219,7 +219,7 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
 
 @property (readonly, nonatomic) OMIEndpoint * _Nonnull endpoint;
 
-@property (copy, nonatomic) void (^ _Nonnull onIncomingCall)(OMICall * _Nullable call);
+@property (copy, nonatomic) void (^ _Nonnull onIncomingCall)(__weak OMICall * _Nullable call);
 
 /**
  *  The shared instance for the sip library.
@@ -271,7 +271,7 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *
  *  @return current active call.
  */
-- (OMICall * _Nullable)getCurrentConfirmCall;
+- (__weak OMICall * _Nullable)getCurrentConfirmCall;
 /*
  *  @return Returns all accounts registerd with the EndPoint
  */
@@ -281,28 +281,28 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *  @return Returns current active call
  */
 
-- (OMICall * _Nullable )getCurrentCall;
+- (__weak OMICall * _Nullable )getCurrentCall;
 
 /*
  *  @return Returns newest call incomming or call out
  */
-- (OMICall *)getNewestCall;
+- (__weak OMICall *)getNewestCall;
 
 /**
  *  Set the incoming call block for a incoming call.
  *
  *  @param incomingCallBlock block that will be invoked when an incoming call is setup.
  */
-- (void)setIncomingCallBlock:(void(^ _Nonnull )(OMICall * _Nonnull call))incomingCallBlock;
+- (void)setIncomingCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))incomingCallBlock;
 
-+ (BOOL)safelyRemoveSipEndpoint;
+- (BOOL)safelyRemoveSipEndpoint;
 
 /**
  * Set the missed block for when a call is missed.
  *
  *  @param missedCallBlock block that will be invoked when a call is completed elsewhere or has been hungup before pickup 
  */
-- (void)setMissedCallBlock:(void(^ _Nonnull )(OMICall * _Nonnull call))missedCallBlock;
+- (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
 
 /**
  Set the log call back method to do own custom logging.
@@ -319,7 +319,7 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *
  *  @return VSCall instance of OMICall of nil when not found.
  */
-- (OMICall * _Nullable)getOMICallWithId:(NSString * _Nonnull)callId andSipUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser;
+- (__weak OMICall * _Nullable)getOMICallWithId:(NSString * _Nonnull)callId andSipUser:(__autoreleasing id<SIPEnabledUser> _Nonnull)sipUser;
 
 /**
  *  Remove the configured endpoint from PJSUA.
@@ -334,7 +334,7 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *
  *  @return BOOL YES if there is a call in progress.
  */
-- (BOOL)anotherCallInProgress:(OMICall * _Nonnull)call;
+- (BOOL)anotherCallInProgress:(__weak OMICall * _Nonnull)call;
 
 /**
  *  This will update the codec configuration on the SIP endpoint

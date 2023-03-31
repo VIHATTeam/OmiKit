@@ -36,9 +36,9 @@
  *  @param completion A completion block which is always invoked. Either the call is started successfully and you can obtain an
  *  OMICall instance throught the block or, when the call fails, you can query the blocks error parameter.
  */
-- (void)startCallToNumber:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(OMICall * _Nullable call, NSError * _Nullable error))completion;
+- (void)startCallToNumber:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
-- (void)startCallToNumberNoReg:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(OMICall * _Nullable call, NSError * _Nullable error))completion;
+- (void)startCallToNumberNoReg:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
 
 /**
@@ -46,7 +46,7 @@
  *
  *  #param completion A completion block giving access to an NSError when unable to answer the given call.
  */
-- (void)answerCall:(OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
+- (void)answerCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**
  *  End the given call.
@@ -54,21 +54,21 @@
  *  @param call The OMICall instance to end.
  *  @param completion A completion block giving access to an NSError when the given call could not be ended.
  */
-- (void)endCall:(OMICall * _Nonnull)call completion:(void (^ _Nullable)(NSError * _Nullable error))completion;
+- (void)endCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 
 /**
  *  Toggle mute of the microphone for this call.
  *
  *  @param completion A completion block giving access to an NSError when mute cannot be toggle for the given call.
  */
-- (void)toggleMuteForCall:(OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
+- (void)toggleMuteForCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**
  *  Toggle hold of the call.
  *
  *  @param completion A completion block giving access to an NSError when the given call cannot be put on hold.
  */
-- (void)toggleHoldForCall:(OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
+- (void)toggleHoldForCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**
  *  Send DTMF tone for this call with a character.
@@ -76,7 +76,7 @@
  *  @param character character NSString the character for the DTMF.
  *  @param completion A completion block giving access to an NSError when sending DTMF fails.
  */
-- (void)sendDTMFForCall:(OMICall * _Nonnull)call character:(NSString * _Nonnull)character completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
+- (void)sendDTMFForCall:(__weak OMICall * _Nonnull)call character:(NSString * _Nonnull)character completion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 
 /**
  *  Find a call with the given UUID.
@@ -85,7 +85,7 @@
  *
  *  @return A OMICall instance if a call was found for the given UUID, otherwise nil.
  */
-- (OMICall * _Nullable)callWithUUID:(NSUUID * _Nonnull)uuid;
+- (__weak OMICall * _Nullable)callWithUUID:(NSUUID * _Nonnull)uuid;
 
 /**
  *  Find a call for the given call ID.
@@ -94,7 +94,7 @@
  *
  *  @return A OMICall instance if a call with the given call ID was found, otherwise nil.
  */
-- (OMICall * _Nullable)callWithCallId:(NSInteger)callId;
+- (__weak OMICall * _Nullable)callWithCallId:(NSInteger)callId;
 
 
 /**
@@ -121,14 +121,14 @@
  *
  *  @param call The OMICall instance to add.
  */
-- (void)addCall:(OMICall * _Nonnull)call;
+- (void)addCall:(__weak OMICall * _Nonnull)call;
 
 /**
  *  Remove the given call from the Call Manager.
  *
  *  @param call the OMICall instance to remove.
  */
-- (void)removeCall:(OMICall * _Nonnull)call;
+- (void)removeCall:(__weak OMICall * _Nonnull)call;
 
 - (void)removeAllCall;
 
@@ -170,7 +170,7 @@
  *
  *  @return The first call for the given account, otherwise nil.
  */
-- (OMICall * _Nullable)firstCallForAccount:(OMIAccount * _Nonnull)account;
+- (__weak OMICall * _Nullable)firstCallForAccount:(OMIAccount * _Nonnull)account;
 
 /**
  *  Returns the first ACTIVE call for the given account.
@@ -179,7 +179,7 @@
  *
  *  @return The first active call for the given account, otherwise nil.
  */
-- (OMICall * _Nullable)firstActiveCallForAccount:(OMIAccount * _Nonnull)account;
+- (__weak OMICall * _Nullable)firstActiveCallForAccount:(OMIAccount * _Nonnull)account;
 
 /**
  *  Returns the last call for the given account
@@ -188,13 +188,13 @@
  *
  *  @return The last call for the given account, otherwise nil.
  */
-- (OMICall * _Nullable)lastCallForAccount:(OMIAccount * _Nonnull)account;
+- (__weak OMICall * _Nullable)lastCallForAccount:(OMIAccount * _Nonnull)account;
 
 /**
  *  Returns the current confirm call
  * *
  */
-- (OMICall * _Nullable)getCurrentConfirmCall;
+- (__weak OMICall * _Nullable)getCurrentConfirmCall;
 
     
 /**

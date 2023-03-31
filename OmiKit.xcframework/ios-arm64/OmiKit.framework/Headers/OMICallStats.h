@@ -37,7 +37,7 @@ extern NSString * _Nonnull const OMICallStatsTotalMBsUsed;
  *
  *  @return OMICallStats instance.
  */
-- (instancetype _Nullable)initWithCall:(OMICall * _Nonnull)call NS_DESIGNATED_INITIALIZER;
+- (instancetype _Nullable)initWithCall:(__weak OMICall * _Nonnull)call NS_DESIGNATED_INITIALIZER;
 
 /**
  * Generate the call status 

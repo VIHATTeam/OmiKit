@@ -85,12 +85,12 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 /**
  *  The incomingCallBlock will be called when an incoming call is received by pjsip.
  */
-@property (copy, nonatomic) void (^ _Nonnull incomingCallBlock)(OMICall * _Nullable call);
+@property (copy, nonatomic) void (^ _Nonnull incomingCallBlock)(__weak OMICall * _Nullable call);
 
 /**
  * The missedCallBlock will be called when a call is completed elsewhere or the original call hung up.
  */
-@property (copy, nonatomic) void(^ _Nonnull missedCallBlock)(OMICall * _Nullable call);
+@property (copy, nonatomic) void(^ _Nonnull missedCallBlock)(__weak OMICall * _Nullable call);
 
 /**
  The logCallBackBlock will be called when there is a log message to be shown.

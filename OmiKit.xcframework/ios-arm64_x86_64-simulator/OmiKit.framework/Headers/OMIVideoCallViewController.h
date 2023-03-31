@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OMIVideoCallViewController : UIViewController
--(id)initWithCall:( OMICall *)call;
+-(id)initWithCall:( __weak OMICall *)call;
 
 @end
 

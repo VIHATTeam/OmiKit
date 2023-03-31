@@ -522,7 +522,7 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *
  *  @return BOOL success of the call transfer.
  */
-- (BOOL)transferToCall:(OMICall * _Nonnull)secondCall;
+- (BOOL)transferToCall:(__weak OMICall * _Nonnull)secondCall;
 
 /**
  *  This will change the transferStatus of the call.

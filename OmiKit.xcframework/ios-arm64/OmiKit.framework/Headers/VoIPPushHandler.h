@@ -9,6 +9,7 @@
 #define VoIPPushHandler_h
 #import <PushKit/PushKit.h>
 
+#import <OMICall.h>
 
 
 
@@ -17,6 +18,7 @@
 @property (nonatomic) NSMutableDictionary * _Nonnull incomingCallConfirmed;
 + (instancetype)sharedInstance;
 + (void)establishConnection:(PKPushPayload * _Nonnull)payload;
++ (void) removeCallFromIncomming:(OMICall * _Nonnull) call;
 
 
 @end
