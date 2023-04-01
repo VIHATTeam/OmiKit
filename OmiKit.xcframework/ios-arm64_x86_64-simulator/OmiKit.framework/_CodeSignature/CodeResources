@@ -30,7 +30,7 @@
 		</data>
 		<key>Headers/OMICall.h</key>
 		<data>
-		cKxclVl62PKLk1VBy+AQIoNC0Hs=
+		ScMglxqFcuht7iRdADUG8DN4bIM=
 		</data>
 		<key>Headers/OMICallManager.h</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Headers/OMIEndpoint.h</key>
 		<data>
-		OxOFVdF9Ud7vjnwlcQ+AzO+IhyI=
+		oU/f7OsYn25SHAd93rGIXWqPb6E=
 		</data>
 		<key>Headers/OMIEndpointConfiguration.h</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>Headers/OMIUtils.h</key>
 		<data>
-		TlgAFuJDxrtdB40tk2yy9/MwRI0=
+		tqdzno+NW2GPWWch0tQs3PyCibs=
 		</data>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Headers/VoIPPushHandler.h</key>
 		<data>
-		URtXYzIL3vnOC8VikIZpBMOtejc=
+		4fd56ooOBCSjP+aXxoxP6DFhfnU=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -225,7 +225,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			okj2zKiz6O+3hvKwbuxy/lpx0ONap8tzwPilvAKvmlc=
+			zuIR7sapFI08PTKyjS0adFJAmr5C4Pk/xftogBT9RI4=
 			</data>
 		</dict>
 		<key>Headers/OMICallManager.h</key>
@@ -253,7 +253,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Y6juoPh6TFCXJ4aOGFQSvTJnn5cmTJgU3M5q8DeKnTU=
+			RBf6zcL5F/1XN9z6zK/ai5ibqLZBSz58TCbxHEmMF0M=
 			</data>
 		</dict>
 		<key>Headers/OMIEndpointConfiguration.h</key>
@@ -344,7 +344,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			uW3EJRnBIA/zMIR54VIZ0YpPd040NinUbdsWJknBFIw=
+			DiWOcHMvM8PVcSgHvpqdb4sp2JfPtTaGpvnVJ/kmwPw=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoCallViewController.h</key>
@@ -414,7 +414,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ctbPNUmqJ/Qo1oaL7ti74cM2NViTw/psYVI0LWq6b+Y=
+			CLbhY1S7+raQIVXfQmDjehkfn2N+OlY0szKCyA56v+4=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

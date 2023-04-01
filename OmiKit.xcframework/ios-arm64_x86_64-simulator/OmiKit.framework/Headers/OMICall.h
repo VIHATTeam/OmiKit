@@ -16,6 +16,14 @@
 extern NSString * _Nonnull const OMICallStateChangedNotification;
 
 /**
+ *  Notification which is posted when the call's state changes.
+ *  The call for which the state changed can be found in the
+ *  notifications user info dict.
+ */
+extern NSString * _Nonnull const OMICallIPChangeNotification;
+
+
+/**
  *  Notification which is posted when the call's media event recived.
  *  The callId for which the media event changed can be found in the
  *  notifications user info dict.

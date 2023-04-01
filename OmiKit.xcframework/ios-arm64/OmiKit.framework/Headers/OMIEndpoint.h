@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 @property int tcpTransportId;
 @property int tlsTransportId;
 @property BOOL * isSupportVideo;
+@property NSDate * lastTimeDestroy;
 
 
 /**
