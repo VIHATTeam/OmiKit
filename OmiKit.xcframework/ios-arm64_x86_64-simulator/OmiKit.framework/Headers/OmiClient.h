@@ -10,19 +10,10 @@
 
 
 /**
- *  state using noise cancel.
- *
- */
-@property __weak OMICall * isUsingNoiseCancel;
-
-
-
-
-/**
  *  Init user name/password for endpoint, ussually this step need to be init when app open firstime or login
  *
  */
-+ (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm ;
++ (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm apiKey:(NSString *) apiKey;
 
 /**
  *  call this function when user logout to prevent notification came to this device without login
