@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <OmiKit/OmiKit.h>
+#import "OmiKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
