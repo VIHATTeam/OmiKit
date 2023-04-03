@@ -135,15 +135,19 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  User toggle muted
      */
     OMICallStateMuted = 8,
+    /**
+     *  User toggle Speaker
+     */
+    OMICallStateToggleSpeaker = 9,
 
     /**
      *  Dont have permission Camera
      */
-    OMICallStatePermissionCameraDenied = 9,
+    OMICallStatePermissionCameraDenied = 10,
     /**
      *  Dont have permission microphone
      */
-    OMICallStatePermissionMicrophoneDenied = 10,
+    OMICallStatePermissionMicrophoneDenied = 11,
 
 };
 #define OMICallStateString(OMICallState) [@[@"OMICallStateNull", @"OMICallStateCalling", @"OMICallStateIncoming", @"OMICallStateEarly", @"OMICallStateConnecting", @"OMICallStateConfirmed", @"OMICallStateDisconnected"] objectAtIndex:OMICallState]

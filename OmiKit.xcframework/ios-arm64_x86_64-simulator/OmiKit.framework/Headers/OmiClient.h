@@ -16,13 +16,21 @@
 @property __weak OMICall * isUsingNoiseCancel;
 
 
+
+
 /**
- *  state using noise cancel. Notice that user will slow down or add latency with noise cancel
+ *  Init user name/password for endpoint, ussually this step need to be init when app open firstime or login
  *
  */
-+ (void)setNoiseSuppression:(BOOL) isUseNoiseSuppression;
-
 + (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm ;
+
+/**
+ *  call this function when user logout to prevent notification came to this device without login
+ *
+ */
++ (void) logout;
+
+    
 /**
  *  Start Service OMI - User ussually dont call this function
  */
@@ -112,5 +120,28 @@
  */
 + (void) setLogLevel:(int) level ;
 
+/**
+ *Use to change information of Call in Callkit like CallerName, Caller Number
+ * @Param: call: object call need to update
+ */
++ (void)reportIncomingCall:(OMICall * _Nonnull) call ;
+
+/**
+ *Use to set output sound for call
+ * @Param: output: Outut need to request
+ */
++ (void)setOutput:(NSString * _Nonnull) output;
+/**
+ *Use to get list of output sound devices
+ * @Param:
+ * @return: list String name of output device
+ */
++ (NSMutableArray<NSString *> *) getListOutputDevices;
+
+/**
+ *  state using noise cancel. Notice that user will slow down or add latency with noise cancel
+ *
+ */
++ (void)setNoiseSuppression:(BOOL) isUseNoiseSuppression;
 
 @end

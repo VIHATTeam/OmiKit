@@ -55,6 +55,11 @@ extern NSString * __nonnull const OMINotificationUserInfoErrorStatusCodeKey;
  */
 extern NSString * __nonnull const OMINotificationUserInfoErrorStatusMessageKey;
 
+/**
+ *  Key to be used for retrieving the status speaker.
+ */
+extern NSString * __nonnull const OMINotificationUserToggleSpeakerState;
+
 
 /**
  *  Possible errors the OMISIPLib can return.

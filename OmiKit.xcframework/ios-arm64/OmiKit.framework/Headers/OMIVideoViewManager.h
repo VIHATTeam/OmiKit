@@ -29,11 +29,11 @@
 /**
  *  create view for local camera capture & stream to another leg
 */
-- (UIView *)createPreviewViewWith:(CGRect)frame;
+- (UIView *)createViewForVideoLocal:(CGRect)frame;
 /**
  * create view for remote stream
 */
-- (UIView *)createVideoWindowWithFrame:(CGRect)frame;
+- (UIView *)createViewForVideoRemote:(CGRect)frame;
 
 @end
 
