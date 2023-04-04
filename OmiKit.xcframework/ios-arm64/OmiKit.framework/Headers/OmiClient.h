@@ -17,6 +17,8 @@
  */
 + (BOOL) initWithUUID:(NSString * _Nonnull) usrUuid fullName:(NSString *_Nullable) fullName apiKey:(NSString *_Nonnull) apiKey ;
 
++ (void) initWithUsername:(NSString *_Nonnull) userName password:(NSString *_Nonnull) password realm:(NSString *_Nonnull) realm ;
+
 /**
  *  call this function when user logout to prevent notification came to this device without login
  *
