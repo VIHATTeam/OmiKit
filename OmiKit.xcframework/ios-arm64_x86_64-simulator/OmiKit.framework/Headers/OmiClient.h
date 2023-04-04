@@ -11,9 +11,11 @@
 
 /**
  *  Init user name/password for endpoint, ussually this step need to be init when app open firstime or login
- *
+ *  @Param uuid: This is unique id of user
+ *  @Param fullName: is user not exits it will create new user with this name
+ *  @Param apiKey: this key get From omicall, help we can authen request from SDK
  */
-+ (void) initWithUsername:(NSString *) userName password:(NSString *) password realm:(NSString *) realm apiKey:(NSString *) apiKey;
++ (BOOL) initWithUUID:(NSString * _Nonnull) usrUuid fullName:(NSString *_Nullable) fullName apiKey:(NSString *_Nonnull) apiKey ;
 
 /**
  *  call this function when user logout to prevent notification came to this device without login

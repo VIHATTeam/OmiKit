@@ -102,7 +102,7 @@
 		</data>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<data>
-		zBBaPm2H4fsaTU9OtBEjGGhfTOU=
+		PxyjzHamm8Kt+1XZPpSor9DDVxw=
 		</data>
 		<key>Headers/OMIVideoCodecs.h</key>
 		<data>
@@ -118,15 +118,11 @@
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		a/ZFwoWt0mSMqsSOoav1CKogRDA=
+		VL3dc1VSzKRIYNoT7NOtB0SpyJU=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
 		JdYoXh82+WNeMZ9BQjRXqQ+f0G8=
-		</data>
-		<key>Headers/OmiKit.h</key>
-		<data>
-		DbOE30G4Bju824LBjCFdSdfplp4=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -150,27 +146,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		DFsSlcciIzbFtCnc/JsPlyI2+nI=
-		</data>
-		<key>OmiKit.bundle/_CodeSignature/CodeDirectory</key>
-		<data>
-		2Hhbc78yM61tlEciWgvSAjjpAvw=
-		</data>
-		<key>OmiKit.bundle/_CodeSignature/CodeRequirements</key>
-		<data>
-		OnX22wWFKRSOFN1+obRynMCeyXM=
-		</data>
-		<key>OmiKit.bundle/_CodeSignature/CodeRequirements-1</key>
-		<data>
-		KMyIhRqtDT5x7Ica5zLb6sy3cNo=
-		</data>
-		<key>OmiKit.bundle/_CodeSignature/CodeResources</key>
-		<data>
-		yG45dugREbptSiXZg1e7PMp8dNo=
-		</data>
-		<key>OmiKit.bundle/_CodeSignature/CodeSignature</key>
-		<data>
-		2jmj7l5rSw0yVb/vlWAYkK/YBwk=
+		tSlC77DG5HQX6qLgQAkLwIYSkHc=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -351,7 +327,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RWJHfxE2vk85B1x1a2kn3gJDXmNA4ZqevXVJkrAmAyY=
+			12+/k65U6K6Hno6QmH5yZx7sYLuoiF3CXPdLHd4mU+M=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoCodecs.h</key>
@@ -379,7 +355,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			B4+4u5GV1itQwLQKWYRQEK3HykeX3/ZlzcUSKkbs7HI=
+			OjXuS4SsmLWo7MyBUdvLfI1cmASKu8gYXqm5Bup0VUg=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
@@ -387,13 +363,6 @@
 			<key>hash2</key>
 			<data>
 			Waj23NVWVS/CekstlZXzEJ5f3p4Uu5HFTa0PbCqec3I=
-			</data>
-		</dict>
-		<key>Headers/OmiKit.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			SI3JItnEkjos6drpgY6jo3uSlfRiFUYqmRJhWyFSbfI=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -428,42 +397,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IeNYwtnX8XT/ipepbreiGL+9OZRBh2MaUbvxwlkXkPc=
-			</data>
-		</dict>
-		<key>OmiKit.bundle/_CodeSignature/CodeDirectory</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			hrE9SIht6gww2AAkMii/XjB1dr9oHHcEAIxBZbkQovU=
-			</data>
-		</dict>
-		<key>OmiKit.bundle/_CodeSignature/CodeRequirements</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			mHkgkE6rZQ51eIwFSqCwUk5qgL/HGqMt+NI3phdD+YY=
-			</data>
-		</dict>
-		<key>OmiKit.bundle/_CodeSignature/CodeRequirements-1</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			rNBTylc1xtFEHMWh0gQ/lok8W5XFWy2PM8F42NGi1RA=
-			</data>
-		</dict>
-		<key>OmiKit.bundle/_CodeSignature/CodeResources</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			jZKoYA9Tzb5foVep4+Wox1ARCsr/svpBuCqmAXtDuXM=
-			</data>
-		</dict>
-		<key>OmiKit.bundle/_CodeSignature/CodeSignature</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+			cLBWS23+xCJ2296WywhJvEE4u8Vln3tVCFVOq4Fv8H4=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>
