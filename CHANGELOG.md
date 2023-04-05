@@ -78,6 +78,18 @@ Released on Monday, June 15, 2020.
 
 ## [1.5.2](https://github.com/VIHATTeam/OmiKit.git) (21/03/2023)
 
+
+## [1.5.18](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
+
+Released on Monday, June 15, 2020.
+
+#### Changed
+
+- Fix bug 2 call receive cause crash
+- Optimize quality Video call depend on network
+- Add more function util process audio 
+- Add callback when mute/hold call
+
 Released on Monday, June 15, 2020.
 
 #### Changed
