@@ -156,13 +156,6 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  */
 - (void)accountStateChanged;
 
-/**
- *  The number that the sip library will call.
- *
- *  @param number     The phonenumber which will be called.
- *  @param completion Completion block which will be executed when everything has been setup. May contain a outbound call or an error object.
- */
-- (void)callNumber:(NSString * _Nonnull)number completion:(void(^_Nonnull)(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
 /**
  *  This will add the call to the account.

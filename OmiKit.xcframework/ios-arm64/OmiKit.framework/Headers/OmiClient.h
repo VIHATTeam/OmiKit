@@ -34,6 +34,16 @@
  *  Start call if call is normal Call
  */
 + (BOOL)startCall:(NSString * _Nonnull) toNumber;
++ (BOOL)startCall:(NSString * _Nonnull) toNumber isVideo:(BOOL) isVideo;
+/**
+ *  Get phone number from UUID
+ */
++ (NSString *)getPhone:(NSString * _Nonnull) toUuid;
+/**
+ *  Start call with Uuid (use for api key)
+ */
++ (BOOL)startCallWithUuid:(NSString * _Nonnull) toNumber isVideo:(BOOL) isVideo;
+
 /**
  *  Start call if call is Video Call
  */

@@ -36,9 +36,9 @@
  *  @param completion A completion block which is always invoked. Either the call is started successfully and you can obtain an
  *  OMICall instance throught the block or, when the call fails, you can query the blocks error parameter.
  */
-- (void)startCallToNumber:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
+- (void)startCallToNumber:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account isVideo:(BOOL) isVideo completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
-- (void)startCallToNumberNoReg:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
+- (void)startCallToNumberNoReg:(NSString * _Nonnull)number forAccount:(OMIAccount * _Nonnull)account isVideo:(BOOL) isVideo completion:(void (^_Nonnull )(__weak OMICall * _Nullable call, NSError * _Nullable error))completion;
 
 
 /**
@@ -180,6 +180,7 @@
  *  @return The first active call for the given account, otherwise nil.
  */
 - (__weak OMICall * _Nullable)firstActiveCallForAccount:(OMIAccount * _Nonnull)account;
+- (__weak OMICall *_Nullable)firstActiveOutboundCallForAccount:(OMIAccount *_Nonnull)account;
 
 /**
  *  Returns the last call for the given account

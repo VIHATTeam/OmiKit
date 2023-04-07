@@ -148,9 +148,14 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  Dont have permission microphone
      */
     OMICallStatePermissionMicrophoneDenied = 11,
+    /**
+     *  Call being request disconnect
+     */
+    OMICallStateDisconnecting = 12,
+
 
 };
-#define OMICallStateString(OMICallState) [@[@"OMICallStateNull", @"OMICallStateCalling", @"OMICallStateIncoming", @"OMICallStateEarly", @"OMICallStateConnecting", @"OMICallStateConfirmed", @"OMICallStateDisconnected"] objectAtIndex:OMICallState]
+#define OMICallStateString(OMICallState) [@[@"OMICallStateNull", @"OMICallStateCalling", @"OMICallStateIncoming", @"OMICallStateEarly", @"OMICallStateConnecting", @"OMICallStateConfirmed", @"OMICallStateDisconnected", @"OMICallStateDisconnecting"] objectAtIndex:OMICallState]
 
 
 /**
@@ -326,6 +331,11 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (readonly, nonatomic) BOOL muted;
 
 /**
+ *  True if the microphone is muted.
+ */
+@property (readonly, nonatomic) BOOL speaker;
+
+/**
  *  True if the call is on hold locally.
  */
 @property (readonly, nonatomic) BOOL onHold;
@@ -404,14 +414,6 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *  and start the call using -startWithCompletion.
  *
  *  This will setup a call to the given number and attached to the account.
- *
- *  @param number  The number that should be called.
- *  @param account The account to which the call should be added.
- *  @param error   Pointer to an NSError pointer. Will be set to a NSError instance if cannot setup the call.
- *
- *  @return OMICall instance
- */
-+ (instancetype _Nullable)callNumber:(NSString * _Nonnull)number withAccount:(OMIAccount * _Nonnull)account error:(NSError * _Nullable * _Nullable)error __attribute__((unavailable("Deprecated, use -startWithCompletion instead")));
 
 /**
  *  When PJSIP receives an incoming call, this initializer is called.
@@ -456,6 +458,7 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 - (instancetype _Nullable)initOutboundCallWithNumberToCall:(NSString * _Nonnull)number account:(OMIAccount * _Nonnull)account;
 
 - (void) increaseCallTime;
+- (void) prepairStop;
 
 /**
  *  Start the call. The number that will be called is the number provided when the call was created using
@@ -554,6 +557,16 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *  Will sent the UPDATE message to the call.
  */
 - (void)update;
+
+/**
+ *  Calculate MOS score & data use of call.
+ */
+- (void)calculateStats;
+
+/**
+ *  Setnew.
+ */
+- (void)setSpeaker:(Boolean)speaker;
 
 + (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string;
 @end
