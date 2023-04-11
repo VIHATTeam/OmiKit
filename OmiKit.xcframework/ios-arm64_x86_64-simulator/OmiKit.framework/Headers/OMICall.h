@@ -44,6 +44,10 @@ extern NSString * _Nonnull const OMICallNoAudioForCallNotification;
  * Notification for when there is an error setting up a call.
  */
 extern NSString * _Nonnull const OMICallErrorDuringSetupCallNotification;
+/**
+ * Notification for when there is an error setting up a call.
+ */
+extern NSString * _Nonnull const OMICallVideoInfo;
 
 /**
  *  Notification that will be posted when a phonecall is connected.
@@ -92,6 +96,18 @@ typedef NS_ENUM(NSInteger, OMICallErrors) {
      */
     OMICallErrorCannotSendDTMF,
 };
+
+typedef NS_ENUM(NSInteger, OMIVideoState) {
+    /**
+     *  Videl stream from local is starting.
+     */
+    OMIVideoLocalReady,
+    /**
+     *  Videl stream from remote is starting.
+     */
+    OMIVideoRemoteReady,
+};
+
 #define OMICallErrorsString(OMICallErrors) [@[@"OMICallErrorCannotCreateThread", @"OMICallErrorCannotCreateCall", @"OMICallErrorCannotAnswerCall", @"OMICallErrorCannotHangupCall", @"OMICallErrorCannotDeclineCall", @"OMICallErrorCannotToggleMute", @"OMICallErrorCannotToggleHold", @"OMICallErrorCannotSendDTMF"] objectAtIndex:OMICallErrors]
 
 
@@ -302,6 +318,11 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *  The local URI of the call.
  */
 @property (readonly, nonatomic) NSString * _Nullable localURI;
+
+/**
+ * save current remove video size
+ */
+@property (nonatomic) CGSize currentVideoSize;
 
 /**
  *  The remote URI of the call.

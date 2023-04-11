@@ -60,6 +60,11 @@ extern NSString * __nonnull const OMINotificationUserInfoErrorStatusMessageKey;
  */
 extern NSString * __nonnull const OMINotificationUserToggleSpeakerState;
 
+/**
+ *  Key to be used for retrieving the status video.
+ */
+extern NSString * __nonnull const OMIVideoInfoState;
+
 
 /**
  *  Possible errors the OMISIPLib can return.

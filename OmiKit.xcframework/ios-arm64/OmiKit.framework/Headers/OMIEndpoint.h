@@ -110,6 +110,7 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  */
 @property (readonly) OMIEndpointConfiguration * _Nonnull endpointConfiguration;
 
+
 /**
  *  The shared instance for the endpoint.
  *

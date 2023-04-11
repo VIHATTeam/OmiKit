@@ -6,6 +6,7 @@
 #import <Foundation/Foundation.h>
 #import "OMIIceConfiguration.h"
 #import "OMITurnConfiguration.h"
+#import "OMIStunConfiguration.h"
 
 /**
  *  The available stun to configure.
@@ -184,6 +185,10 @@ typedef NS_ENUM(NSUInteger, OMIContactRewriteMethod) {
 @property (nonatomic) OMITurnConfiguration * _Nullable turnConfiguration;
 
 @property (nonatomic) OMIIceConfiguration * _Nullable iceConfiguration;
+/**
+ * The available STUN configuration
+ */
+@property (nonatomic) OMIStunConfiguration * _Nullable stunConfiguration;
 
 @end
 
