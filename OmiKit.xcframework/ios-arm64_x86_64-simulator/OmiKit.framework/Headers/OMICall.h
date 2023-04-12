@@ -47,7 +47,7 @@ extern NSString * _Nonnull const OMICallErrorDuringSetupCallNotification;
 /**
  * Notification for when there is an error setting up a call.
  */
-extern NSString * _Nonnull const OMICallVideoInfo;
+extern NSString * _Nonnull const OMICallVideoInfoNotification;
 
 /**
  *  Notification that will be posted when a phonecall is connected.
