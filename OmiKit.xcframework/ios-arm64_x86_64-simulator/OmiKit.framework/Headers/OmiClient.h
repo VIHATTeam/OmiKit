@@ -172,6 +172,6 @@
  *
  *  @param missedCallBlock block that will be invoked when a call is completed elsewhere or has been hungup before pickup
  */
-- (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
++ (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
 
 @end

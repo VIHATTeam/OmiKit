@@ -36,12 +36,99 @@ pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 ### Use
 
 ## Setting up
-Push notification:
+###Step 1:  Setting Push notification:
 - To setting up details please check here  <a href="https://api.omicall.com/web-sdk/mobile-sdk/ios-sdk/cau-hinh-push-notification">Guide Push notification config Android/IOS</a>.
 
+###Step 2: Setting AppDelegate
+
+    - Setting Enviroment : it will effect key push notification setting in web base at step 1
+    - Inject Callkit Provider Delegate
+    - Inject Voip Push notification listener interace
+    - Setting Push notification APNS for normal push notification ( we using it in case call cancel from another party)  
+Sample Code:
+```ruby
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+#ifdef DEBUG
+    [OmiClient setEnviroment:KEY_OMI_APP_ENVIROMENT_SANDBOX];
+#else
+    [OmiClient setEnviroment:KEY_OMI_APP_ENVIROMENT_PRODUCTION];
+#endif
+
+    provider = [[CallKitProviderDelegate alloc] initWithCallManager: [OMISIPLib sharedInstance].callManager ];
+    voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
+    pushkitManager = [[PushKitManager alloc] initWithVoipRegistry:voipRegistry];
+    
+    [self requestPushNotificationPermissions];
+    [OmiClient setLogLevel:5];
+    
+    
+    return YES;
+}
+
+- (void)requestPushNotificationPermissions
+{
+    // iOS 10+
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+        switch (settings.authorizationStatus)
+        {
+            // User hasn't accepted or rejected permissions yet. This block shows the allow/deny dialog
+            case UNAuthorizationStatusNotDetermined:
+            {
+                center.delegate = self;
+                [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error)
+                 {
+                     if(granted)
+                     {
+                         dispatch_async(dispatch_get_main_queue(), ^{
+                             [[UIApplication sharedApplication] registerForRemoteNotifications];
+                         });
+                     }
+                 }];
+                break;
+            }
+            case UNAuthorizationStatusAuthorized:
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UIApplication sharedApplication] registerForRemoteNotifications];
+                });
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+}
+
+When get notification token, we need update setup client:
+- (void)application:(UIApplication*)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
+{
+    // parse token bytes to string
+    const char *data = [devToken bytes];
+    NSMutableString *token = [NSMutableString string];
+    for (NSUInteger i = 0; i < [devToken length]; i++)
+    {
+        [token appendFormat:@"%02.2hhX", data[i]];
+    }
+    [OmiClient setUserPushNotificationToken:[token copy]];
+}
 
 
-## Setting up Application
+    
+```
+###Step 3: Setting the App state
+We can listen event app go to background/forground from appdelegate or UIScene or Swift, after that we use this function of library for setting State:
+
+```ruby
+[OmiClient setAppplicationState:OMIAppStateForeground];
+
+we have 2 state need to set:
+- OMIAppStateForeground
+- OMIAppStateBackground
+```
+
+
+###Step 4 Setting up Application
 
 Include the library
 
@@ -55,7 +142,7 @@ Currently we provide 2 way for init user extension for call
 [OmiClient initWithUsername:MY_USERNAME password:MY_PASSWORD realm:MY_REALM];
 
 ```
-2. Init witl Apikey
+2. Init with Apikey ( For get APIKey please contact sale admin/ customer services)
 ```ruby
 [OmiClient initWithUUID:(NSString * _Nonnull) fullName:<#(NSString * _Nullable)#> apiKey:<#(NSString * _Nonnull)#>]
 
@@ -82,27 +169,7 @@ To listen event of Call we setting notification:
 
 ```
 
-Declare function to get notification:
- ```ruby
-
-- (void)callStateChanged: (NSNotification *)notification {
-    
-    __weak typeof(self)weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __weak OMICall *call = [[notification userInfo] objectForKey:OMINotificationUserInfoCallKey];
-        switch(call.callState)
-        {
-            case OMICallStateEarly:
-                break;
-            ....
-        }
-    });
-}
-
-     
-```
-
-Listen event Call State to know when call confirm or invite state:
+Declare function Listen event Call State to know when call confirm or invite state:
 Notification key: OMICallStateChangedNotification
 Example 
  ```ruby
@@ -138,6 +205,9 @@ Example
     });
 }
 
+
+    [OmiClient setAppplicationState:OMIAppStateForeground];
+
      
 ```
 Listen event Media event:
@@ -168,6 +238,13 @@ Example:
     });
 }
 
+```
+
+Listen event call misscall:
+```ruby
+[Omiclient setMissedCallBlock:^(OMICall * _Nonnull __weak call) {
+        <#code#>
+}];
 ```
 
 
