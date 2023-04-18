@@ -249,6 +249,7 @@ Example:
 
 ### 4. Listen the Video call state
 when event come we need to re-render video screen
+Detail sample project can view here: https://github.com/VIHATTeam/IOS-Objective-VideoCall-Example
 
     ### Listen: 
 ```ruby
