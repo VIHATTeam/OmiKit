@@ -162,12 +162,16 @@ BOOL result = [OmiClient startCall:(NSString * _Nonnull) isVideo:<#(BOOL)#>];
 
 ```
 
+# Notification callback
 
-To listen event of Call we setting notification:
+## Call notification:
+
+### 1. To listen event of Call we setting notification:
  ```ruby
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateChanged:) name:OMICallStateChangedNotification object:nil];
 
 ```
+
 
 Declare function Listen event Call State to know when call confirm or invite state:
 Notification key: OMICallStateChangedNotification
@@ -204,13 +208,9 @@ Example
         }
     });
 }
-
-
-    [OmiClient setAppplicationState:OMIAppStateForeground];
-
-     
 ```
-Listen event Media event:
+
+### 2. Listen event Media event:
 Notification key: OMICallMediaStateChangedNotification
 Example:
 ```ruby
@@ -240,14 +240,64 @@ Example:
 
 ```
 
-Listen event call misscall:
+### 3. Listen event call misscall:
 ```ruby
 [Omiclient setMissedCallBlock:^(OMICall * _Nonnull __weak call) {
         <#code#>
 }];
 ```
 
+### 4. Listen the Video call state
+when event come we need to re-render video screen
+```ruby
+    Listen: 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoNotification:) name:OMICallVideoInfoNotification object:nil];
+    
+    Process: 
+    
+    -(void) videoNotification:(NSNotification *) noti {
+        NSDictionary *dic = [noti userInfo];
+        NSNumber * state = [dic valueForKey:OMIVideoInfoState];
+        switch([state intValue]){
+            case OMIVideoRemoteReady:{
+                [self startPreview];
+                break;
+            }
+        }
+    }
 
+
+```
+
+### 5. Listen the Video call state
+when event come we need to re-render video screen
+```ruby
+    Listen: 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNetworkHealth:) name:OMICallNetworkQualityNotification object:nil];
+    
+    Process: 
+    
+    -(void) updateNetworkHealth:(NSNotification *) noti {
+        NSDictionary *dic = [noti userInfo];
+        NSNumber * state = [dic valueForKey:OMINotificationNetworkStatusKey];
+        switch([state intValue]){
+            case OMINetworkGood:{
+                [self.networkStatus setImage: [UIImage imageNamed: @"network_best"]];
+                break;
+            }
+            case OMINetworkMedium:{
+                [self.networkStatus setImage: [UIImage imageNamed: @"network_medium"]];
+                break;
+            }
+            case OMINetworkBad:{
+                [self.networkStatus setImage: [UIImage imageNamed: @"network_bad"]];
+                break;
+            }
+        }
+    }
+
+
+```
 
 
 Using noise cancel( Perfomance slow when lower phone)
