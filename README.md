@@ -36,10 +36,10 @@ pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 ### Use
 
 ## Setting up
-###Step 1:  Setting Push notification:
+### Step 1:  Setting Push notification:
 - To setting up details please check here  <a href="https://api.omicall.com/web-sdk/mobile-sdk/ios-sdk/cau-hinh-push-notification">Guide Push notification config Android/IOS</a>.
 
-###Step 2: Setting AppDelegate
+### Step 2: Setting AppDelegate
 
     - Setting Enviroment : it will effect key push notification setting in web base at step 1
     - Inject Callkit Provider Delegate
@@ -116,7 +116,7 @@ When get notification token, we need update setup client:
 
     
 ```
-###Step 3: Setting the App state
+### Step 3: Setting the App state
 We can listen event app go to background/forground from appdelegate or UIScene or Swift, after that we use this function of library for setting State:
 
 ```ruby
