@@ -249,12 +249,13 @@ Example:
 
 ### 4. Listen the Video call state
 when event come we need to re-render video screen
+
+    ### Listen: 
 ```ruby
-    Listen: 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoNotification:) name:OMICallVideoInfoNotification object:nil];
-    
-    Process: 
-    
+    ```
+    ### Process: 
+```ruby
     -(void) videoNotification:(NSNotification *) noti {
         NSDictionary *dic = [noti userInfo];
         NSNumber * state = [dic valueForKey:OMIVideoInfoState];
@@ -265,12 +266,25 @@ when event come we need to re-render video screen
             }
         }
     }
-
+```
+    ### Show Video Preview:
+```ruby    
+    - (void)startPreview {
+        __weak typeof(self) weakSelf = self;
+        if(!_remoteVideoRenderView || !_localVideoRenderView) return;
+        
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.remoteVideoRenderView.contentMode = UIViewContentModeScaleAspectFill;
+                [weakSelf.remoteVideoRenderView setView:[self.videoManager createViewForVideoRemote:weakSelf.remoteVideoRenderView.frame]];
+                weakSelf.localVideoRenderView.contentMode = UIViewContentModeScaleAspectFill;
+                [weakSelf.localVideoRenderView setView:[self.videoManager createViewForVideoLocal:weakSelf.localVideoRenderView.frame]];
+            });
+    }
 
 ```
 
-### 5. Listen the Video call state
-when event come we need to re-render video screen
+### 5. Listen the network health for update UI instruction for user 
+The information we calculator on MOS score and device 3 level bellow
 ```ruby
     Listen: 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNetworkHealth:) name:OMICallNetworkQualityNotification object:nil];
