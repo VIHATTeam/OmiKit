@@ -16,11 +16,25 @@
 extern NSString * _Nonnull const OMICallStateChangedNotification;
 
 /**
+ *  Notification which is posted when the media call's state changes.
+ *  The call for which the state changed can be found in the
+ *  notifications user info dict.
+ */
+extern NSString * _Nonnull const OMICallMediaStateChangedNotification;
+
+
+/**
  *  Notification which is posted when the call's state changes.
  *  The call for which the state changed can be found in the
  *  notifications user info dict.
  */
 extern NSString * _Nonnull const OMICallIPChangeNotification;
+
+/**
+ *  Notification when network status change we have 3 level best/medium/bad.
+ */
+extern NSString * _Nonnull const OMICallNetworkQualityNotification;
+
 
 
 /**
@@ -108,6 +122,24 @@ typedef NS_ENUM(NSInteger, OMIVideoState) {
     OMIVideoRemoteReady,
 };
 
+
+typedef NS_ENUM(NSInteger, OMINetworkStatus) {
+    /**
+     *  Network are best for Voip/video call
+     */
+    OMINetworkGood,
+    /**
+     *   Network are medium status for Voip/video call, it's mean call can effect like lag, crackle
+     */
+    OMINetworkMedium,
+    /**
+     *   Network are bad, ussualy cause call can effect like lag, crackle
+     */
+    OMINetworkBad,
+
+};
+
+
 #define OMICallErrorsString(OMICallErrors) [@[@"OMICallErrorCannotCreateThread", @"OMICallErrorCannotCreateCall", @"OMICallErrorCannotAnswerCall", @"OMICallErrorCannotHangupCall", @"OMICallErrorCannotDeclineCall", @"OMICallErrorCannotToggleMute", @"OMICallErrorCannotToggleHold", @"OMICallErrorCannotSendDTMF"] objectAtIndex:OMICallErrors]
 
 
@@ -147,6 +179,21 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  User toggle hold
      */
     OMICallStateHold = 7,
+
+    /**
+     *  Call being request disconnect
+     */
+    OMICallStateDisconnecting = 12,
+
+
+};
+
+
+/**
+ *  The states which a call can have.
+ */
+typedef NS_ENUM(NSInteger, OMICallMediaState) {
+  
     /**
      *  User toggle muted
      */
@@ -164,13 +211,13 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  Dont have permission microphone
      */
     OMICallStatePermissionMicrophoneDenied = 11,
-    /**
-     *  Call being request disconnect
-     */
-    OMICallStateDisconnecting = 12,
+
 
 
 };
+
+
+
 #define OMICallStateString(OMICallState) [@[@"OMICallStateNull", @"OMICallStateCalling", @"OMICallStateIncoming", @"OMICallStateEarly", @"OMICallStateConnecting", @"OMICallStateConfirmed", @"OMICallStateDisconnected", @"OMICallStateDisconnecting"] objectAtIndex:OMICallState]
 
 

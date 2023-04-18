@@ -17,6 +17,20 @@
 
 @class DDLogMessage;
 
+
+typedef NS_ENUM(NSInteger, OMIAppState) {
+    /**
+     *  app go to background
+     */
+    OMIAppStateBackground,
+    /**
+     *   App go to foreground
+     */
+    OMIAppStateForeground,
+
+};
+
+
 /**
  *  Key to be used for retreiving a Call object out of NSNotification user info dict.
  */
@@ -39,6 +53,12 @@ extern NSString * __nonnull const OMINotificationUserInfoWindowSizeKey;
  * Key to be used for retrieving the currentCall state out of the NSSNotification user info dict.
  */
 extern NSString * __nonnull const OMINotificationUserInfoCallStateKey;
+
+/**
+ * Key to be used for retrieving the currentCall state out of the NSSNotification user info dict.
+ */
+extern NSString * __nonnull const OMINotificationUserInfoCallMediaStateKey;
+
 
 /**
  *  Key to be used for retrieving the current audio state for call out of the NSNotificaton user info dict.
@@ -64,6 +84,11 @@ extern NSString * __nonnull const OMINotificationUserToggleSpeakerState;
  *  Key to be used for retrieving the status video.
  */
 extern NSString * __nonnull const OMIVideoInfoState;
+
+/**
+ *  Key to be used for retrieving the status video.
+ */
+extern NSString * __nonnull const OMINotificationNetworkStatusKey;
 
 
 /**

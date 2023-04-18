@@ -72,8 +72,11 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 @property int udpTransportId;
 @property int tcpTransportId;
 @property int tlsTransportId;
-@property BOOL * isSupportVideo;
-@property NSDate * lastTimeDestroy;
+@property BOOL isSupportVideo;
+@property NSDate *_Nullable lastTimeDestroy;
+@property NSDate *_Nullable lastTimeIpChange;
+@property NSDate *_Nullable lastTimeForeground;
+@property int  lastMOS;
 
 
 /**
@@ -121,12 +124,13 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 /**
  *  This will remove the pjsua configuration.
  */
-- (void)destroyPJSUAInstance;
+- (void)destroyEndpointInstance;
 
 /**
  *  Adjust config realtime of Opus
  */
 -(void) adjustOpusConfig:(float)mos sampleRate:(int) sampleRate bitRate:(int) bitRate;
+-(void) adjustStreamByNetwork:(float)mos sampleRate:(int) sampleRate bitRate:(int) bitRate;
 
 /**
  *  This will configure the endpoint with pjsua.
@@ -176,4 +180,7 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  *  @param codecConfiguration OMICodecConfiguration Instance of an OMICodecConfiguration
  */
 - (BOOL)updateCodecConfiguration:(OMICodecConfiguration * _Nonnull)codecConfiguration;
+
+-(void) reinviteWithVideo:(BOOL) isVideo;
+
 @end

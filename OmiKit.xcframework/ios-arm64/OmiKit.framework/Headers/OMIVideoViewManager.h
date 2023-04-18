@@ -18,6 +18,9 @@
 /// Turn on/off camera.
 - (void)toggleCamera;
 
+- (void)stopPreview;
+
+
 /// Switch front/back camera.
 - (void)switchCamera;
 

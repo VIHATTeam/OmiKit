@@ -35,29 +35,46 @@ pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 
 ### Use
 
+## Setting up
+Push notification:
+- To setting up details please check here  <a href="https://api.omicall.com/web-sdk/mobile-sdk/ios-sdk/cau-hinh-push-notification">Guide Push notification config Android/IOS</a>.
+
+
+
+## Setting up Application
+
 Include the library
 
 ```ruby
-#import <OmiKit/OmiKit.h>
+#import <OmiKit/OmiKit-umbrella.h>
 ```
 
-Init use
+Currently we provide 2 way for init user extension for call
+1. Init with username/password/real info
 ```ruby
 [OmiClient initWithUsername:MY_USERNAME password:MY_PASSWORD realm:MY_REALM];
 
 ```
+2. Init witl Apikey
+```ruby
+[OmiClient initWithUUID:(NSString * _Nonnull) fullName:<#(NSString * _Nullable)#> apiKey:<#(NSString * _Nonnull)#>]
+
+```
 
 To make call to Number (Phone or Agent number)
+We provide 2 way to make call
+1. Start call to real number or Extension
  ```ruby
-[OmiClient startCall:phoneNumber];
+BOOL result = [OmiClient startCall:(NSString * _Nonnull) isVideo:<#(BOOL)#>];
 
 ```
 
-To make VideoCall to Number (Phone or Agent number)
+2. Start call with uuid of user and apikey
  ```ruby
-[OmiClient startVideoCall:phoneNumber];
+    [OmiClient startCallWithUuid:(NSString * _Nonnull) isVideo:<#(BOOL)#>];
 
 ```
+
 
 To listen event of Call we setting notification:
  ```ruby
@@ -85,52 +102,81 @@ Declare function to get notification:
      
 ```
 
-Call State:
+Listen event Call State to know when call confirm or invite state:
+Notification key: OMICallStateChangedNotification
+Example 
  ```ruby
-    /**
-     *   Before INVITE is sent or received.
-     */
-    OMICallStateNull = 0,
-    /**
-     *   After INVITE is sent.
-     */
-    OMICallStateCalling = 1,
-    /**
-     *  After INVITE is received.
-     */
-    OMICallStateIncoming = 2,
-    /**
-     *  After response with To tag.
-     */
-    OMICallStateEarly = 3,
-    /**
-     *  After 2xx is sent/received.
-     */
-    OMICallStateConnecting = 4,
-    /**
-     *  After ACK is sent/received.
-     */
-    OMICallStateConfirmed = 5,
-    /**
-     *  Session is terminated.
-     */
-    OMICallStateDisconnected = 6,
-    /**
-     *  User toggle hold
-     */
-    OMICallStateHold = 7,
-    /**
-     *  User toggle muted
-     */
-    OMICallStateMuted = 8,
+- (void)callStateChanged: (NSNotification *)notification {
+    
+    __weak typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __weak  OMICall *call = [[notification userInfo] objectForKey:OMINotificationUserInfoCallKey];
+        switch(call.callState)
+        {
+            case OMICallStateEarly:
+                OMILogDebug(@"callStateChanged OMICallStateEarly : %@",call.uuid.UUIDString);
+                break;
+            case OMICallStateCalling:
+                OMILogDebug(@"callStateChanged OMICallStateCalling : %@",call.uuid.UUIDString);
+                break;
+            case OMICallStateIncoming:{
+                OMILogDebug(@"callStateChanged OMICallStateIncoming : %@",call.uuid.UUIDString);
+                break;
+            }
+            case OMICallStateConnecting:
+                OMILogDebug(@"callStateChanged OMICallStateConnecting : %@",call.uuid.UUIDString);
+                break;
+            case OMICallStateConfirmed:{
+                OMILogDebug(@"callStateChanged OMICallStateConfirmed : %@",call.uuid.UUIDString);
+               
+                break;
+            }
+            case OMICallStateDisconnected:
+                OMILogDebug(@"callStateChanged OMICallStateDisconnected : %@",call.uuid.UUIDString);
+                break;
+        }
+    });
+}
 
      
 ```
+Listen event Media event:
+Notification key: OMICallMediaStateChangedNotification
+Example:
+```ruby
+- (void)callMediaStateChanged: (NSNotification *)notification {
+    
+    __weak typeof(self)weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OMICallMediaState mediaState = (OMICallMediaState)[[notification userInfo] objectForKey:OMINotificationUserInfoCallMediaStateKey];
+        switch(mediaState)
+        {
+            case OMICallStateMuted:
+                OMILogDebug(@"OMICallMediaState OMICallStateMuted");
+                break;
+            case OMICallStateToggleSpeaker:
+                OMILogDebug(@"OMICallMediaState OMICallStateToggleSpeaker");
+                break;
+            case OMICallStatePermissionCameraDenied:
+                OMILogDebug(@"OMICallMediaState OMICallStateToggleSpeaker");
+                break;
+            case OMICallStatePermissionMicrophoneDenied:
+                OMILogDebug(@"OMICallMediaState OMICallStateToggleSpeaker");
+                break;
+            
+        }
+    });
+}
 
-Using noise cancel
+```
+
+
+
+
+Using noise cancel( Perfomance slow when lower phone)
+
  ```ruby
-
-    [OmiClient setNoiseSuppression:true];
+[OmiClient setNoiseSuppression:true];
 
 ```
 

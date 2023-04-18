@@ -161,5 +161,17 @@
  *
  */
 + (void)setNoiseSuppression:(BOOL)isUseNoiseSuppression;
+/**
+ *  Set Application State for the library to process right state
+ *
+ */
++ (void)setAppplicationState:(OMIAppState) state;
+
+/**
+ * Set the missed block for when a call is missed.
+ *
+ *  @param missedCallBlock block that will be invoked when a call is completed elsewhere or has been hungup before pickup
+ */
+- (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
 
 @end
