@@ -114,21 +114,7 @@ When get notification token, we need update setup client:
 }
 
 
-    
-```
-### Step 3: Setting the App state
-We can listen event app go to background/forground from appdelegate or UIScene or Swift, after that we use this function of library for setting State:
-
-```ruby
-[OmiClient setAppplicationState:OMIAppStateForeground];
-
-we have 2 state need to set:
-- OMIAppStateForeground
-- OMIAppStateBackground
-```
-
-
-###Step 4 Setting up Application
+###Step 3 Setting up Application
 
 Include the library
 
