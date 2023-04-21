@@ -114,7 +114,7 @@ When get notification token, we need update setup client:
 }
 ```
 
-###Step 3 Setting up Application
+### Step 3 Setting up Application
 
 Include the library
 
