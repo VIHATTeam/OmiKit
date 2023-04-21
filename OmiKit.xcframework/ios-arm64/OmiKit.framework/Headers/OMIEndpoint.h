@@ -181,6 +181,6 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  */
 - (BOOL)updateCodecConfiguration:(OMICodecConfiguration * _Nonnull)codecConfiguration;
 
--(void) reinviteWithVideo:(BOOL) isVideo;
+-(void) reinviteWithVideoIfCalling;
 
 @end

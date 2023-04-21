@@ -96,3 +96,13 @@ Released on Monday, June 15, 2020.
 
 - Fix bug video call
 - Fixing bud multicall cause get wrong active2
+
+## [1.5.26](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
+
+
+
+Released on Friday, April 21, 2023.
+
+#### Changed
+- fixbug 
+- Optimize quality Video call depend on network

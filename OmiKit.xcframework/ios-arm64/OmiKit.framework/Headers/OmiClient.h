@@ -161,11 +161,6 @@
  *
  */
 + (void)setNoiseSuppression:(BOOL)isUseNoiseSuppression;
-/**
- *  Set Application State for the library to process right state
- *
- */
-+ (void)setAppplicationState:(OMIAppState) state;
 
 /**
  * Set the missed block for when a call is missed.
