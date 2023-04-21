@@ -112,7 +112,7 @@ When get notification token, we need update setup client:
     }
     [OmiClient setUserPushNotificationToken:[token copy]];
 }
-
+```
 
 ###Step 3 Setting up Application
 
