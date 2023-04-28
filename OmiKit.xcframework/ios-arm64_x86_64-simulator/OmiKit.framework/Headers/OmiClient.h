@@ -47,6 +47,8 @@
  *  Get phone number from UUID
  */
 + (NSString *)getPhone:(NSString *_Nonnull)toUuid;
+
++ (id)getAccountInfo:(NSString *_Nonnull)sipAccount;
 /**
  *  Start call with Uuid (use for api key)
  */
