@@ -90,6 +90,10 @@ extern NSString * __nonnull const OMIVideoInfoState;
  */
 extern NSString * __nonnull const OMINotificationNetworkStatusKey;
 
+/**
+ *  Key to be used for receiving sip number.
+ */
+extern NSString * __nonnull const OMINotificationSIPKey;
 
 /**
  *  Possible errors the OMISIPLib can return.

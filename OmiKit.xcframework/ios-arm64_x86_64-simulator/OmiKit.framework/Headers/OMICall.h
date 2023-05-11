@@ -64,6 +64,11 @@ extern NSString * _Nonnull const OMICallErrorDuringSetupCallNotification;
 extern NSString * _Nonnull const OMICallVideoInfoNotification;
 
 /**
+ * Notification for when switchboard answer call.
+ */
+extern NSString * _Nonnull const OMICallSwitchBoardAnswerNotification;
+
+/**
  *  Notification that will be posted when a phonecall is connected.
  */
 extern NSString * _Nonnull const OMICallConnectedNotification DEPRECATED_MSG_ATTRIBUTE("Deprecated, listen for OMICallStateChangedNotification instead");
@@ -184,8 +189,6 @@ typedef NS_ENUM(NSInteger, OMICallState) {
      *  Call being request disconnect
      */
     OMICallStateDisconnecting = 12,
-
-
 };
 
 
