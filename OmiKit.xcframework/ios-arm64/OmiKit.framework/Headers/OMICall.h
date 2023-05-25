@@ -463,6 +463,12 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  */
 @property (readonly, nonatomic) float MOS;
 
+@property (readonly, nonatomic) float LATENCY;
+
+@property (readonly, nonatomic) float JITTER;
+
+@property (readonly, nonatomic) float PPL;
+
 /**
  * The codec that has been used during the call.
  */

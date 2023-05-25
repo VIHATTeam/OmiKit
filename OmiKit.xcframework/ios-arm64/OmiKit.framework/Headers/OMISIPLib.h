@@ -91,6 +91,19 @@ extern NSString * __nonnull const OMIVideoInfoState;
 extern NSString * __nonnull const OMINotificationNetworkStatusKey;
 
 /**
+ *  Key to be used for showing network information
+ */
+extern NSString * __nonnull const OMINotificationJitterKey;
+extern NSString * __nonnull const OMINotificationMOSKey;
+extern NSString * __nonnull const OMINotificationPPLKey;
+extern NSString * __nonnull const OMINotificationLatencyKey;
+
+/**
+ *  Key to be used for end cause
+ */
+extern NSString * __nonnull const OMINotificationEndCauseKey;
+
+/**
  *  Key to be used for receiving sip number.
  */
 extern NSString * __nonnull const OMINotificationSIPKey;
