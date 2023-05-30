@@ -68,6 +68,13 @@ extern NSString * _Nonnull const OMICallVideoInfoNotification;
  */
 extern NSString * _Nonnull const OMICallSwitchBoardAnswerNotification;
 
+
+extern NSString * _Nonnull const OMICallStatsPPL;
+
+extern NSString * _Nonnull const OMICallStatsLatency;
+
+extern NSString * _Nonnull const OMICallStatsJitter;
+
 /**
  *  Notification that will be posted when a phonecall is connected.
  */
@@ -125,6 +132,25 @@ typedef NS_ENUM(NSInteger, OMIVideoState) {
      *  Videl stream from remote is starting.
      */
     OMIVideoRemoteReady,
+};
+
+typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
+    
+    OMIInvalidUuid,
+    
+    OMIInvalidPhoneNumber,
+    
+    OMIMaxRetry,
+
+    OMIPermissionDenied,
+    
+    OMICouldNotFindEndpoint,
+    
+    OMIAccountRegisterFailed,
+    
+    OMIStartCallFailed,
+    
+    OMIStartCallSuccess,
 };
 
 

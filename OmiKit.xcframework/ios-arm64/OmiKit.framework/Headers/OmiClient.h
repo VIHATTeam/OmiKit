@@ -36,13 +36,9 @@
  */
 + (BOOL)startOmiService:(BOOL)isVideo;
 /**
- *  Start call if call is normal Call
- */
-+ (BOOL)startCall:(NSString *_Nonnull)toNumber;
-/**
  *  Start call with option video call
  */
-+ (BOOL)startCall:(NSString *_Nonnull)toNumber isVideo:(BOOL)isVideo;
++ (void)startCall:(NSString *_Nonnull) toNumber isVideo:(BOOL) isVideo result: (void (^)(OMIStartCallStatus status)) completion;
 /**
  *  Get phone number from UUID
  */
@@ -53,11 +49,6 @@
  *  Start call with Uuid (use for api key)
  */
 + (BOOL)startCallWithUuid:(NSString *_Nonnull)toNumber isVideo:(BOOL)isVideo;
-
-/**
- *  Start call if call is Video Call
- */
-+ (BOOL)startVideoCall:(NSString *_Nonnull)toNumber;
 /**
  *  Answer by function call, dont neet user interactive with callkit
  */
