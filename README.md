@@ -138,14 +138,40 @@ To make call to Number (Phone or Agent number)
 We provide 2 way to make call
 1. Start call to real number or Extension
  ```ruby
-BOOL result = [OmiClient startCall:(NSString * _Nonnull) isVideo:<#(BOOL)#>];
+BOOL result = [OmiClient startCall:_callPhoneNumberTextField.text isVideo:FALSE result:^(OMIStartCallStatus status){
+        // check status here
+    }];
 
 ```
 
 2. Start call with uuid of user and apikey
  ```ruby
-    [OmiClient startCallWithUuid:(NSString * _Nonnull) isVideo:<#(BOOL)#>];
+    [OmiClient startCallWithUuid:(NSString * _Nonnull) toUuid isVideo: (BOOL) isVideo result: (void (^)(OMIStartCallStatus status)) completion {
+            // check status here
+    }];
 
+```
+
+The start call status follow those code:
+```
+typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
+    
+    OMIInvalidUuid,
+    
+    OMIInvalidPhoneNumber,
+    
+    OMIMaxRetry,
+
+    OMIPermissionDenied,
+    
+    OMICouldNotFindEndpoint,
+    
+    OMIAccountRegisterFailed,
+    
+    OMIStartCallFailed,
+    
+    OMIStartCallSuccess,
+};
 ```
 
 # Notification callback
