@@ -48,7 +48,7 @@
 /**
  *  Start call with Uuid (use for api key)
  */
-+ (BOOL)startCallWithUuid:(NSString *_Nonnull)toNumber isVideo:(BOOL)isVideo;
++ (void)startCallWithUuid:(NSString * _Nonnull) toUuid isVideo: (BOOL) isVideo result: (void (^)(OMIStartCallStatus status)) completion;
 /**
  *  Answer by function call, dont neet user interactive with callkit
  */
