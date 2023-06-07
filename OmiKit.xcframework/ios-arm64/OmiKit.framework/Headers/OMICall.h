@@ -140,6 +140,8 @@ typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
     
     OMIInvalidPhoneNumber,
     
+    OMISamePhoneNumber,
+    
     OMIMaxRetry,
 
     OMIPermissionDenied,
