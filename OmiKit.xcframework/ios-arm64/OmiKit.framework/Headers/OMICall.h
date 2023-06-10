@@ -153,6 +153,8 @@ typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
     OMIStartCallFailed,
     
     OMIStartCallSuccess,
+    
+    OMIHaveAnotherCall,
 };
 
 

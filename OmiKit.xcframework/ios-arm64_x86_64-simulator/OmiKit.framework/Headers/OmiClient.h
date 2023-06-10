@@ -111,7 +111,7 @@
  *SANDBOX = 2;
  */
 
-+ (void)setEnviroment:(NSString *_Nonnull)enviroment;
++ (void)setEnviroment:(NSString *_Nonnull)enviroment prefix: (NSString *) prefix userNameKey: (NSString *) userNameKey maxCall: (int) maxCall;
 
 /**
  *Use to set APNS Normal push notification by application

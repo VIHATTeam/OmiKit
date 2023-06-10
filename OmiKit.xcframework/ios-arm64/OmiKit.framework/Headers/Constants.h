@@ -8,8 +8,9 @@
 extern int const ddLogLevel;
 
 #pragma PUSH
-static NSString * KEY_OMI_VOIP_TOKEN = @"voipToken";
-static NSString * KEY_OMI_DEVICE_TOKEN = @"device_token";
+static NSString * KEY_OMI_VOIP_TOKEN = @"omicall/voipToken";
+static NSString * KEY_OMI_DEVICE_TOKEN = @"omicall/device_token";
+static NSString * KEY_OMI_MAX_CALL = @"omicall/max_call";
 static NSString * KEY_OMI_RECEIVE_APNS_TOKEN = @"KEY_OMI_RECEIVE_APNS_TOKEN";
 static NSString * KEY_OMI_APP_ENVIROMENT = @"KEY_OMI_APP_ENVIROMENT";
 
