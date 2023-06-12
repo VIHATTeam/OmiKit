@@ -114,6 +114,11 @@
 + (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall;
 
 /**
+ *Check and remove voip token on my server.
+ */
++ (void) checkVoipToken:(NSString * _Nonnull) voipToken;
+
+/**
  *Use to set APNS Normal push notification by application
  *This push notification will use to make SDK able to push cancel call, chat,
  *another infomation
