@@ -167,4 +167,6 @@
  */
 + (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
 
++ (NSString *_Nullable)getCurrentSip;
+
 @end
