@@ -109,6 +109,11 @@ extern NSString * __nonnull const OMINotificationEndCauseKey;
 extern NSString * __nonnull const OMINotificationSIPKey;
 
 /**
+ *  Key to be used for receiving current route
+ */
+extern NSString * __nonnull const OMINotificationCurrentAudioRouteKey;
+
+/**
  *  Possible errors the OMISIPLib can return.
  */
 typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {

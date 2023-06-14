@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OMISIPLib.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface OmiClient : NSObject
 
@@ -167,6 +168,25 @@
  */
 + (void)setMissedCallBlock:(void(^ _Nonnull )(__weak OMICall * _Nonnull call))missedCallBlock;
 
+/**
+ * get current user sip
+ */
 + (NSString *_Nullable)getCurrentSip;
+
+/**
+ * get all audios in your device
+ */
++ (NSArray<NSDictionary<NSString *, NSString *> *> *_Nonnull) getAudioInDevices;
+
+/**
+ * get current audio in device
+ */
++ (NSArray<NSDictionary<NSString *, NSString *> *> *_Nonnull) getCurrentAudio;
+
+
+/**
+ * set audio output/input
+ */
++ (void)setAudioOutputs:(NSString *_Nonnull)portType;
 
 @end

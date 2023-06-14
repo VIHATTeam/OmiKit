@@ -68,6 +68,11 @@ extern NSString * _Nonnull const OMICallVideoInfoNotification;
  */
 extern NSString * _Nonnull const OMICallSwitchBoardAnswerNotification;
 
+/**
+ * Notification for when audio route changed.
+ */
+extern NSString * _Nonnull const OMICallAudioRouteChangeNotification;
+
 
 extern NSString * _Nonnull const OMICallStatsPPL;
 
