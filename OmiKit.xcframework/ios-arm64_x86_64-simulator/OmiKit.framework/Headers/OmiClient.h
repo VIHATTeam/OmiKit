@@ -19,7 +19,12 @@
  */
 + (BOOL)initWithUUID:(NSString *_Nonnull)usrUuid
             fullName:(NSString *_Nullable)fullName
-              apiKey:(NSString *_Nonnull)apiKey;
+            apiKey:(NSString *_Nonnull)apiKey;
+
++ (BOOL)initWithUUIDAndPhone:(NSString *_Nonnull)usrUuid
+            fullName:(NSString *_Nullable)fullName
+            apiKey:(NSString *_Nonnull)apiKey
+            phone: (NSString *_Nonnull)phone;
 
 + (void)initWithUsername:(NSString *_Nonnull)userName
                 password:(NSString *_Nonnull)password
