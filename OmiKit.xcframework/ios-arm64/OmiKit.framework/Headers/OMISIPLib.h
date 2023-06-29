@@ -59,6 +59,11 @@ extern NSString * __nonnull const OMINotificationUserInfoCallStateKey;
  */
 extern NSString * __nonnull const OMINotificationUserInfoCallMediaStateKey;
 
+/**
+ * Key to be used for retrieving the Call UUID.
+ */
+extern NSString * __nonnull const OMINotificationCallUUIDKey;
+
 
 /**
  *  Key to be used for retrieving the current audio state for call out of the NSNotificaton user info dict.
@@ -291,7 +296,7 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *
  *  @return success of configuration.
  */
-- (BOOL)configureLibraryWithEndPointConfiguration:(OMIEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable * _Nullable)error;
+- (void)configureLibraryWithEndPointConfiguration:(OMIEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  This will create and add a OMIAccount to the Endpoint.

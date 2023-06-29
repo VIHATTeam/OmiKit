@@ -32,6 +32,8 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
 
 - (BOOL)isCallActive:(NSString *)uuidString;
 
+- (BOOL)isCallEnded:(NSString *)uuidString;
+
 /**
  * Report the incoming call to CallKit so the native "incoming call" screen can be presented.
  *

@@ -17,7 +17,7 @@
 + (void)handle:(PKPushPayload * _Nonnull)payload completion: (void (^)(void))completion;
 @property (nonatomic) NSMutableDictionary * _Nonnull incomingCallConfirmed;
 + (instancetype)sharedInstance;
-+ (void)establishConnection:(PKPushPayload * _Nonnull)payload;
++ (void)establishConnection:(PKPushPayload * _Nonnull)payload completion: (void (^)(BOOL))completion;
 + (void) removeCallFromIncomming:(OMICall * _Nonnull) call;
 
 

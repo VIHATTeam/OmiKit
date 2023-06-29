@@ -8,6 +8,13 @@
 #import "OMICallStats.h"
 #import "SipInvite.h"
 
+
+
+
+/**
+ *  Notification which is posted when the have incoming call (from SIP).
+ */
+extern NSString * _Nonnull const OMICallInComingNotification;
 /**
  *  Notification which is posted when the call's state changes.
  *  The call for which the state changed can be found in the

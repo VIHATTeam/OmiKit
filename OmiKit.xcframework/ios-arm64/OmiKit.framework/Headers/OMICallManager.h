@@ -57,6 +57,22 @@
 - (void)endCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 
 /**
+ *  End the given call.
+ *
+ *  @param uuid The UUID to end.
+ *  @param completion A completion block giving access to an NSError when the given call could not be ended.
+ */
+- (void)endCallWithUuidIfNeed:(NSUUID *)uuid completion:(void (^)(NSError *error))completion;
+
+/**
+ *  End the given call.
+ *
+ *  @param uuid The UUID to end.
+ *  @param completion A completion block giving access to an NSError when the given call could not be ended.
+ */
+- (void)endCallWithUuidIShowing:(NSUUID *)uuid completion:(void (^)(NSError *error))completion;
+
+/**
  *  Toggle mute of the microphone for this call.
  *
  *  @param completion A completion block giving access to an NSError when mute cannot be toggle for the given call.
