@@ -117,7 +117,7 @@
  *SANDBOX = 2;
  */
 
-+ (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall;
++ (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage;
 
 /**
  *Check and remove voip token on my server.
