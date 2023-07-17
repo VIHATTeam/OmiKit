@@ -124,6 +124,12 @@
 - (BOOL) removeCallExcepCall:(NSString *)uuid;
 
 /**
+    This function use for remove Virtual Call in Call List
+    @param uuid of infomation call
+ */
+- (void) removeVirtualCallByUUID:(NSString *)uuid;
+
+/**
  *  Returns all the calls for a given account.
  *
  * @param account The OMIAccount for which to find it's calls.
