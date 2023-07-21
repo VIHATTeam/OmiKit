@@ -233,4 +233,14 @@
  *  @param account The OMIAccount instance for which to sent the UPDATE.
  */
 - (void)updateActiveCallsForAccount:(OMIAccount * _Nonnull)account;
+
+
+
+/**
+ *  Check and Clear timer using for case end call before 5s.
+ *  
+ */
+- (void)checkAndClearTimer;
+
+
 @end
