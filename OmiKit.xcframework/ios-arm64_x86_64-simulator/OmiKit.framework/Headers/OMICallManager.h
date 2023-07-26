@@ -242,5 +242,10 @@
  */
 - (void)checkAndClearTimer;
 
+/**
+ *  Use for end Call and close call kit
+ *
+ */
+- (void)endCallWithUUID:(NSUUID *_Nonnull)uuid;
 
 @end

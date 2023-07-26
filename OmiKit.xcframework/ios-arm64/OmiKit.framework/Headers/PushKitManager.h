@@ -6,12 +6,17 @@
 //
 //#import <PushKit/PKPushRegistryDelegate.h>
 #import <PushKit/PushKit.h>
+#import <CallKit/CXCallObserver.h>
 
 #ifndef PushKitManager_h
 #define PushKitManager_h
 @interface PushKitManager : NSObject<PKPushRegistryDelegate>
 - (instancetype)initWithVoipRegistry:(PKPushRegistry *)voIPRegistry;
 
+/**
+ * Func use for listen CXCallObserver change every call
+ */
+- (void)callObserver:(CXCallObserver *)callObserver callChanged:(CXCall *)call;
 
 @end
 
