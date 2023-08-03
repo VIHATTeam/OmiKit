@@ -248,4 +248,7 @@
  */
 - (void)endCallWithUUID:(NSUUID *_Nonnull)uuid;
 
+- (void)startListening;
+- (void)stopListening;
+
 @end

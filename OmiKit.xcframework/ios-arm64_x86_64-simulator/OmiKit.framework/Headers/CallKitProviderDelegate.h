@@ -41,5 +41,10 @@ extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNoti
  */
 - (void)reportIncomingCall:(__weak OMICall * _Nonnull)call;
 
+/**
+ *  Use for end Call and close call kit
+ *
+ */
+- (void)reportCallWithUUID:(NSUUID *_Nonnull)uuid;
 
 @end

@@ -12,7 +12,7 @@
 #define PushKitManager_h
 @interface PushKitManager : NSObject<PKPushRegistryDelegate>
 - (instancetype)initWithVoipRegistry:(PKPushRegistry *)voIPRegistry;
-
++ (instancetype)sharedInstance;
 /**
  * Func use for listen CXCallObserver change every call
  */

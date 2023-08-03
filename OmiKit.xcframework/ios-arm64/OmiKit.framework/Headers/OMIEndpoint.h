@@ -153,12 +153,22 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 };
 #define OMIEndpointStateString(OMIEndpointState) [@[@"OMIEndpointStopped", @"OMIEndpointStarting", @"OMIEndpointStarted"] objectAtIndex:OMIEndpointState]
 
+// /**
+//  *  Possible states for the switchboard signal when make call or get call
+//  *  REGISTER, INVITE, ACK, BYE, CANCEL, OPTIONS, MESSAGE, INFO, UPDATE, REGISTER, REFER, NOTIFY, PUBLISH, SUBSCRIBE
+//  */
+// typedef enum {REGISTER, INVITE, CANCEL, ACK, BYE, MESSAGE, UPDATE, NOTIFY} OMIStateSignalSwitchBoard;
+// #define OMIStateSignalSwitchBoardIndex(enum) [@[@"REGISTER",@"INVITE",@"CANCEL", @"ACK", @"BYE", @"MESSAGE", @"UPDATE", @"NOTIFY"] indexOfObject:enum]
+// #define OMIStateSignalSwitchBoardString(enum) [@[@"REGISTER",@"INVITE",@"CANCEL", @"ACK", @"BYE", @"MESSAGE", @"UPDATE", @"NOTIFY"] objectAtIndex:enum]
+// #define OMIStateSignalSwitchBoardHaveMethod(enum) [@[@"REGISTER",@"INVITE",@"CANCEL", @"ACK", @"BYE", @"MESSAGE", @"UPDATE", @"NOTIFY"] containsObject:enum]
 @interface OMIEndpoint : NSObject
 
 /**
  *  Current state of the endpoint.
  */
 @property (nonatomic) OMIEndpointState state;
+
+@property (nonatomic) NSString* _Nonnull stateSignalSwitchBoard ;
 
 @property (assign) bool isV6Transport;
 @property int udpTransportId;
