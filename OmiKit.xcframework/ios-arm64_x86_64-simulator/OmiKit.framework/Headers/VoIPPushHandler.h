@@ -19,8 +19,7 @@
 + (instancetype)sharedInstance;
 + (void)establishConnection:(PKPushPayload * _Nonnull)payload completion: (void (^)(BOOL))completion;
 + (void) removeCallFromIncomming:(OMICall * _Nonnull) call;
-
-
+- (BOOL)enableShowCallKit;
 @end
 
 #endif /* VoIPPushHandler_h */

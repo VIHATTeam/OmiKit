@@ -28,7 +28,8 @@
 
 + (void)initWithUsername:(NSString *_Nonnull)userName
                 password:(NSString *_Nonnull)password
-                   realm:(NSString *_Nonnull)realm;
+                   realm:(NSString *_Nonnull)realm
+                   proxy:(NSString *_Nonnull)proxy;
 
 /**
  *  call this function when user logout to prevent notification came to this
@@ -117,7 +118,7 @@
  *SANDBOX = 2;
  */
 
-+ (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage;
++ (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage typePushVoip:(NSString *)typePushVoip;
 
 /**
  *Check and remove voip token on my server.
@@ -193,5 +194,7 @@
  * set audio output/input
  */
 + (void)setAudioOutputs:(NSString *_Nonnull)portType;
+
++ (void)sendLogTracking:(NSString *)typeLog logString:(NSString *) logString;
 
 @end
