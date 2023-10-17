@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.90](https://github.com/VIHATTeam/OmiKit.git) (17/10/2023)
+
+- Fix hang when canceling calls, 
+- Fix error of not being able to call continuously, add UDP connection
+
+
 ## [1.0.0](https://github.com/VIHATTeam/OmiKit.git) (15/06/2020)
 
 Released on Monday, June 15, 2020.
