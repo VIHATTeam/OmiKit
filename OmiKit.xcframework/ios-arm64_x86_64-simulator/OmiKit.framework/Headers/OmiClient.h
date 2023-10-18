@@ -197,4 +197,6 @@
 
 + (void)sendLogTracking:(NSString *)typeLog logString:(NSString *) logString;
 
++ (void)sendLogTrackingPush:(NSString *)logString;
+
 @end
