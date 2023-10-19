@@ -199,4 +199,5 @@
 
 + (void)sendLogTrackingPush:(NSString *)logString;
 
++ (void)sendLogTrackingRegisterAccount:(NSString *)logString;
 @end
