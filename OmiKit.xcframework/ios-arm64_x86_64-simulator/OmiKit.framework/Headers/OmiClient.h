@@ -200,4 +200,5 @@
 + (void)sendLogTrackingPush:(NSString *)logString;
 
 + (void)sendLogTrackingRegisterAccount:(NSString *)logString;
++ (int)getLogLevel;
 @end

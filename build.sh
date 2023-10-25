@@ -1,6 +1,4 @@
 
-git tag -a $1 -m "Relase lease $1"
-git push origin $1
 pod lib lint --allow-warnings --no-clean --verbose
 
 if [ $? -eq 0 ]; then
