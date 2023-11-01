@@ -13,4 +13,4 @@ if [ $? -eq 0 ]; then
 	fi
 else
 	echo "pod verifys fail!"
-fi
+fi	

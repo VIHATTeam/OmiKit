@@ -688,4 +688,6 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 - (void)setSpeaker:(Boolean)speaker;
 
 + (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string;
+
+
 @end

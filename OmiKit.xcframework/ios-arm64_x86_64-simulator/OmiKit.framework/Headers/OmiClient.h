@@ -7,6 +7,7 @@
 #import "OMISIPLib.h"
 #import <AVFoundation/AVFoundation.h>
 
+@class OMICallInfo, OMICallInfoItem;
 @interface OmiClient : NSObject
 
 /**
@@ -201,4 +202,6 @@
 
 + (void)sendLogTrackingRegisterAccount:(NSString *)logString;
 + (int)getLogLevel;
+
++(void)sendLogRTPCall:(OMICallInfoItem *_Nonnull)_OMICallInfoItem;
 @end
