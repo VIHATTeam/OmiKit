@@ -26,7 +26,7 @@ static NSString * KEY_OMI_APP_ENVIROMENT_SANDBOX = @"2";
 static NSString * KEY_OMI_APP_DEVICE_TYPE_IOS = @"2";
 static NSString * KEY_OMI_APP_DEVICE_TYPE_ANDROID = @"1";
 static NSString * KEY_OMI_APP_USE_NOISE_SUPPRESSION = @"KEY_OMI_APP_USE_NOISE_SUPPRESSION";
-
+static NSString * KEY_LOG_LEVEL = @"omicall/logLevel";
 #pragma NOTI
 static NSString * KEY_OMI_USER_NAME_KEY = @"omicall/userNameKey";
 
