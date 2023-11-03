@@ -208,4 +208,8 @@
 
 + (void)sendLogTrackingStatusEndpoint:(NSString *) typeLog logString:(NSString *) logString;
 
++ (void)handleEndpointNotAvailable:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
+
++ (void)handleExistingEndpoint:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
+
 @end
