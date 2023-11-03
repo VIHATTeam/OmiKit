@@ -7,15 +7,16 @@
 #import "OMISIPLib.h"
 #import <AVFoundation/AVFoundation.h>
 
+
 @class OMICallInfo, OMICallInfoItem;
 @interface OmiClient : NSObject
 
 /**
  *  Init user name/password for endpoint, ussually this step need to be init
  * when app open firstime or login
- *  @Param uuid: This is unique id of user
- *  @Param fullName: is user not exits it will create new user with this name
- *  @Param apiKey: this key get From omicall, help we can authen request from
+ *  @Param usrUuid This is unique id of user
+ *  @Param fullName is user not exits it will create new user with this name
+ *  @Param apiKey this key get From omicall, help we can authen request from
  * SDK
  */
 + (BOOL)initWithUUID:(NSString *_Nonnull)usrUuid
@@ -203,5 +204,8 @@
 + (void)sendLogTrackingRegisterAccount:(NSString *)logString;
 + (int)getLogLevel;
 
-+(void)sendLogRTPCall:(OMICallInfoItem *_Nonnull)_OMICallInfoItem;
++ (void)sendLogRTPCall:(OMICallInfoItem *_Nonnull)_OMICallInfoItem;
+
++ (void)sendLogTrackingStatusEndpoint:(NSString *) typeLog logString:(NSString *) logString;
+
 @end
