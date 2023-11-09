@@ -199,4 +199,10 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  */
 - (__weak OMICall * _Nullable)firstActiveCall;
 
+/**
+ *  Variable used to store state, if transportTCPDefaultFail initialization TCP = TRUE, this time it will initialize with UDP
+ */
+@property (nonatomic) Boolean transportTCPDefaultFail;
+
+
 @end
