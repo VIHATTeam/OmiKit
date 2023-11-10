@@ -204,5 +204,7 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
  */
 @property (nonatomic) Boolean transportTCPDefaultFail;
 
+@property (nonatomic) Boolean isActiveBackground;
+
 
 @end
