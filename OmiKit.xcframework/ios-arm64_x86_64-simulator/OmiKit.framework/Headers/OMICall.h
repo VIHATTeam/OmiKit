@@ -424,7 +424,7 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 /**
  *  The name of the caller.
  */
-@property (readonly, nonatomic) NSString * _Nullable callerName;
+@property (strong, nonatomic) NSString * _Nullable callerName;
 
 /**
  *  The number of the caller.

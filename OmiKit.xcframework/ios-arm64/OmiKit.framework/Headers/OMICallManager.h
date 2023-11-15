@@ -251,4 +251,8 @@
 - (void)startListening;
 - (void)stopListening;
 
+- (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
+
+- (__weak OMICall * _Nullable)findCallWithCallId:(NSInteger *_Nonnull)callId;
+
 @end

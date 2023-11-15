@@ -28,7 +28,8 @@
 
 + (NSString*) getOmiID;
 + (int)getAvailableBandwidth ;
-
++ (BOOL)isPhoneNumber:(NSString *)name;
++ (NSString *)formatPhoneNumber:(NSString *)name;
 
 @end
 
