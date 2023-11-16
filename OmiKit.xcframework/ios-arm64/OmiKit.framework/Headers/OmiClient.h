@@ -212,4 +212,6 @@
 
 + (void)handleExistingEndpoint:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
 
++ (void)sendLogTrackingLogInOut:(NSString *)typeLog logString:(NSString *) logString;
+
 @end

@@ -30,6 +30,8 @@
 + (int)getAvailableBandwidth ;
 + (BOOL)isPhoneNumber:(NSString *)name;
 + (NSString *)formatPhoneNumber:(NSString *)name;
++ (void)saveProxy:(NSString *)proxy;
++ (NSString *)getProxy;
 
 @end
 
