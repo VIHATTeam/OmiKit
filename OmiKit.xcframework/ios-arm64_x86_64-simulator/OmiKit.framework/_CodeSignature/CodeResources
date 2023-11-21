@@ -66,7 +66,7 @@
 		</data>
 		<key>Headers/OMINetworkMonitor.h</key>
 		<data>
-		/huiTvKOPYIukQvD0F+vtOWy4tY=
+		u9gfuC8+sC04GDwfefRESjiGbjs=
 		</data>
 		<key>Headers/OMIOpusConfiguration.h</key>
 		<data>
@@ -118,7 +118,7 @@
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		3D37M4QwudihlHRdI0uNR26rwjA=
+		Pr0SS8ZigS/7YP1PenfjilEtuZw=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		k7ogsXdihK4mgqxNYcusFb0xLH8=
+		FuHqXINUpUPwMRGL1aGe9oxk5N8=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -146,7 +146,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		7cQRgmdQWVt3nYWO6fzO3PL3U8E=
+		oFJJyQb72yFKUBT4aKlH3fGVBt4=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -264,7 +264,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sG195Je0KhVsds4t3SKnhD7+UQJ5ocYhZAcCkBVgGIw=
+			TxId6AS4FXVuV2o8GElEw1Kt99lLselLdAq/5zs91Pw=
 			</data>
 		</dict>
 		<key>Headers/OMIOpusConfiguration.h</key>
@@ -355,7 +355,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hVmGRjh4JV1sTyU/xiS0a1zxz5vguLkkmp/6uOg8+mk=
+			0gyHnb13BJZz9Mq4a4CLtJ7zU7ZXdqL2LZHBO5MA8wQ=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
@@ -397,7 +397,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4bxyG2wzTRKTbY+bQuAVhKar8aYUgl9ZX/X8w1O43Us=
+			oyXK76V0UN7OMTEJ5TDyZg+yhA7G6gYdIzDbdlOpY4A=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>

@@ -16,7 +16,7 @@
  * when app open firstime or login
  *  @Param usrUuid This is unique id of user
  *  @Param fullName is user not exits it will create new user with this name
- *  @Param apiKey this key get From omicall, help we can authen request from
+ *  @Param apiKey this key From omicall, help we can authen request from
  * SDK
  */
 + (BOOL)initWithUUID:(NSString *_Nonnull)usrUuid

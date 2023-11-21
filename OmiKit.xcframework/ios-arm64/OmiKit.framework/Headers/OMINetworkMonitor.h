@@ -31,4 +31,8 @@ extern NSString * _Nonnull const OMINetworkMonitorChangedNotification;
  */
 - (void)stopMonitoring;
 
+- (BOOL)isObservingMonitoring;
+
+- (void)deallocNSNotification;
+
 @end
