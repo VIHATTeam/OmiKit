@@ -32,6 +32,7 @@
 + (NSString *)formatPhoneNumber:(NSString *)name;
 + (void)saveProxy:(NSString *)proxy;
 + (NSString *)getProxy;
++ (BOOL)lookupSipHeaders:(NSString *) textFind textPosition:(NSString *) textPosition sipMessage:(NSString *) sipMessage;
 
 @end
 

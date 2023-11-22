@@ -689,5 +689,6 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 
 + (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string;
 
+- (void)updateLastStatus:(NSInteger)statusCall lastStatusText:(NSString *) lastStatusText;
 
 @end

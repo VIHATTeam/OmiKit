@@ -285,4 +285,6 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 
 -(void) reinviteWithVideoIfCalling;
 
+-(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
+
 @end
