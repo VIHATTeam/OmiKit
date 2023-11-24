@@ -1,4 +1,7 @@
 
+git tag -a $1 -m "Release version $1"
+git push origin --tags 
+
 pod lib lint --allow-warnings --no-clean --verbose
 
 if [ $? -eq 0 ]; then
