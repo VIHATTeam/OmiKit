@@ -33,7 +33,7 @@
 + (void)saveProxy:(NSString *)proxy;
 + (NSString *)getProxy;
 + (BOOL)lookupSipHeaders:(NSString *) textFind textPosition:(NSString *) textPosition sipMessage:(NSString *) sipMessage;
-
++ (void)delayActionAfterTime:(NSInteger ) numberSecond completion:(void (^)(void))completion;
 @end
 
 @interface HttpRequest : NSObject

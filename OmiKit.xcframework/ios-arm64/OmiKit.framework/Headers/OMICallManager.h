@@ -249,7 +249,6 @@
 - (void)endCallWithUUID:(NSUUID *_Nonnull)uuid;
 
 - (void)startListening;
-- (void)stopListening;
 
 - (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
 
