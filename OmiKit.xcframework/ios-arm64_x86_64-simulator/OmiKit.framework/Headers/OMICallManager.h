@@ -248,7 +248,7 @@
  */
 - (void)endCallWithUUID:(NSUUID *_Nonnull)uuid;
 
-- (void)startListening;
+- (void)startCheckSpamCalls:(NSInteger)retry;
 
 - (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
 
