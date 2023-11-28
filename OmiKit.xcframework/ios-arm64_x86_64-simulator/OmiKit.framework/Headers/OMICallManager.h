@@ -56,13 +56,6 @@
  */
 - (void)endCall:(__weak OMICall * _Nonnull)call completion:(void (^ _Nullable)(NSError * _Nullable error))completion;
 
-/**
- *  End the given call.
- *
- *  @param uuid The UUID to end.
- *  @param completion A completion block giving access to an NSError when the given call could not be ended.
- */
-- (void)endCallWithUuidIfNeed:(NSUUID *)uuid completion:(void (^)(NSError *error))completion;
 
 /**
  *  End the given call.
@@ -235,12 +228,6 @@
 - (void)updateActiveCallsForAccount:(OMIAccount * _Nonnull)account;
 
 
-
-/**
- *  Check and Clear timer using for case end call before 5s.
- *  
- */
-- (void)checkAndClearTimer;
 
 /**
  *  Use for end Call and close call kit
