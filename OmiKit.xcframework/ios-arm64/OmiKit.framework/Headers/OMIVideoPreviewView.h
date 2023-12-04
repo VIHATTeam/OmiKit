@@ -6,6 +6,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// update preview view from ViewManager
 /// - Parameter view: the preview view from VideoViewManager
 - (void)setView: (UIView *)view;
+
+- (void)setPlayer:(AVPlayer *)player;
 
 @end
 
