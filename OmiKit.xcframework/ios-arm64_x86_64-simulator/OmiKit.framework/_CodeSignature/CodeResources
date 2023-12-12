@@ -152,6 +152,10 @@
 		<data>
 		EKYMq5S5VExGpTGFvZ+0IogfFwI=
 		</data>
+		<key>README.md</key>
+		<data>
+		u3GcStg84otg5lE/olwBpwR5QzU=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -405,6 +409,13 @@
 			<key>hash2</key>
 			<data>
 			nY/da05RuWVuJkveWu+LKYd4TD4ihkKEqpxqCBObbvw=
+			</data>
+		</dict>
+		<key>README.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CsBFqFUGNmZgujxaHa4AVy5FPEurk1wExv8L02J72fY=
 			</data>
 		</dict>
 	</dict>
