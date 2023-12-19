@@ -34,6 +34,14 @@
 + (NSString *)getProxy;
 + (BOOL)lookupSipHeaders:(NSString *) textFind textPosition:(NSString *) textPosition sipMessage:(NSString *) sipMessage;
 + (void)delayActionAfterTime:(NSInteger ) numberSecond completion:(void (^)(void))completion;
+/*
+ Find the method: INVITED, REGISTER from the sip string
+ */
++ (NSString *)getMethodFromSIPMessage:(NSString *)sipMessage;
+/*
+ Find the UUID from Sip Message
+ */
++ (NSString *)findAndCutUUIDFromSipMessages:(NSString *)sipMessage;
 @end
 
 @interface HttpRequest : NSObject

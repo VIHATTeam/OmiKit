@@ -214,4 +214,6 @@
 
 + (void)sendLogTrackingLogInOut:(NSString *)typeLog logString:(NSString *) logString account:(NSString *) account domain:(NSString *) domain ;
 
++ (void)sendLogCallId:(NSString *)typeLog logString:(NSString *) logString ;
+
 @end

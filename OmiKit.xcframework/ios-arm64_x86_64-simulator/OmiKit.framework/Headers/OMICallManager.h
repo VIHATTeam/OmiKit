@@ -12,6 +12,16 @@
 @class OMIAccount;
 
 /**
+ Because the transaction id is retrieved in the SIP incoming call message. At this time, the call array has not been initialized yet, then it will not be possible to add omiID.
+ Therefore, we need a temporary array containing intermediate information
+ */
+@interface OMITransactionIdInfoItem : NSObject
+@property (nonatomic, strong) NSString *transactionID;
+@property (nonatomic, assign) NSInteger callID; // Sử dụng assign cho kiểu dữ liệu nguyên thủy.
+@end
+
+
+/**
  *  The OMICallManager class is the single point of entry for everything you want to do with a call.
  *  - start an outbound call
  *  - end a call
@@ -240,5 +250,11 @@
 - (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
 
 - (__weak OMICall * _Nullable)findCallWithCallId:(NSInteger *_Nonnull)callId;
+
+- (void)addTransactionIdInfoItem:(OMITransactionIdInfoItem *)item;
+
+- (void)removeTransactionIdInfoItemWithCallId:(NSInteger)callId;
+
+- (OMITransactionIdInfoItem * _Nullable)findTransactionIdInfoItemByCallId:(NSInteger)callId;
 
 @end
