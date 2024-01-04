@@ -29,4 +29,4 @@ static NSString * KEY_OMI_APP_USE_NOISE_SUPPRESSION = @"KEY_OMI_APP_USE_NOISE_SU
 static NSString * KEY_LOG_LEVEL = @"omicall/logLevel";
 #pragma NOTI
 static NSString * KEY_OMI_USER_NAME_KEY = @"omicall/userNameKey";
-
+static NSString * KEY_OMI_REPRESENT_NAME = @"omicall/representName";

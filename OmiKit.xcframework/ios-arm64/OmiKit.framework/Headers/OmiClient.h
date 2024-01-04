@@ -122,6 +122,7 @@
 
 + (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage typePushVoip:(NSString *)typePushVoip;
 
++  (void) setEnviroment:(NSString *) enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage typePushVoip: (NSString *)typePushVoip representName: (NSString *)representName;
 /**
  *Check and remove voip token on my server.
  */
