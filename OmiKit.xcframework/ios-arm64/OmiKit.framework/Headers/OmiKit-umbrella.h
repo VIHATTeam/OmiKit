@@ -42,6 +42,7 @@
 #import "PushKitManager.h"
 #import "SipInvite.h"
 #import "VoIPPushHandler.h"
+#import "OMIUtils.h"
 
 FOUNDATION_EXPORT double OmiKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];

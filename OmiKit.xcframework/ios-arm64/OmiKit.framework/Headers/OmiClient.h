@@ -217,4 +217,9 @@
 
 + (void)sendLogCallId:(NSString *)typeLog logString:(NSString *) logString ;
 
+/**
+ This func will check and auto close all call when user kill app.
+ **/
++ (void) OMICloseCall;
+
 @end
