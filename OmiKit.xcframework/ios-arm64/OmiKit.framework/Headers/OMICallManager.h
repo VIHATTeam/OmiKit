@@ -174,6 +174,11 @@
  */
 - (void)endAllCalls;
 
+/**
+ *  End all calls.
+ *  Notice this function just use to remove All call current when user kill app
+ */
+- (void)closeAllCalls;
 
 - (NSMutableArray *)getAllCalls;
 
