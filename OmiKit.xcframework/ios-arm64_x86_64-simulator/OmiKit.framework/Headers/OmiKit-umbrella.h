@@ -17,6 +17,7 @@
 #import "OMIAudioCodecs.h"
 #import "OMIAudioController.h"
 #import "OMICall.h"
+#import "OMICallInfo.h"
 #import "OMICallManager.h"
 #import "OMICallStats.h"
 #import "OmiClient.h"
@@ -42,7 +43,6 @@
 #import "PushKitManager.h"
 #import "SipInvite.h"
 #import "VoIPPushHandler.h"
-#import "OMIUtils.h"
 
 FOUNDATION_EXPORT double OmiKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];
