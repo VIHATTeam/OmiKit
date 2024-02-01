@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/Constants.h</key>
 		<data>
-		R5f5yqBp4SIVVkCmifv0fRCMjaU=
+		+w6SkHUE8kAri8u0LIJvAZK/zis=
 		</data>
 		<key>Headers/OMIAccount.h</key>
 		<data>
@@ -82,7 +82,7 @@
 		</data>
 		<key>Headers/OMISIPLib.h</key>
 		<data>
-		caZhGmCMootFOrCh8ylIxNH4exw=
+		eHnFbj5j3SNdq36K1f6n1Atv8hc=
 		</data>
 		<key>Headers/OMIStunConfiguration.h</key>
 		<data>
@@ -122,7 +122,7 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		uAxjCmkmfPfja2zKu2vv3DVkvZ4=
+		JdYoXh82+WNeMZ9BQjRXqQ+f0G8=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -152,10 +152,6 @@
 		<data>
 		EKYMq5S5VExGpTGFvZ+0IogfFwI=
 		</data>
-		<key>README.md</key>
-		<data>
-		u3GcStg84otg5lE/olwBpwR5QzU=
-		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -170,7 +166,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			jMrUhgCZY6ZL2V+1kXDPIGklhOThh0LCFZU6KmOZWIs=
+			w0K2n5Sv6J6h/Ado+wT54JgRVtfyTu5Z7HebQpr9Fuk=
 			</data>
 		</dict>
 		<key>Headers/OMIAccount.h</key>
@@ -296,7 +292,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GhvDeEV80y8vPtNBi10838sDIizzU0TSPPcpxK0KnaQ=
+			x+psAu5lX6HuRxIaN025PxHNOpAWFdPGgcxgE5a/t6A=
 			</data>
 		</dict>
 		<key>Headers/OMIStunConfiguration.h</key>
@@ -366,7 +362,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ED+vFOttQkOZ9CMKelKkJI6cZpH0K/KKLdsE/1m1AL4=
+			Waj23NVWVS/CekstlZXzEJ5f3p4Uu5HFTa0PbCqec3I=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -409,13 +405,6 @@
 			<key>hash2</key>
 			<data>
 			nY/da05RuWVuJkveWu+LKYd4TD4ihkKEqpxqCBObbvw=
-			</data>
-		</dict>
-		<key>README.md</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			CsBFqFUGNmZgujxaHa4AVy5FPEurk1wExv8L02J72fY=
 			</data>
 		</dict>
 	</dict>
