@@ -19,8 +19,8 @@ static NSString * TYPE_PUSH_CALLKIT_FORGROUND = @"callkit/forground";
 static NSString * TYPE_PUSH_CALLKIT_BACKGROUND =  @"callkit/background";
 static NSString * TYPE_PUSH_CALLKIT_DEFAULT = @"callkit/default";
 static NSString * CALL_KIT = @"callkit/";
-#pragma APP
 
+#pragma APP
 static NSString * OMI_SIP_USER_LOGIN = @"omicall/user/login";
 static NSString * KEY_OMI_APP_ENVIROMENT_PRODUCTION = @"1";
 static NSString * KEY_OMI_APP_ENVIROMENT_SANDBOX = @"2";
@@ -28,6 +28,8 @@ static NSInteger KEY_OMI_APP_DEVICE_TYPE_IOS = 2;
 static NSString * KEY_OMI_APP_DEVICE_TYPE_ANDROID = @"1";
 static NSString * KEY_OMI_APP_USE_NOISE_SUPPRESSION = @"KEY_OMI_APP_USE_NOISE_SUPPRESSION";
 static NSString * KEY_LOG_LEVEL = @"omicall/logLevel";
+static NSString * OMICALL_TRANSFERED = @"omicall/call/transfer";
+
 #pragma NOTI
 static NSString * KEY_OMI_USER_NAME_KEY = @"omicall/userNameKey";
 static NSString * KEY_OMI_REPRESENT_NAME = @"omicall/representName";
