@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name                  = 'OmiKit'
-  s.version               = '1.6.56'
+  s.version               = '1.6.57'
   s.homepage           = "https://micall.com/"
   s.summary            = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
