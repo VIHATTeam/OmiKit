@@ -17,7 +17,6 @@
 #import "OMIAudioCodecs.h"
 #import "OMIAudioController.h"
 #import "OMICall.h"
-#import "OMICallInfo.h"
 #import "OMICallManager.h"
 #import "OMICallStats.h"
 #import "OmiClient.h"
