@@ -32,10 +32,6 @@
 		<data>
 		Jzx11Mrl84QaPAqw4uYvkBwBe5U=
 		</data>
-		<key>Headers/OMICallInfo.h</key>
-		<data>
-		9d0uJjZAYUHo1sSRq3zoS2HiGxw=
-		</data>
 		<key>Headers/OMICallManager.h</key>
 		<data>
 		DBUBa45/GFp5e/oQe0fPt/TcR7I=
@@ -126,7 +122,7 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		TKKTRCVIHx4paYalvCaOKCU4iWM=
+		6gOBStaw5LR5v2OgHrj+7NOGtE4=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -155,6 +151,10 @@
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
 		EKYMq5S5VExGpTGFvZ+0IogfFwI=
+		</data>
+		<key>README.md</key>
+		<data>
+		u3GcStg84otg5lE/olwBpwR5QzU=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -206,13 +206,6 @@
 			<key>hash2</key>
 			<data>
 			cGqhkzO1FqZsd0Geo4ITn5JleWzz26FQ3v7CKKXrGIs=
-			</data>
-		</dict>
-		<key>Headers/OMICallInfo.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			4m+t2gvpyuZHzRQrjTpLDA7A9mj5CGhtKoZBQShOXyE=
 			</data>
 		</dict>
 		<key>Headers/OMICallManager.h</key>
@@ -373,7 +366,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			yKgXlMQw07eVMu8tFjUhC8PLlJYj+wQCA2n0CPk7eQE=
+			ZtX81HmdNLw0R7CBUkXKpkfL67kvGNuXyqKlcT6BhDs=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -416,6 +409,13 @@
 			<key>hash2</key>
 			<data>
 			nY/da05RuWVuJkveWu+LKYd4TD4ihkKEqpxqCBObbvw=
+			</data>
+		</dict>
+		<key>README.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CsBFqFUGNmZgujxaHa4AVy5FPEurk1wExv8L02J72fY=
 			</data>
 		</dict>
 	</dict>
