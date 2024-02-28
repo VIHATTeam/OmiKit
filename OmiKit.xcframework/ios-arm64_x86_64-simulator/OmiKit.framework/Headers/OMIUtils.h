@@ -43,16 +43,6 @@
  */
 + (NSString *)findAndCutUUIDFromSipMessages:(NSString *)sipMessage;
 
-+ (NSUUID *)getCallIDGenerate:(NSUUID *)callUUID;
-
-+ (NSUUID *)findAndGenCallIDGenerate:(NSUUID *)callUUID;
-
-+ (NSUUID *)getCallIDOrigin:(NSUUID *)callUUID;
-
-+ (NSUUID *)getCallIDGenerate:(NSUUID *)callUUID;
-
-+ (NSUUID *)genCallIDGenerate:(NSUUID *)callUUID;
-
 @end
 
 @interface HttpRequest : NSObject
