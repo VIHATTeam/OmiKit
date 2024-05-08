@@ -10,7 +10,8 @@ extern NSString * __nonnull const CallKitProviderDelegateOutboundCallStartedNoti
 extern NSString * __nonnull const CallKitProviderDelegateInboundCallAcceptedNotification;
 extern NSString * __nonnull const CallKitProviderDelegateInboundCallRejectedNotification;
 
-@import CallKit;
+#import <CallKit/CallKit.h>
+
 
 @class OMICallManager, OMICall;
 

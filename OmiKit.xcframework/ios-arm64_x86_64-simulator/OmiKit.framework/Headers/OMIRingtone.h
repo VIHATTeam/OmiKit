@@ -5,7 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@import AVFoundation;
+#import <AVFoundation/AVAudioSession.h>
 
 @interface OMIRingtone : NSObject
 
