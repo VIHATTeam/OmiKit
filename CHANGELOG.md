@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.7.17](https://github.com/VIHATTeam/OmiKit.git) (15/05/2024)
+
+- Fix call id off func answerIncommingCall for SDK React Native 
+
+
+
 ## [1.5.90](https://github.com/VIHATTeam/OmiKit.git) (17/10/2023)
 
 - Fix hang when canceling calls, 
