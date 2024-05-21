@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.7.18](https://github.com/VIHATTeam/OmiKit.git) (21/05/2024)
+
+- Fix crash in coming call when transfer call 
+
 ## [1.7.17](https://github.com/VIHATTeam/OmiKit.git) (15/05/2024)
 
 - Fix call id off func answerIncommingCall for SDK React Native 
