@@ -9,7 +9,7 @@
 #define OMIVideoViewManager_h
 
 #import <UIKit/UIKit.h>
-#import "OMIVideoPreviewView.h"
+#import <OmiKit/OMIVideoPreviewView.h>
 
 @interface OMIVideoViewManager : NSObject
 

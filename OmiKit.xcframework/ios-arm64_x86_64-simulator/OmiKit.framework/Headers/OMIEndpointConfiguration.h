@@ -4,9 +4,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OMIIpChangeConfiguration.h"
-#import "OMIStunConfiguration.h"
-#import "OMICodecConfiguration.h"
+#import <OmiKit/OMIIpChangeConfiguration.h>
+#import <OmiKit/OMIStunConfiguration.h>
+#import <OmiKit/OMICodecConfiguration.h>
 
 
 @interface OMIEndpointConfiguration : NSObject
