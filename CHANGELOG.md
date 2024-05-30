@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.20](https://github.com/VIHATTeam/OmiKit.git) (30/05/2024)
+
+- Update new core SDK 
+
 
 ## [1.7.18](https://github.com/VIHATTeam/OmiKit.git) (21/05/2024)
 
