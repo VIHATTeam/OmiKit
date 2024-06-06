@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.21](https://github.com/VIHATTeam/OmiKit.git) (06/06/2024)
+
+- Revert code add mission file Omikit.h
+
 ## [1.7.20](https://github.com/VIHATTeam/OmiKit.git) (30/05/2024)
 
 - Update new core SDK 
