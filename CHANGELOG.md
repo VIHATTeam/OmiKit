@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.22](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
+
+- Fix wrong call_id when get push incoming call second
+- Reduce time start call  
+
+
 ## [1.7.21](https://github.com/VIHATTeam/OmiKit.git) (06/06/2024)
 
 - Revert code add mission file Omikit.h
