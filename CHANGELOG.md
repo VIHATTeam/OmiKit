@@ -2,38 +2,61 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.7.23](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
+
+#### Changed
+
+- Fix missing omi_id off incoming call 
+
+## [1.7.24](https://github.com/VIHATTeam/OmiKit.git) (19/06/2024)
+
+#### Changed
 - Add function clear call when close Callkit false 
 
-## [1.7.22](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
+## [1.7.23](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
 
+
+#### Changed
 - Fix wrong call_id when get push incoming call second
 - Reduce time start call  
 
+## [1.7.22](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
 
-## [1.7.21](https://github.com/VIHATTeam/OmiKit.git) (06/06/2024)
+
+#### Changed
 
 - Revert code add mission file Omikit.h
 
-## [1.7.20](https://github.com/VIHATTeam/OmiKit.git) (30/05/2024)
+## [1.7.21](https://github.com/VIHATTeam/OmiKit.git) (06/06/2024)
+
+
+#### Changed
 
 - Update new core SDK 
 
+## [1.7.20](https://github.com/VIHATTeam/OmiKit.git) (30/05/2024)
+
+
+#### Changed
+
+- Fix crash in coming call when transfer call
 
 ## [1.7.18](https://github.com/VIHATTeam/OmiKit.git) (21/05/2024)
+ 
 
-- Fix crash in coming call when transfer call 
-
-## [1.7.17](https://github.com/VIHATTeam/OmiKit.git) (15/05/2024)
+#### Changed
 
 - Fix call id off func answerIncommingCall for SDK React Native 
 
+## [1.7.17](https://github.com/VIHATTeam/OmiKit.git) (15/05/2024)
 
 
-## [1.5.90](https://github.com/VIHATTeam/OmiKit.git) (17/10/2023)
+#### Changed
 
 - Fix hang when canceling calls, 
 - Fix error of not being able to call continuously, add UDP connection
+
+## [1.5.90](https://github.com/VIHATTeam/OmiKit.git) (17/10/2023)
+
 
 
 ## [1.0.0](https://github.com/VIHATTeam/OmiKit.git) (15/06/2020)

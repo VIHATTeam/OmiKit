@@ -180,14 +180,6 @@
  */
 - (void)closeAllCalls;
 
-
-/**
- *  End call when have error from CallKit.
- *  Notice this function just use to remove All call current when user kill app
- */
-
-- (void)OmiCloseFromCallKit;
-
 - (NSMutableArray *)getAllCalls;
 
 /**

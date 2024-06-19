@@ -4,10 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/CallIDsManager.h</key>
-		<data>
-		Jnke5D0qoCWVRJUvsp9L1cHdt84=
-		</data>
 		<key>Headers/CallKitProviderDelegate.h</key>
 		<data>
 		xkIi41vn2y9mDPdp+O4dvbVjx5M=
@@ -36,13 +32,9 @@
 		<data>
 		Jzx11Mrl84QaPAqw4uYvkBwBe5U=
 		</data>
-		<key>Headers/OMICallInfo.h</key>
-		<data>
-		9d0uJjZAYUHo1sSRq3zoS2HiGxw=
-		</data>
 		<key>Headers/OMICallManager.h</key>
 		<data>
-		SqWJVpZ/font7hOvZffRjulA9T0=
+		DBUBa45/GFp5e/oQe0fPt/TcR7I=
 		</data>
 		<key>Headers/OMICallStats.h</key>
 		<data>
@@ -130,7 +122,7 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		85XVGPTlP2z9CYpn3vIlaDi4SEo=
+		pCI0M+dR7kXDWJ1Hf4g1W62WCNI=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -160,16 +152,13 @@
 		<data>
 		EKYMq5S5VExGpTGFvZ+0IogfFwI=
 		</data>
+		<key>README.md</key>
+		<data>
+		u3GcStg84otg5lE/olwBpwR5QzU=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/CallIDsManager.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			OZrARUCHp5nPwGSzFW6z70+1W3JKgQw3Eu/QXWBibc0=
-			</data>
-		</dict>
 		<key>Headers/CallKitProviderDelegate.h</key>
 		<dict>
 			<key>hash2</key>
@@ -219,18 +208,11 @@
 			cGqhkzO1FqZsd0Geo4ITn5JleWzz26FQ3v7CKKXrGIs=
 			</data>
 		</dict>
-		<key>Headers/OMICallInfo.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			4m+t2gvpyuZHzRQrjTpLDA7A9mj5CGhtKoZBQShOXyE=
-			</data>
-		</dict>
 		<key>Headers/OMICallManager.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			tPxKRtVEmnocpBJRhtFtmMeVDrsiHVsn/iIV/yl26f8=
+			+4xmmEUNQIQmv1ITlIMg9pNcW1KE1Bw1VyYLIwU1cJA=
 			</data>
 		</dict>
 		<key>Headers/OMICallStats.h</key>
@@ -384,7 +366,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			N9srWRSy7CvjkYcDDx7SUQ94ay8dPKRIrBlwRoguoaA=
+			IAfxg41sMc28vho1AtnGaQEUsBT3sKDLmCzpNthJjSk=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -427,6 +409,13 @@
 			<key>hash2</key>
 			<data>
 			nY/da05RuWVuJkveWu+LKYd4TD4ihkKEqpxqCBObbvw=
+			</data>
+		</dict>
+		<key>README.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CsBFqFUGNmZgujxaHa4AVy5FPEurk1wExv8L02J72fY=
 			</data>
 		</dict>
 	</dict>
