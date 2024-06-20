@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+#### Changed
+
+- Rollback code and fix missed OMI_ID
+
+## [1.7.25](https://github.com/VIHATTeam/OmiKit.git) (20/06/2024)
+
 
 #### Changed
 
