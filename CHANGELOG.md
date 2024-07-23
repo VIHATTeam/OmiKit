@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
+- Add log tracking log in/out
+
+## [1.7.26](https://github.com/VIHATTeam/OmiKit.git) (23/07/2024)
+
+#### Changed
+
 - Rollback code and fix missed OMI_ID
 
 ## [1.7.25](https://github.com/VIHATTeam/OmiKit.git) (20/06/2024)

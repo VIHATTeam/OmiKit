@@ -126,7 +126,7 @@
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		mwXNtqHeN6U954txSmnSKU8GXgU=
+		y4YywU5TXmD2DLr/TuEdQjXIfZM=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
@@ -146,7 +146,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		FuHqXINUpUPwMRGL1aGe9oxk5N8=
+		tO7MZ5axnrtKGw1+KH1D/MM0jv0=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -154,7 +154,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		oFJJyQb72yFKUBT4aKlH3fGVBt4=
+		9kx+FZwgrobS3hP4GCk3YqCQYHc=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -377,7 +377,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PtmTJp3BiKgjTHavUuXwj2vYBRWsN/EW3ukcnRlmD6c=
+			Daruw6tZHqG0tXEW8X2EFnR3RKyjTqsFMTfnff/dmc0=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
@@ -419,7 +419,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			oyXK76V0UN7OMTEJ5TDyZg+yhA7G6gYdIzDbdlOpY4A=
+			woqCUlUyvq3v9U4eamVK6myknK6xnxN81+EyF2RTP8c=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>
