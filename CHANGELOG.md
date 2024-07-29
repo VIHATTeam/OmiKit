@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
+- Update code SwitchBoard
+
+## [1.7.27](https://github.com/VIHATTeam/OmiKit.git) (29/07/2024)
+
+
+#### Changed
+
 - Add log tracking log in/out
 
 ## [1.7.26](https://github.com/VIHATTeam/OmiKit.git) (23/07/2024)
