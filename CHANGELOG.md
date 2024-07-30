@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 - Update code SwitchBoard
 
+## [1.7.28](https://github.com/VIHATTeam/OmiKit.git) (30/07/2024)
+
+#### Changed
+
+- Update code SwitchBoard
+
 ## [1.7.27](https://github.com/VIHATTeam/OmiKit.git) (29/07/2024)
 
 
