@@ -32,6 +32,13 @@
  */
 @interface OMICallManager : NSObject
 
+
+/** Save last info transfer call
+ */
+@property (nonatomic, strong) NSString *previousForwardedPhoneNumber;
+
+- (BOOL)isPreviousForwardedPhoneNumberSet;
+
 /**
  *  Controler responsible for managing the audio streams for the calls.
  */

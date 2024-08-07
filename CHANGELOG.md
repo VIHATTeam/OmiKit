@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+
+#### Changed
+
+- Fix same call Id Omi 
+
+## [1.7.30](https://github.com/VIHATTeam/OmiKit.git) (07/08/2024)
+
+
 #### Changed
 
 - Update code SwitchBoard
