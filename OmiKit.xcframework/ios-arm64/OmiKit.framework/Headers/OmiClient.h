@@ -224,4 +224,11 @@
  **/
 + (void) OMICloseCall;
 
+
+// isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
++ (void)setIsPartialPhoneNumber:(BOOL)value;
+
+// isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
++ (BOOL)isPartialPhoneNumber;
+
 @end

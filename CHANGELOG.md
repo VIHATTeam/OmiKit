@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
+- Fix secret show phone number in UI Callkit
+
+## [1.7.31](https://github.com/VIHATTeam/OmiKit.git) (14/08/2024)
+
+#### Changed
+
 - Fix same call Id Omi 
 
 ## [1.7.30](https://github.com/VIHATTeam/OmiKit.git) (07/08/2024)
