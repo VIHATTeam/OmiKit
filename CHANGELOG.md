@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+#### Changed
+
+- Add message for destination ads
+
+## [1.7.32](https://github.com/VIHATTeam/OmiKit.git) (15/08/2024)
 
 #### Changed
 
