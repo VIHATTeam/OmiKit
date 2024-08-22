@@ -167,6 +167,8 @@ typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
     OMIStartCallSuccess,
     
     OMIHaveAnotherCall,
+    
+    OMIAccountTurnOffNumberInternal
 };
 
 
