@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+
+#### Changed
+
+- Fix Show Phone CallKit 
+
+## [1.7.34](https://github.com/VIHATTeam/OmiKit.git) (23/08/2024)
+
+
 #### Changed
 
 - Fix message code error when turn off number internal 
