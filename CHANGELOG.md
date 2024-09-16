@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 
 #### Changed
 
+- Fix crash removeObjectKey 
+
+## [1.7.35](https://github.com/VIHATTeam/OmiKit.git) (16/09/2024)
+
+
 - Fix Show Phone CallKit 
 
 ## [1.7.34](https://github.com/VIHATTeam/OmiKit.git) (23/08/2024)
