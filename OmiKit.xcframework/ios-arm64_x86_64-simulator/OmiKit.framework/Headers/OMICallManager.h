@@ -176,6 +176,12 @@
 
 
 /**
+ * sipNumber is number selected for call out/in
+ */
+- (void)setSipNumber:(NSString * _Nonnull ) sipNumber callID:(NSInteger) callId;
+
+
+/**
  *  End all calls.
  *  Notice this function just use to hangup SIP Call not End Callkit
  */

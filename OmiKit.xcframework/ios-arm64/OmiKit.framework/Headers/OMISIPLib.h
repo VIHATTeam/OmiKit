@@ -329,6 +329,11 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  */
 - (void)setOmiID:(NSString * _Nonnull) omiId callID:(NSInteger) callId;
 
+
+/**
+ * sipNumber is selected number for call out/in
+ */
+- (void)setSipNumber:(NSString * _Nonnull) sipNumber callID:(NSInteger) callId;
 /*
  *
  *  @return current active call.

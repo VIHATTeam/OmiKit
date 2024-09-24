@@ -43,6 +43,12 @@
  */
 + (NSString *)findAndCutUUIDFromSipMessages:(NSString *)sipMessage;
 
+
+/*
+ Find and cut sip number from message
+ */
++ (NSString *)findAndCutSipNumberFromSipMessages:(NSString *)sipMessage;
+
 @end
 
 @interface HttpRequest : NSObject

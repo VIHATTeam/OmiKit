@@ -353,6 +353,11 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic) NSString * _Nullable omiId;
 
 /**
+ * sipNumber is selected number for called out/in
+ */
+@property (nonatomic) NSString * _Nullable sipNumber;
+
+/**
  *  if call is Video call or normal VOIP Call
  */
 @property (nonatomic) BOOL isVideo;
