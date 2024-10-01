@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 
 #### Changed
+- Optimize code Codes, media 
+
+## [1.7.38](https://github.com/VIHATTeam/OmiKit.git) (01/10/2024)
+
 
 - Add Sip_number for object OMICALL
 
@@ -110,6 +114,7 @@ All notable changes to this project will be documented in this file.
 
 
 #### Changed
+
 
 - Fix crash in coming call when transfer call
 
