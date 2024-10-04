@@ -50,14 +50,14 @@ Sample Code:
 ```swift
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    /* Khởi tạo môi trường
+    /* Initialize environment
 #ifdef DEBUG
-    * setEnviroment: set môi trường thực hiện của KH (Dev/Production) gồm các enum được OMI định sẵn: KEY_OMI_APP_ENVIROMENT_SANDBOX (dùng cho Dev), KEY_OMI_APP_ENVIROMENT_PRODUCTION (dùng cho production)
-    * userNameKey: API Key mà OMI cung cấp
-    * maxCall: cuộc gọi đồng thời tại 1 thời điểm. Hiện tại OMICALL chỉ hỗ trợ 1 cuộc gọi.
-    * callKitImage: hình ảnh đại điện của DN KH trên UI CallKit của iOS
-    * typePushVoip: giá trị mặc là background
-    * representName: giá trị không bắt buộc (nếu không dùng, không truyền đối số này xuống). Dùng cho trường hợp KH muốn hiển thị tên đại diện Doanh Nghiệp mình cho tất cả cuộc gọi đến.
+    * setEnviroment: Sets the execution environment of the client (Dev/Production) which includes predefined enums by OMI: KEY_OMI_APP_ENVIRONMENT_SANDBOX (for Dev), KEY_OMI_APP_ENVIRONMENT_PRODUCTION (for Production)
+    * userNameKey: API Key provided by OMI
+    * maxCall: The number of simultaneous calls at one time. Currently, OMICALL only supports 1 call at a time.
+    * callKitImage: The representative image of the client displayed in the iOS CallKit UI
+    * typePushVoip: The default value is "background"
+    * representName: This value is optional (if not used, do not pass this argument). It is used when the client wants to display their business's representative name for all incoming calls.
     */
 #ifdef DEBUG
       [OmiClient setEnviroment:KEY_OMI_APP_ENVIROMENT_SANDBOX userNameKey:@"full_name" maxCall:1 callKitImage:@"icYourApp" typePushVoip:@"background"];
@@ -65,16 +65,21 @@ Sample Code:
        [OmiClient setEnviroment:KEY_OMI_APP_ENVIROMENT_PRODUCTION userNameKey:@"full_name" maxCall:1 callKitImage:@"icYourApp" typePushVoip:@"background"];
 #endif
 
-
-    /* Tiến hành cấu hình VOIP cuộc gọi
+   /*
+    * This function is important because we need to clearly know your PROJECT_ID to push the call
     */
+    [OmiClient setFcmProjectId:@YOUR_FIREBASE_PROJECT_ID];
+
+
+    /* Proceed with configuring VOIP call
+    */​
     provider = [[CallKitProviderDelegate alloc] initWithCallManager: [OMISIPLib sharedInstance].callManager ];
     voipRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     pushkitManager = [[PushKitManager alloc] initWithVoipRegistry:voipRegistry];
     
     [self requestPushNotificationPermissions];
 
-    /* Chúng tôi cung cấp 5 giá trị cho KH log thông tin cuộc gọi cần thiết với các giá trị sau
+    /* We provide 5 levels for clients to log necessary call information with the following values:
     *    1 - OMILogVerbose
     *    1 - OMILogDebug
     *    1 - OMILogInfo
@@ -86,7 +91,7 @@ Sample Code:
     return YES;
 }
 
-  /* Tiến hành xin quyền thông báo của thiết bị. Nếu từ chối, OMICall sẽ không push cuộc gọi được đến cho bạn
+  /* Proceed to request device notification permissions. If denied, OMICall will not be able to push calls to you
     */
 - (void)requestPushNotificationPermissions
 {
@@ -121,8 +126,8 @@ Sample Code:
     }];
 }
 
-/* Nhận device Token và chuyển nó sang mã hex để lưu trữ token cho Push Call
-*/
+/* Receive the device Token and convert it to hex format to store the token for Push Call
+*/​
 - (void)application:(UIApplication*)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
 {
     // parse token bytes to string
@@ -135,7 +140,7 @@ Sample Code:
     [OmiClient setUserPushNotificationToken:[token copy]];
 }
 
-/* Func này quan trọng vì nó sẽ đóng tất cả các cuộc gọi đang diễn ra khi user kill app với hệ thống OMI.
+/* This function is important because it will terminate all ongoing calls when the user kills the app with the OMI system.
 */
 - (void)applicationWillTerminate:(UIApplication *)application {
     [OmiClient OMICloseCall];
@@ -153,17 +158,17 @@ Include the library
 
 Currently we provide 2 way for init user extension for call
 1. Init with username/password/real info:
-   + Func này được dùng cho mục đích: Nhân viên gọi ra cho số viễn thông khác, số nội bộ, số bên ngoài.
-   + Các giá trị MY_USERNAME, MY_PASSWORD, MY_REALM, PROXY được lấy thông qua API của OMICall
+ + This function is used for the purpose of: Employees making outgoing calls to other telecom numbers, internal numbers, and external numbers.
++ The values MY_USERNAME, MY_PASSWORD, MY_REALM, and PROXY are obtained through the OMICall API.
 ```Swift
 [OmiClient initWithUsername:MY_USERNAME password:MY_PASSWORD realm:MY_REALM, proxy:PROXY];
 
 ```
 1. Init with Apikey ( For get APIKey please contact sale admin/ customer services)
-   + Func được dùng cho trường hợp, khách hành muốn user gọi lên số tổng đài của mình, tương tác với số tổng đài (Khi dùng func này, user sẽ không gọi ra các số viễn thông, số nội bộ khác)
-   + Các tham số: 
-     + YOUR_ID, YOUR_NAME là các giá trị bất kì bạn đặt cho User của bạn với YOUR_ID dùng để định danh khách hàng. 
-     + OMI_API_KEY là gì trị mà OMI cung cấp
+  + This function is used when the client wants the user to call their call center number and interact with the call center number (When using this function, the user will not be able to call other telecom numbers or internal numbers).
++ Parameters: 
+   + YOUR_ID, YOUR_NAME are arbitrary values you assign to your user, with YOUR_ID used to identify the customer.
+   + OMI_API_KEY is the value provided by OMI.
 ```Swift
  [OmiClient initWithUUID:YOUR_ID fullName:YOUR_NAME apiKey:OMI_API_KEY];
 
@@ -200,7 +205,7 @@ BOOL result = [OmiClient startCall:PHONE_NUMBER isVideo:FALSE result:^(OMIStartC
 ```
 
 1. Start call with uuid of user and apikey
-   + Được dùng cho trường hợp bạn định danh mỗi khách hàng với UUID trước đó và giờ thực hiện gọi đến theo ID đó 
++ Used in cases where you have previously identified each customer with a UUID and now make a call based on that ID.
  ```Swift
     [OmiClient startCallWithUuid:(NSString * _Nonnull) toUuid isVideo: (BOOL) isVideo result: (void (^)(OMIStartCallStatus status)) completion {
             // check status here
@@ -214,7 +219,7 @@ BOOL result = [OmiClient startCall:PHONE_NUMBER isVideo:FALSE result:^(OMIStartC
 ## Call notification:
 
 ### 1. To listen event of Call we setting notification:
-+ Dùng để lắng nghe cuộc gọi trong suốt quá trình gọi hoặc gọi có cuộc gọi đến
++ Used to listen for calls throughout the calling process or when there is an incoming call.
  ```Swift
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateChanged:) name:OMICallStateChangedNotification object:nil];
 
@@ -257,9 +262,9 @@ Example:
     });
 }
 ```
-+ Flow và giá trị của OMICallState
++ Flow and values of OMICallState
   * `Incoming call` state lifecycle: incoming -> connecting -> confirmed -> disconnected
-  * `Outgoing call` state lifecycle: calling -> early -> connecting -> confirmed -> disconnected 
+  * `Outgoing call` state lifecycle: calling -> early -> connecting -> confirmed -> disconnected​⬤
 
 | Value   | Mean  |
 |------------|------------|
@@ -274,8 +279,8 @@ Example:
 | OMICallStateDisconnecting |Call being request disconnect |
 
 
-### 2. Dùng đề lắng nghe khi cuộc gọi bị kết thúc
-+ Dùng để lắng nghe sự kiện khi cuộc gọi bị kết thúc
+### 2. Used to listen for when a call is terminated.
++ Used to listen for the event when a call is terminated.​
   
  ```Swift
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callDealloc:) name:OMICallDealloc object:nil];
@@ -291,13 +296,13 @@ Example:
     OMICall *call = [OMISIPLib.sharedInstance getCurrentConfirmCall];
     if (call != nil && [call.uuid isEqual:self.callId]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            // Thực hiện các thao tác liên quan đến UI hoặc logic khi cuộc gọi kết thúc
+            // Perform actions related to UI or logic when the call is terminated.
         });
     }
 }
 ```
 
-+ các giá trị EndCause
++ EndCause values:
   
 | EndCause   | Mean  |
 |------------|------------|
@@ -359,7 +364,7 @@ Example:
 ```
 
 
-Ngoài ra còn các event khác như:
+## Additionally, there are other events such as:
   - `NSNotification.Name.OMICallMediaStateChangedNotification`: Audio changed.
   - `NSNotification.Name.OMICallMediaStateChangedNotification`: Audio changed.
   - `NSNotification.Name.OMICallInComingNotification`: When have new incomming call.
