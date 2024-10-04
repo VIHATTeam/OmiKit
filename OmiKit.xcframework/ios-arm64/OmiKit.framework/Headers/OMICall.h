@@ -358,6 +358,11 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic) NSString * _Nullable sipNumber;
 
 /**
+ * sipNameNumber is name off Sip Number (default: Empty)
+ */
+@property (nonatomic) NSString * _Nullable sipNameNumber;
+
+/**
  *  if call is Video call or normal VOIP Call
  */
 @property (nonatomic) BOOL isVideo;

@@ -49,6 +49,11 @@
  */
 + (NSString *)findAndCutSipNumberFromSipMessages:(NSString *)sipMessage;
 
+/*
+ Find IP and cut ip from proxy
+ */
++(NSString *)extractIPAddress:(NSString * _Nonnull)inputString;
+
 @end
 
 @interface HttpRequest : NSObject

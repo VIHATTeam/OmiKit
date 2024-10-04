@@ -123,6 +123,15 @@
 + (void)setEnviroment:(NSString *_Nonnull)enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage typePushVoip:(NSString *)typePushVoip;
 
 +  (void) setEnviroment:(NSString *) enviroment userNameKey: (NSString *) userNameKey maxCall: (int) maxCall callKitImage: (NSString*) callKitImage typePushVoip: (NSString *)typePushVoip representName: (NSString *)representName;
+
+/**
+ * Used to set your projectId of Firebase project for OMI. This is important, because we need to know to properly push incoming calls according to your project Id.
+ *
+ * Params:
+ * - projectId: NSString*
+ */
++ (void) setFcmProjectId:(NSString * _Nonnull) projectId;
+
 /**
  *Check and remove voip token on my server.
  */

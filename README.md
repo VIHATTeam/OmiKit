@@ -332,7 +332,7 @@ Example:
 ### 3. Listen event Media event:
 Notification key: OMICallMediaStateChangedNotification
 Example:
-```ruby
+```Swift
 - (void)callMediaStateChanged: (NSNotification *)notification {
     
     __weak typeof(self)weakSelf = self;
@@ -356,18 +356,19 @@ Example:
         }
     });
 }
-
 ```
 
 
 Ngoài ra còn các event khác như:
-  - `NSNotification.Name.OMICallNetworkQuality`: Audio changed.
-  - `NSNotification.Name.OMICallNetworkQuality`: Audio changed.
-  - `NSNotification.Name.OMICallNetworkQuality`: Click missed call notification.
-  - `NSNotification.Name.OMICallNetworkQuality`: Switchboard sip is listening.
+  - `NSNotification.Name.OMICallMediaStateChangedNotification`: Audio changed.
+  - `NSNotification.Name.OMICallMediaStateChangedNotification`: Audio changed.
+  - `NSNotification.Name.OMICallInComingNotification`: When have new incomming call.
+  - `NSNotification.Name.OMICallSwitchBoardAnswerNotification`: Switchboard sip is listening.
   - `NSNotification.Name.OMICallNetworkQuality`: The calling quality.
+  
+
 ### 4. Listen event call misscall:
-```ruby
+```Swift
 [Omiclient setMissedCallBlock:^(OMICall * _Nonnull __weak call) {
         <#code#>
 }];
@@ -378,11 +379,11 @@ when event come we need to re-render video screen
 Detail sample project can view here: https://github.com/VIHATTeam/IOS-Objective-VideoCall-Example
 
     ### Listen: 
-```ruby
+```Swift
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoNotification:) name:OMICallVideoInfoNotification object:nil];
-    ```
+ ```
     ### Process: 
-```ruby
+```Swift
     -(void) videoNotification:(NSNotification *) noti {
         NSDictionary *dic = [noti userInfo];
         NSNumber * state = [dic valueForKey:OMIVideoInfoState];
@@ -395,7 +396,7 @@ Detail sample project can view here: https://github.com/VIHATTeam/IOS-Objective-
     }
 ```
     ### Show Video Preview:
-```ruby    
+```Swift    
     - (void)startPreview {
         __weak typeof(self) weakSelf = self;
         if(!_remoteVideoRenderView || !_localVideoRenderView) return;
@@ -412,7 +413,7 @@ Detail sample project can view here: https://github.com/VIHATTeam/IOS-Objective-
 
 ### 6. Listen the network health for update UI instruction for user 
 The information we calculator on MOS score and device 3 level bellow
-```ruby
+```Swift
     Listen: 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateNetworkHealth:) name:OMICallNetworkQualityNotification object:nil];
     
@@ -443,7 +444,7 @@ The information we calculator on MOS score and device 3 level bellow
 
 Using noise cancel( Perfomance slow when lower phone)
 
- ```ruby
+ ```Swift
 [OmiClient setNoiseSuppression:true];
 
 ```

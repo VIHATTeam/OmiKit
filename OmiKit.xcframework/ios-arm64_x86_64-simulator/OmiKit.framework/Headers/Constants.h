@@ -15,9 +15,11 @@ static NSString * KEY_OMI_CALLKIT_IMAGE = @"omicall/callkit_image";
 static NSString * KEY_OMI_RECEIVE_APNS_TOKEN = @"KEY_OMI_RECEIVE_APNS_TOKEN";
 static NSString * KEY_OMI_APP_ENVIROMENT = @"KEY_OMI_APP_ENVIROMENT";
 static NSString * KEY_OMI_TYPE_PUSH_CALLKIT = @"omicall/type_push_callkit";
+static NSString * KEY_OMI_PROJECT_FCM_ID = @"omicall/project_fcm_id";
 static NSString * TYPE_PUSH_CALLKIT_FORGROUND = @"callkit/forground";
 static NSString * TYPE_PUSH_CALLKIT_BACKGROUND =  @"callkit/background";
 static NSString * TYPE_PUSH_CALLKIT_DEFAULT = @"callkit/default";
+static NSString * PROJECT_ID_DEFAULT = @"omicrm-6558a";
 static NSString * CALL_KIT = @"callkit/";
 
 #pragma APP

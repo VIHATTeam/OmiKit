@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 
 #### Changed
+- Add SipNameNumber, projectId 
+
+## [1.7.39](https://github.com/VIHATTeam/OmiKit.git) (004/10/2024)
+
 - Optimize code Codes, media 
 
 ## [1.7.38](https://github.com/VIHATTeam/OmiKit.git) (01/10/2024)
