@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.1](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
+
+#### Changed
+- Optimize flow incoming call and fix prefix phone number
+  
+### ------------------------------
+
 ## [1.7.41](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
 
 #### Changed

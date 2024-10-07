@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <CallKit/CallKit.h>
 
 @interface OMIUtils : NSObject
 
@@ -59,6 +59,13 @@
  Find phone number and hide with *
  */
 + (NSString *)maskedPhoneNumberOrName:(NSString *)inputString;
+
+/*
+ Update UI CallKit
+ */
++ (CXCallUpdate *)prepareCallUpdateWithVideo:(BOOL)isVideo
+                                  callNumber:(NSString *)callNumber
+                                  remoteName:(NSString *)remoteName ;
 
 @end
 
