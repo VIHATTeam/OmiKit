@@ -3,10 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.7.40](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
+
+#### Changed
+- Update hide prefix phone number with CallKit
+  
+### ------------------------------
+
 #### Changed
 - Add SipNameNumber, projectId 
 
-## [1.7.39](https://github.com/VIHATTeam/OmiKit.git) (004/10/2024)
+## [1.7.39](https://github.com/VIHATTeam/OmiKit.git) (04/10/2024)
 
 - Optimize code Codes, media 
 

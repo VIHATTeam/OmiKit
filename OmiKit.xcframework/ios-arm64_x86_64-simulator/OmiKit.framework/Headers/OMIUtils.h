@@ -54,6 +54,12 @@
  */
 +(NSString *)extractIPAddress:(NSString * _Nonnull)inputString;
 
+
+/*
+ Find phone number and hide with *
+ */
++ (NSString *)maskedPhoneNumberOrName:(NSString *)inputString;
+
 @end
 
 @interface HttpRequest : NSObject
