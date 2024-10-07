@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.41](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
+
+#### Changed
+- Fix space in phone number
+  
+### ------------------------------
 
 ## [1.7.40](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
 
