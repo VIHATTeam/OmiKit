@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.2](https://github.com/VIHATTeam/OmiKit.git) (25/12/2024)
+
+#### Changed
+- Fix crash SDK
+  
+### ------------------------------
+
 ## [1.8.1](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
 
 #### Changed

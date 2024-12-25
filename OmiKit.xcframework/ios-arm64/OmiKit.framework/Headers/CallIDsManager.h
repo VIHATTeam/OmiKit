@@ -44,6 +44,8 @@ THIS CLASS USE FOR MANAGE CALL ID PUSH VOIP
 
 - (BOOL)findCallIDOrigin:(NSUUID *)callUUID;
 
+- (void)removeAllCallIDs;
+
 @end
        
 
