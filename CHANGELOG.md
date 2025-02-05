@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.3](https://github.com/VIHATTeam/OmiKit.git) (05/02/2025)
+
+#### Changed
+- Fix codec opus for out going 
+  
+### ------------------------------
+
 ## [1.8.2](https://github.com/VIHATTeam/OmiKit.git) (25/12/2024)
 
 #### Changed
