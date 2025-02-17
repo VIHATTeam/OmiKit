@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.5](https://github.com/VIHATTeam/OmiKit.git) (17/02/2025)
+
+#### Changed
+- Fix audio session when end call 
+  
+### ------------------------------
+
 ## [1.8.4](https://github.com/VIHATTeam/OmiKit.git) (06/02/2025)
 
 #### Changed
