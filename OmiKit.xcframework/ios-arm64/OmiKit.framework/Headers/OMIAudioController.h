@@ -59,4 +59,10 @@ typedef NS_ENUM(NSInteger, OMIAudioControllerOutputs) {
  */
 - (void)deactivateAudioSession;
 
+/**
+ * Toggle speaker mode and return true if speaker is enabled
+ */
+-(BOOL)toggleSpeaker;
+
+
 @end

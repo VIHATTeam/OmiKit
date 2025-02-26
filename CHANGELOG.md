@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.8.8](https://github.com/VIHATTeam/OmiKit.git) (26/02/2025)
+
+#### Changed
+- Add func toggle speaker 
+  
+### ------------------------------
+
 
 ## [1.8.6](https://github.com/VIHATTeam/OmiKit.git) (26/02/2025)
 
