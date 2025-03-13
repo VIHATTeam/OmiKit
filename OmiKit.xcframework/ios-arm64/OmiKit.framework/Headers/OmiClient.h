@@ -192,6 +192,12 @@
 + (NSString *_Nullable)getCurrentSip;
 
 /**
+ * get user sip info
+ */
++ (NSString *_Nullable)getSipInfo;
+
+
+/**
  * get all audios in your device
  */
 + (NSArray<NSDictionary<NSString *, NSString *> *> *_Nonnull) getAudioInDevices;
@@ -212,6 +218,7 @@
 + (void)sendLogTrackingPush:(NSString *)logString;
 
 + (void)sendLogTrackingRegisterAccount:(NSString *)logString;
+
 + (int)getLogLevel;
 
 + (void)sendLogRTPCall:(OMICallInfoItem *_Nonnull)_OMICallInfoItem;

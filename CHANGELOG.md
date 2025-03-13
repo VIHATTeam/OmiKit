@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.10](https://github.com/VIHATTeam/OmiKit.git) (13/03/2025)
+
+#### Changed
+- Add log tracking start call failed 
+  
+### ------------------------------
+
 ## [1.8.9](https://github.com/VIHATTeam/OmiKit.git) (27/02/2025)
 
 #### Changed

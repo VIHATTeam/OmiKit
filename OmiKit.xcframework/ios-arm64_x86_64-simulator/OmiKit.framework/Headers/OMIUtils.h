@@ -67,6 +67,9 @@
                                   callNumber:(NSString *)callNumber
                                   remoteName:(NSString *)remoteName ;
 
+
+extern NSString *const SDK_VERSION;
+
 @end
 
 @interface HttpRequest : NSObject
