@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.11](https://github.com/VIHATTeam/OmiKit.git) (18/03/2025)
+
+#### Changed
+- Change STUN address
+  
+### ------------------------------
+
+
 ## [1.8.10](https://github.com/VIHATTeam/OmiKit.git) (13/03/2025)
 
 #### Changed
