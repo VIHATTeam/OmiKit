@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.14](https://github.com/VIHATTeam/OmiKit.git) (21/03/2025)
+
+#### Changed
+- Update name caller when missed call from flow call ZCC
+  
+
 ## [1.8.12](https://github.com/VIHATTeam/OmiKit.git) (19/03/2025)
 
 #### Changed

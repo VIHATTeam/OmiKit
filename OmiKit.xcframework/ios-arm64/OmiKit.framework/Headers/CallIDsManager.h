@@ -26,15 +26,19 @@ THIS CLASS USE FOR MANAGE CALL ID PUSH VOIP
 + (instancetype)sharedInstance;
 
 - (void)addCallIDWithGenerate:(NSString *)callIdGenerate origin:(NSString *)callIdOrigin;
+
 - (NSDictionary *)getCallIDAtIndex:(NSUInteger)index;
-// Trong CallIDsManager.h thêm khai báo của hàm
+
 - (NSUUID *)findAndGenCallIDGenerate:(NSUUID *)callUUID;
 
 - (NSUUID *)getCallIDGenerate:(NSUUID *)callUUID;
 
 - (NSUUID *)getCallIDOrigin:(NSUUID *)callUUID;
 
-- (NSUUID *)genCallIDGenerate:(NSUUID *)callUUID;
+- (NSUUID *)genCallIDGenerate:(NSUUID *)callUUID callName:(nullable NSString *)callName;
+
+// Get caller name off call zalo zcc
+- (NSString *)getCallerName:(NSUUID *)callUUID;
 
 - (void)removeCallIDOrigin:(NSUUID *)callUUID;
 
