@@ -213,27 +213,13 @@
  */
 + (void)setAudioOutputs:(NSString *_Nonnull)portType;
 
-+ (void)sendLogTracking:(NSString *)typeLog logString:(NSString *) logString;
-
-+ (void)sendLogTrackingPush:(NSString *)logString;
-
-+ (void)sendLogTrackingRegisterAccount:(NSString *)logString;
-
 + (int)getLogLevel;
 
 + (void)sendLogRTPCall:(OMICallInfoItem *_Nonnull)_OMICallInfoItem;
 
-+ (void)sendLogTrackingStatusEndpoint:(NSString *) typeLog logString:(NSString *) logString;
-
 + (void)handleEndpointNotAvailable:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
 
 + (void)handleExistingEndpoint:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
-
-+ (void)sendLogTrackingLogInOut:(NSString *)typeLog logString:(NSString *) logString account:(NSString *) account domain:(NSString *) domain ;
-
-+ (void)sendLogTrackingOnOffline:(NSString *)typeLog logString:(NSString *) logString account:(NSString *) account domain:(NSString *) domain ;
-
-+ (void)sendLogCallId:(NSString *)typeLog logString:(NSString *) logString ;
 
 /**
  This func will check and auto close all call when user kill app.

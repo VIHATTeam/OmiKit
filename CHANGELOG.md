@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.16](https://github.com/VIHATTeam/OmiKit.git) (25/03/2025)
+
+#### Changed
+- Re-build for 1.8.15
+
+## [1.8.15](https://github.com/VIHATTeam/OmiKit.git) (25/03/2025)
+
+#### Changed
+- Clean code and fix missed Call Name from partner 
+
 ## [1.8.14](https://github.com/VIHATTeam/OmiKit.git) (21/03/2025)
 
 #### Changed
