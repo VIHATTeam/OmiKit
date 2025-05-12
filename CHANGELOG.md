@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.17](https://github.com/VIHATTeam/OmiKit.git) (12/05/2025)
+- Cập nhật func tính MOS cho cả OPUS
+- Thêm func reset giá trị OPUS mỗi khi end call 
+
+
 ## [1.8.16](https://github.com/VIHATTeam/OmiKit.git) (25/03/2025)
+
+
 
 #### Changed
 - Re-build for 1.8.15

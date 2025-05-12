@@ -287,6 +287,7 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
+- (void)resetOpusCodecToDefault;
 
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSNumber *, NSString *> *codecInfoStorage; // 🔹 Lưu thông tin codec theo call_id
 
