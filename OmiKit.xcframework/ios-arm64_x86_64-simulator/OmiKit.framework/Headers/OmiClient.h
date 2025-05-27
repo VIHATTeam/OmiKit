@@ -234,10 +234,10 @@
 + (BOOL)isPartialPhoneNumber;
 
 /**
- * Kiểm tra trạng thái cancel của cuộc gọi thông qua API
+ * Kiểm tra cuộc gọi có được trả lời hay không.
  * @param callId ID của cuộc gọi cần kiểm tra
- * @return YES nếu cuộc gọi đã được bắt máy (payload: true), NO nếu chưa bị cancel (payload: false) hoặc có lỗi
+ * @return YES nếu cuộc gọi đã trả lời, NO nếu cuộc gọi bị hủy hoặc không được trả lời.
  */
-+ (BOOL)checkCallCancelStatus:(NSString * _Nonnull)callId;
++ (BOOL)checkHasAnsweredCall:(NSString * _Nonnull)callId;
 
 @end

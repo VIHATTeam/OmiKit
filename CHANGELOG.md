@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.8.20](https://github.com/VIHATTeam/OmiKit.git) (27/05/2025)
+- Add func check has answer call, change API
+
 ## [1.8.19](https://github.com/VIHATTeam/OmiKit.git) (27/05/2025)
 - Add func check has answer call 
 
