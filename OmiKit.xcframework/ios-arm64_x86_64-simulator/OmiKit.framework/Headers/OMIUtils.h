@@ -77,4 +77,5 @@ extern NSString *const SDK_VERSION;
 - (NSData* _Nonnull )httpRequestWithURL:(NSURL * _Nonnull)url httpMethod:(NSString * _Nullable)httpMethod body:(NSData *_Nullable)body contentType:(NSString * _Nullable)contentType error:(NSError *_Nullable* _Nullable)error;
 - (NSData* _Nonnull )httpRequestWithURLAuthen:(NSURL * _Nonnull)url httpMethod:(NSString * _Nullable)httpMethod body:(NSData *_Nullable)body contentType:(NSString * _Nullable)contentType error:(NSError *_Nullable* _Nullable)error;
 - (NSData* _Nonnull )httpRequestWithDefaultAuthen:(NSURL * _Nonnull)url httpMethod:(NSString * _Nullable)httpMethod body:(NSData *_Nullable)body contentType:(NSString * _Nullable)contentType error:(NSError *_Nullable* _Nullable)error;
+- (NSString* _Nullable )httpRequestWithURLFast:(NSURL * _Nonnull)url httpMethod:(NSString * _Nullable)httpMethod body:(NSData *_Nullable)body contentType:(NSString * _Nullable)contentType error:(NSError *_Nullable* _Nullable)error;
 @end

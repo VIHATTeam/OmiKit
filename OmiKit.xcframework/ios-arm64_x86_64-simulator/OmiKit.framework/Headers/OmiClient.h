@@ -233,4 +233,11 @@
 // isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
 + (BOOL)isPartialPhoneNumber;
 
+/**
+ * Kiểm tra trạng thái cancel của cuộc gọi thông qua API
+ * @param callId ID của cuộc gọi cần kiểm tra
+ * @return YES nếu cuộc gọi đã được bắt máy (payload: true), NO nếu chưa bị cancel (payload: false) hoặc có lỗi
+ */
++ (BOOL)checkCallCancelStatus:(NSString * _Nonnull)callId;
+
 @end
