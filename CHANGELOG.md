@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.8.19](https://github.com/VIHATTeam/OmiKit.git) (27/05/2025)
+- Add func check has answer call 
+
 ## [1.8.17](https://github.com/VIHATTeam/OmiKit.git) (12/05/2025)
 - Cập nhật func tính MOS cho cả OPUS
 - Thêm func reset giá trị OPUS mỗi khi end call 
