@@ -48,7 +48,6 @@
 #import "SipInvite.h"
 #import "VoIPPushHandler.h"
 #import "NSError+OMIError.h"
-#import "NSString+PJString.h"
 
 FOUNDATION_EXPORT double OmiKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];

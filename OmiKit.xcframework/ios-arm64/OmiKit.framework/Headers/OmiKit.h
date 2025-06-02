@@ -67,4 +67,3 @@ FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];
 
 // Category Extensions (from SIPCore)
 #import "NSError+OMIError.h"
-#import "NSString+PJString.h" 
