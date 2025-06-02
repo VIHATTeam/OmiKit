@@ -21,7 +21,6 @@
 #import "OMICall.h"
 #import "OMICallInfo.h"
 #import "OMICallManager.h"
-#import "OMICallMapping.h"
 #import "OMICallStats.h"
 #import "OmiClient.h"
 #import "OMICodecConfiguration.h"
