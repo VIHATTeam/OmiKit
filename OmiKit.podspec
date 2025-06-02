@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name                  = 'OmiKit'
-  s.version               = '1.8.28'
+  s.version               = '1.8.29'
   s.homepage           = "https://micall.com/"
   s.summary            = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -21,20 +21,29 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
   s.source           = { :git => 'https://github.com/VIHATTeam/OmiKit.git', :tag => s.version.to_s }
 
-  s.source_files = 'OmiKit.xcframework/**/OmiKit.framework/Headers/*.h'
-  s.public_header_files =  'OmiKit.xcframework/**/OmiKit.framework/Headers/*.h'
-
+  # Configure XCFramework properly
+  s.vendored_frameworks = "OmiKit.xcframework"
+  
+  # Ensure headers are accessible with proper import paths
+  s.preserve_paths = 'OmiKit.xcframework'
+  
+  # Add module map configuration to ensure proper module resolution
+  s.module_map = 'OmiKit.xcframework/ios-arm64/OmiKit.framework/Modules/module.modulemap'
 
   s.libraries = 'stdc++'
-  s.pod_target_xcconfig = {'OTHER_LDFLAGS' => '-ObjC'}
-
-  s.vendored_frameworks = "OmiKit.xcframework"
   s.frameworks = 'CoreFoundation', 'VideoToolbox', 'AudioToolbox', 'AVFoundation', 'GLKit', 'CFNetwork',  'CoreMedia'
+  
   s.pod_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    'OTHER_LDFLAGS' => '-ObjC',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    # Ensure framework headers are found correctly
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',
+    'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers'
   }
   s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',
+    'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers'
   }
 
 end
