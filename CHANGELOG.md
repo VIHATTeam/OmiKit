@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.8.21, 1.8.23, 1.8.25](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
+## [1.8.21, 1.8.23, 1.8.25, 1.8.26](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
 - Pump version
 
 ## [1.8.20](https://github.com/VIHATTeam/OmiKit.git) (27/05/2025)
