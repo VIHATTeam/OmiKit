@@ -13,6 +13,7 @@
 #import "CallIDsManager.h"
 #import "CallKitProviderDelegate.h"
 #import "Constants.h"
+#import "LogFileManager.h"
 #import "OMIAccount.h"
 #import "OMIAccountConfiguration.h"
 #import "OMIAudioCodecs.h"
@@ -20,6 +21,7 @@
 #import "OMICall.h"
 #import "OMICallInfo.h"
 #import "OMICallManager.h"
+#import "OMICallMapping.h"
 #import "OMICallStats.h"
 #import "OmiClient.h"
 #import "OMICodecConfiguration.h"
@@ -27,6 +29,7 @@
 #import "OMIEndpointConfiguration.h"
 #import "OMIIceConfiguration.h"
 #import "OMIIpChangeConfiguration.h"
+#import "OmiKit.h"
 #import "OMILogging.h"
 #import "OMINetworkMonitor.h"
 #import "OMIOpusConfiguration.h"
@@ -44,7 +47,8 @@
 #import "PushKitManager.h"
 #import "SipInvite.h"
 #import "VoIPPushHandler.h"
-
+#import "NSError+OMIError.h"
+#import "NSString+PJString.h"
 
 FOUNDATION_EXPORT double OmiKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];

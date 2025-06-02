@@ -16,6 +16,18 @@
 		<data>
 		oU7fSssNyGAJi2dUuzykIKzGEwc=
 		</data>
+		<key>Headers/LogFileManager.h</key>
+		<data>
+		rvkhEMTK4CIJJB1hFoovJeqd52M=
+		</data>
+		<key>Headers/NSError+OMIError.h</key>
+		<data>
+		LzaQ+sECaNgFocHzeVWUD2T7YS0=
+		</data>
+		<key>Headers/NSString+PJString.h</key>
+		<data>
+		safifb9LwX8tYZM5fIgcW5fvysw=
+		</data>
 		<key>Headers/OMIAccount.h</key>
 		<data>
 		/iERg8J4LENOQxYKvxd9yWEyWO8=
@@ -43,6 +55,10 @@
 		<key>Headers/OMICallManager.h</key>
 		<data>
 		74KhX5dJCebCk7lgg5vOCx5fGEQ=
+		</data>
+		<key>Headers/OMICallMapping.h</key>
+		<data>
+		AS9ylYh2R4eSUmJO5fsh0ODCAgg=
 		</data>
 		<key>Headers/OMICallStats.h</key>
 		<data>
@@ -106,7 +122,7 @@
 		</data>
 		<key>Headers/OMIUtils.h</key>
 		<data>
-		oX/Rf3KwiTJZndjHXxLyWKOYelU=
+		zqrzSQDNlQHTt16HKOfZY/DcNcY=
 		</data>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<data>
@@ -126,11 +142,15 @@
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		6sI7G2CSDXf67DAr+2R5YIN4u4o=
+		xTnlmZvIwgUuS9oenZDVhExaqi0=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		85XVGPTlP2z9CYpn3vIlaDi4SEo=
+		w9OJYGGwZoYPilP0Iu7m7v0bpXA=
+		</data>
+		<key>Headers/OmiKit.h</key>
+		<data>
+		TPoIrq7nnRZZApxUoTQwXJOFArg=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -146,7 +166,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		MNghQdDnxY1PsWNCtMO/ktKsMwM=
+		OSGmbmHPQXhKWsSpt2dehsuGuEE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -154,7 +174,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		KvpN6rFxgU0i6FDCO7W0YIzbXm4=
+		wUPSe7raLevbZC8hRa1FkTs/M4I=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -182,6 +202,27 @@
 			<key>hash2</key>
 			<data>
 			k9TKH3s8Ypedz+Wdc9CXL02iS1sn0kOT3ss7MItnanU=
+			</data>
+		</dict>
+		<key>Headers/LogFileManager.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SNCY1jJUdn94IIjl53wyCA/OVEflxowlhSWF5Okn0QA=
+			</data>
+		</dict>
+		<key>Headers/NSError+OMIError.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MtzTAwRGAgkjBg2NlMzPXwqz0Z7NzdvE7gtYh6x5Kzc=
+			</data>
+		</dict>
+		<key>Headers/NSString+PJString.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1t+nLMWj4wc1xHhkeyPwxrhiN7qes8jLaFI7v/pY8ek=
 			</data>
 		</dict>
 		<key>Headers/OMIAccount.h</key>
@@ -231,6 +272,13 @@
 			<key>hash2</key>
 			<data>
 			oC83R3qEj7G6PT94TED3cdxKeb35uUOlgCrotVzWaVU=
+			</data>
+		</dict>
+		<key>Headers/OMICallMapping.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OJXkic5IpoBvS6RWtJ9UsCPW855jcM3+xWlbFsU5bHo=
 			</data>
 		</dict>
 		<key>Headers/OMICallStats.h</key>
@@ -342,7 +390,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1bisKo3pfqaW0o0oxwDBcomjmq/nsSKpEdn+VdHh3wk=
+			Pwgua4nQTCoLw8RFIxK24atM1wc6EC0ekciiRr8oqeg=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoCallViewController.h</key>
@@ -377,14 +425,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			NG8VvStVmHcfj9bHnyPh2myoFlfbnmYAQj8F1PCymzA=
+			nBx8PDho8t64yg+NXdtcEpr+ETgMncLGITW1jLWRmpg=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			N9srWRSy7CvjkYcDDx7SUQ94ay8dPKRIrBlwRoguoaA=
+			b9+yHdSHJ2CtvYnvlBMf91+2jE9SF54qdkjmrtVtEC4=
+			</data>
+		</dict>
+		<key>Headers/OmiKit.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			u0vTjxJ8xp1Rs0AY4DIy+27LmSf8WNs87Oj7aBUsfRA=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -419,7 +474,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dwoxuKag15IHE5ABBSSQkKHaeR3AGv90aZY6kbMnIwc=
+			zvF4CyAi/NpD/x3eGVs5LHYMADCcbY9yJ8lnqaTi4xk=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>

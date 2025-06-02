@@ -233,4 +233,11 @@
 // isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
 + (BOOL)isPartialPhoneNumber;
 
+/**
+ * Kiểm tra cuộc gọi có được trả lời hay không.
+ * @param callId ID của cuộc gọi cần kiểm tra
+ * @return YES nếu cuộc gọi đã trả lời, NO nếu cuộc gọi bị hủy hoặc không được trả lời.
+ */
++ (BOOL)checkHasAnsweredCall:(NSString * _Nonnull)callId;
+
 @end
