@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.8.27](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
+## [1.8.27, 1.8.28](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
 - Add func check show cuộc gọi nhỡ 
   
 
