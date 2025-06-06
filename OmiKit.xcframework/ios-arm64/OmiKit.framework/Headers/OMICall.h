@@ -610,13 +610,23 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 - (BOOL)hangup:(NSError * _Nullable * _Nullable)error;
 
 /**
- *  This will decline the incoming call.
+ *  This will decline the incoming call and ít still ring in orther devices
  *
  *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot decline the call.
  *
  *  @return BOOL success of declining up the call.
  */
 - (BOOL)decline:(NSError * _Nullable * _Nullable)error;
+
+
+/**
+ *  This will decline the incoming call and kill call, stop ring in orther device
+ *
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot decline the call.
+ *
+ *  @return BOOL success of declining up the call.
+ */
+- (BOOL)dropCall:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  Toggle mute of the microphone for this call.

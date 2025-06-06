@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.34](https://github.com/VIHATTeam/OmiKit.git) (06/06/2025)
+- Add infor into user-agent for flow incoming call. 
+- Add func DropCall 
 
 ## [1.8.33](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
 - Fix kịch bản tiêu chí
