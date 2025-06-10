@@ -33,6 +33,7 @@ static NSString * KEY_LOG_LEVEL = @"omicall/logLevel";
 static NSString * OMICALL_TRANSFERED = @"omicall/call/transfer";
 static NSString * OMICALL_CALL_ID = @"omicall/call/callID";
 static NSString * OMICALL_IS_PARTIAL_PHONE_NUMBER = @"omikit/isPartialPhoneNumber";
+static NSString * KEY_OMI_DECLINE_CALL_USE_BUSY_HERE = @"omicall/declineCallUseBusyHere";
 
 
 #pragma NOTI

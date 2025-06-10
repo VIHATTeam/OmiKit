@@ -240,4 +240,16 @@
  */
 + (BOOL)checkHasAnsweredCall:(NSString * _Nonnull)callId;
 
+/**
+ * Cấu hình hành vi từ chối cuộc gọi.
+ * @param useBusyHere YES để sử dụng mã 486 (BUSY_HERE), NO để sử dụng mã 603 (DECLINE)
+ */
++ (void)configureDeclineCallBehavior:(BOOL)useBusyHere;
+
+/**
+ * Từ chối và kết thúc cuộc gọi trên tất cả thiết bị.
+ * @param uuid UUID của cuộc gọi cần drop
+ */
++ (void)dropCall:(NSUUID *_Nonnull)uuid;
+
 @end

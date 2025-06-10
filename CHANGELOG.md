@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.35](https://github.com/VIHATTeam/OmiKit.git) (10/06/2025)
+- Add cấu hình từ chối cuộc gọi 486-603. Mặc định 603
+- Add func DropCall vào OMIClient 
+
 ## [1.8.34](https://github.com/VIHATTeam/OmiKit.git) (06/06/2025)
 - Add infor into user-agent for flow incoming call. 
 - Add func DropCall 
