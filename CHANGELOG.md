@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.36](https://github.com/VIHATTeam/OmiKit.git) (11/06/2025)
+- Fix lỗi không kill cuộc gọi ở background 
+
 ## [1.8.35](https://github.com/VIHATTeam/OmiKit.git) (10/06/2025)
 - Add cấu hình từ chối cuộc gọi 486-603. Mặc định 603
 - Add func DropCall vào OMIClient 
