@@ -1,6 +1,8 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.8.37](https://github.com/VIHATTeam/OmiKit.git) (11/06/2025)
+- Thêm func declineWithBusy 
 
 ## [1.8.36](https://github.com/VIHATTeam/OmiKit.git) (11/06/2025)
 - Fix lỗi không kill cuộc gọi ở background 

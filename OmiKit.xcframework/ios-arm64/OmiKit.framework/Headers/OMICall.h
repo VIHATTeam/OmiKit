@@ -618,6 +618,15 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  */
 - (BOOL)decline:(NSError * _Nullable * _Nullable)error;
 
+/**
+ *  This will decline the incoming call with specified status code
+ *
+ *  @param useBusyHere BOOL if YES, sends 486 BUSY_HERE; if NO, sends 603 DECLINE. Default is YES.
+ *  @param error Pointer to an NSError pointer. Will be set to a NSError instance if cannot decline the call.
+ *
+ *  @return BOOL success of declining up the call.
+ */
+- (BOOL)declineWithBusyHere:(BOOL)useBusyHere error:(NSError * _Nullable * _Nullable)error;
 
 /**
  *  This will decline the incoming call and kill call, stop ring in orther device
