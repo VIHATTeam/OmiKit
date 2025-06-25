@@ -13,9 +13,6 @@ FOUNDATION_EXPORT double OmiKitVersionNumber;
 //! Project version string for OmiKit.
 FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];
 
-// Category Extensions (from SIPCore)
-#import "NSError+OMIError.h"
-
 #import "CallKitProviderDelegate.h"
 #import "Constants.h"
 #import "OMIAccount.h"

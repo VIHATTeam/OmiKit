@@ -20,14 +20,6 @@
 		<data>
 		rvkhEMTK4CIJJB1hFoovJeqd52M=
 		</data>
-		<key>Headers/NSError+OMIError.h</key>
-		<data>
-		LzaQ+sECaNgFocHzeVWUD2T7YS0=
-		</data>
-		<key>Headers/NSString+PJString.h</key>
-		<data>
-		safifb9LwX8tYZM5fIgcW5fvysw=
-		</data>
 		<key>Headers/OMIAccount.h</key>
 		<data>
 		/iERg8J4LENOQxYKvxd9yWEyWO8=
@@ -142,11 +134,11 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		YrE2ctrbjm5WA3PvWqjlojJpZ4w=
+		zgV4pYLO+WuPIAE9a9XL7/jKJHk=
 		</data>
 		<key>Headers/OmiKit.h</key>
 		<data>
-		YCx3gIfLc8HSsZN6YNrdN6N0Xds=
+		UWQ+TQ08XftReDYanaW/AvpRB9I=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -205,20 +197,6 @@
 			<key>hash2</key>
 			<data>
 			SNCY1jJUdn94IIjl53wyCA/OVEflxowlhSWF5Okn0QA=
-			</data>
-		</dict>
-		<key>Headers/NSError+OMIError.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			MtzTAwRGAgkjBg2NlMzPXwqz0Z7NzdvE7gtYh6x5Kzc=
-			</data>
-		</dict>
-		<key>Headers/NSString+PJString.h</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			1t+nLMWj4wc1xHhkeyPwxrhiN7qes8jLaFI7v/pY8ek=
 			</data>
 		</dict>
 		<key>Headers/OMIAccount.h</key>
@@ -421,14 +399,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Uhwhhs4tTrqv/26AFCl5uAw3yQKwjgJR5i4ddJdcEo8=
+			g0VHk5xTL5HJGyQV//rzw3IX5bKkM50DbKvgYrALggA=
 			</data>
 		</dict>
 		<key>Headers/OmiKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OnwaxGLdLhPrujisxSwWX+DS76ZJ3R6eEEjy/IzpfEE=
+			BMXOY5AI9AKr5A77RT3EKUdZ5+wgDhdQdXA3CRvTRiA=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
