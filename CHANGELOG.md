@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.41](https://github.com/VIHATTeam/OmiKit.git) (27/06/2025)
+- Add mã check chặn show thông báo cuộc gọi nhỡ
+
 ## [1.8.38, 1.8.40](https://github.com/VIHATTeam/OmiKit.git) (23/06/2025)
 - Fix crash khi mở từ background lên foreground  
 
