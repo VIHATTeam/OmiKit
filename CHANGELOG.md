@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.42](https://github.com/VIHATTeam/OmiKit.git) (02/07/2025)
+- Hot fix missed omiId ở state early khi out going call 
+
 ## [1.8.41](https://github.com/VIHATTeam/OmiKit.git) (27/06/2025)
 - Add mã check chặn show thông báo cuộc gọi nhỡ
 
