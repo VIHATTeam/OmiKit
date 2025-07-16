@@ -39,3 +39,12 @@ static NSString * KEY_OMI_DECLINE_CALL_USE_BUSY_HERE = @"omicall/declineCallUseB
 #pragma NOTI
 static NSString * KEY_OMI_USER_NAME_KEY = @"omicall/userNameKey";
 static NSString * KEY_OMI_REPRESENT_NAME = @"omicall/representName";
+
+#pragma CALL EVENT
+static NSString *const CALL_EVENT_HANGUP = @"HANGUP";
+static NSString *const CALL_EVENT_ANSWERED = @"ANSWERED";
+static NSString *const CALL_EVENT_TRANSFER = @"TRANSFER";
+
+static NSString *const CALL_DIRECTION_INBOUND = @"inbound";
+static NSString *const CALL_DIRECTION_OUTBOUND = @"outbound";
+

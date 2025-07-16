@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.8.43](https://github.com/VIHATTeam/OmiKit.git) (16/07/2025)
+- Add API update action when accept, hangup, transfer call 
+
 ## [1.8.42](https://github.com/VIHATTeam/OmiKit.git) (02/07/2025)
 - Hot fix missed omiId ở state early khi out going call 
 

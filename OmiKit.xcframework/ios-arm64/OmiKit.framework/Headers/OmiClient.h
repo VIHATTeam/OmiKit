@@ -252,4 +252,22 @@
  */
 + (void)dropCall:(NSUUID *_Nonnull)uuid;
 
+/**
+ * Cập nhật hành động cuộc gọi (như HANGUP, ANSWERED, TRANSFER) và kết thúc cuộc gọi trên tất cả thiết bị.
+ *
+ * @param eventCall   Sự kiện cuộc gọi, ví dụ: @"HANGUP", @"ANSWERED", @"TRANSFER"
+ * @param callId      omiCall id của cuộc gọi cần xử lý
+ * @param isIncoming   Hướng cuộc gọi isCommingCall thì true
+ * @param dest        Thiết bị đích khi chuyển tiếp cuộc gọi
+ * @param phoneNumber Số điện thoại liên quan đến cuộc gọi
+ * @param sipNumber   Số SIP của người dùng
+ *
+ * @return YES nếu gửi thành công, NO nếu có lỗi.
+ */
++ (BOOL)updateActionCall:(NSString * _Nonnull)eventCall
+                  callId:(NSString * _Nonnull)callId
+              isIncoming:(BOOL * _Nonnull)isIncoming
+                    dest:(NSString * _Nonnull)dest
+             phoneNumber:(NSString * _Nonnull)phoneNumber
+               sipNumber:(NSString * _Nonnull)sipNumber;
 @end
