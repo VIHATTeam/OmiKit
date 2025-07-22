@@ -270,4 +270,27 @@
                     dest:(NSString * _Nonnull)dest
              phoneNumber:(NSString * _Nonnull)phoneNumber
                sipNumber:(NSString * _Nonnull)sipNumber;
+
+/**
+ * Kiểm tra domain fussion có cấu hình
+ */
++ (void)checkHasConfig;
+
+
+/**
+ * Kiểm tra có nên show cuộc gọi nhỡ hay không
+ * @param callId ID của cuộc gọi cần kiểm tra
+ * @return YES là có show cuộc gọi nhỡ, NO không show cuộc gọi nhỡ
+ */
++ (BOOL)checkHasShowMissedCall:(NSString * _Nonnull)callId;
+
+
+/**
+ * Kiểm tra giá trị từ backend có nên show cuộc gọi nhỡ hay không
+ * @param value: ANSWERED, TRANSFERRED, HUNG_UP, UNKNOWN
+ * @return YES nếu value là UNKNOWN, NO nếu là ANSWERED, TRANSFERRED, HUNG_UP
+ */
++ (BOOL)checkPayloadShowMissCall:(NSString * _Nonnull)value;
+
+
 @end

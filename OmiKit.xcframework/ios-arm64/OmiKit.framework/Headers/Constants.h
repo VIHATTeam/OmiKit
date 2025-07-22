@@ -34,7 +34,7 @@ static NSString * OMICALL_TRANSFERED = @"omicall/call/transfer";
 static NSString * OMICALL_CALL_ID = @"omicall/call/callID";
 static NSString * OMICALL_IS_PARTIAL_PHONE_NUMBER = @"omikit/isPartialPhoneNumber";
 static NSString * KEY_OMI_DECLINE_CALL_USE_BUSY_HERE = @"omicall/declineCallUseBusyHere";
-
+static NSString * KEY_ENABLE_CONFIG_SEND_ACTION_CALL = @"omicall/hasEnableConfigSendActionCall";
 
 #pragma NOTI
 static NSString * KEY_OMI_USER_NAME_KEY = @"omicall/userNameKey";

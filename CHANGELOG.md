@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.8.44](https://github.com/VIHATTeam/OmiKit.git) (22/07/2025)
+- Add API update action when accept, hangup, transfer call and func check show missed call 
+
 ## [1.8.43](https://github.com/VIHATTeam/OmiKit.git) (16/07/2025)
 - Add API update action when accept, hangup, transfer call 
 
