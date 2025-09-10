@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.45](https://github.com/VIHATTeam/OmiKit.git) (10/09/2025)
+- Fix lỗi crash khi nhận incomming call
+- Fix lỗi không wake up app khi có incomming call ở thiết bị yếu
 
 ## [1.8.44](https://github.com/VIHATTeam/OmiKit.git) (22/07/2025)
 - Add API update action when accept, hangup, transfer call and func check show missed call 
