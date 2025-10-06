@@ -10,7 +10,7 @@
 
 #ifndef PushKitManager_h
 #define PushKitManager_h
-@interface PushKitManager : NSObject<PKPushRegistryDelegate>
+@interface PushKitManager : NSObject<PKPushRegistryDelegate, CXCallObserverDelegate>
 - (instancetype)initWithVoipRegistry:(PKPushRegistry *)voIPRegistry;
 + (instancetype)sharedInstance;
 /**

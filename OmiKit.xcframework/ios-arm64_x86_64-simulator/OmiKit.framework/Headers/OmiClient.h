@@ -53,6 +53,11 @@
  */
 + (NSString *)getPhone:(NSString *_Nonnull)toUuid;
 
+/**
+ *  Get phone number from UUID with callback completion
+ */
++ (void)getPhone:(NSString *_Nonnull)toUuid completion:(void (^)(NSString * _Nullable phone))completion;
+
 + (id)getAccountInfo:(NSString *_Nonnull)sipAccount;
 /**
  *  Start call with Uuid (use for api key)

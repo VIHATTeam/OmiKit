@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.8.46](https://github.com/VIHATTeam/OmiKit.git) (06/10/2025)
+- Hot fix crash Thread SDK 
+
 ## [1.8.45](https://github.com/VIHATTeam/OmiKit.git) (10/09/2025)
 - Fix lỗi crash khi nhận incomming call
 - Fix lỗi không wake up app khi có incomming call ở thiết bị yếu
