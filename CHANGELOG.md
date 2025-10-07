@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.47](https://github.com/VIHATTeam/OmiKit.git) (07/10/2025)
+- Hot fix crash incoming call at background 
 
 ## [1.8.46](https://github.com/VIHATTeam/OmiKit.git) (06/10/2025)
 - Hot fix crash Thread SDK 
