@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.48](https://github.com/VIHATTeam/OmiKit.git) (14/10/2025)
+- RollBack fix call 4g ios 
+
 ## [1.8.47](https://github.com/VIHATTeam/OmiKit.git) (07/10/2025)
 - Hot fix crash incoming call at background 
 
