@@ -67,6 +67,21 @@
                                   callNumber:(NSString *)callNumber
                                   remoteName:(NSString *)remoteName ;
 
+/*
+ Check if IPv6 is available on cellular network
+ */
++ (BOOL)isIPv6Available;
+
+/*
+ Check if IP address is APIPA (169.254.x.x)
+ */
++ (BOOL)isAPIPA_Address:(NSString *)ipAddress;
+
+/*
+ Get valid local IP address (not APIPA)
+ */
++ (NSString *)getValidLocalIPAddress;
+
 extern NSString *const SDK_VERSION;
 
 @end

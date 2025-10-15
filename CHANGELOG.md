@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.51](https://github.com/VIHATTeam/OmiKit.git) (15/10/2025)
+- Fix 4g network mobifone not send register to switch board
+
 ## [1.8.48](https://github.com/VIHATTeam/OmiKit.git) (14/10/2025)
 - RollBack fix call 4g ios 
 
