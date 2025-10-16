@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.8.52](https://github.com/VIHATTeam/OmiKit.git) (16/10/2025)
+- Update API remove devices info
+
 ## [1.8.51](https://github.com/VIHATTeam/OmiKit.git) (15/10/2025)
 - Fix 4g network mobifone not send register to switch board
 
