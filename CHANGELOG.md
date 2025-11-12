@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.54](https://github.com/VIHATTeam/OmiKit.git) (12/10/2025)
+- Fix ice, turn and fix re-invite switch board
+  
 
 ## [1.8.52](https://github.com/VIHATTeam/OmiKit.git) (16/10/2025)
 - Update API remove devices info

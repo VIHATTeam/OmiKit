@@ -212,6 +212,16 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
 @property (readonly, nonatomic) OMIIceConfiguration * _Nullable iceConfiguration;
 
 /**
+ *  The STUN Configuration (dynamic based on network provider).
+ */
+@property (readonly, nonatomic) OMIStunConfiguration * _Nullable stunConfiguration;
+
+/**
+ *  The TURN Configuration (dynamic based on network provider).
+ */
+@property (readonly, nonatomic) OMITurnConfiguration * _Nullable turnConfiguration;
+
+/**
  * Specify if source TCP port should be used as the initial Contact
  * address if TCP/TLS transport is used. Note that this feature will
  * be automatically turned off when nameserver is configured because
@@ -297,6 +307,21 @@ typedef NS_ENUM(NSUInteger, OMISIPLibErrors) {
  *  @return success of configuration.
  */
 - (void)configureLibraryWithEndPointConfiguration:(OMIEndpointConfiguration * _Nonnull)endpointConfiguration error:(NSError * _Nullable * _Nullable)error;
+
+/**
+ *  Pre-warm endpoint to reduce incoming call delay.
+ *  Call this method when app launches or when user logs in.
+ *  This initializes PJSIP endpoint (including audio device) in advance,
+ *  reducing VoIP push → CallKit show time by ~1.5 seconds.
+ *
+ *  IMPORTANT: This is optional. If not called, endpoint will be initialized
+ *  automatically when first call arrives (existing behavior).
+ *
+ *  @param endpointConfiguration Endpoint configuration to use
+ *  @param completion            Called when pre-warming completes (success or failure)
+ */
+- (void)preWarmEndpointWithConfiguration:(OMIEndpointConfiguration * _Nonnull)endpointConfiguration
+                              completion:(void (^_Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 /**
  *  This will create and add a OMIAccount to the Endpoint.

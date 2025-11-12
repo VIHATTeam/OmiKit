@@ -297,6 +297,40 @@
  */
 + (void)getPhone:(NSString *_Nonnull)toUuid completion:(void (^)(NSString * _Nullable phone))completion;
 
+/**
+ * Fetch network information from server
+ */
++ (void)fetchNetworkInfo;
+
+/**
+ * Fetch ICE provider list from server
+ */
++ (void)fetchProviderList;
+
+/**
+ * Apply dynamic STUN/TURN/Proxy configuration based on current network
+ */
++ (void)applyDynamicConfiguration;
+
+/**
+ * Get fallback proxy IP for retry when DNS fails
+ * @return Fallback IP with port :5222, or nil if not available
+ */
++ (NSString * _Nullable)getFallbackProxyIP;
+
+/**
+ * Test helper: Override network name for testing ICE provider matching
+ * @param networkName The test network name (e.g., "fpt" to match FPT provider)
+ * Usage: [OmiClient setTestNetworkName:@"fpt"];
+ */
++ (void)setTestNetworkName:(NSString * _Nonnull)networkName;
+
+/**
+ * Test helper: Clear network name override
+ * Usage: [OmiClient clearTestNetworkName];
+ */
++ (void)clearTestNetworkName;
+
 
 
 @end

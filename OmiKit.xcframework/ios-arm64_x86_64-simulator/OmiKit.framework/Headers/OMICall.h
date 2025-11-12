@@ -368,6 +368,14 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic) BOOL isVideo;
 
 /**
+ *  Track if initial INVITE had video offer (m=video in SDP)
+ *  This is used to determine if re-INVITE with video should be sent
+ *  IMPORTANT: This flag is set ONCE during call initialization and should NOT change
+ *  during call lifecycle (re-INVITE, hold, transfer, etc.)
+ */
+@property (nonatomic, readonly) BOOL hasInitialVideoOffer;
+
+/**
  * The Call-ID that is present in the SIP messages.
  */
 @property (readonly, nonatomic) NSString * _Nonnull messageCallId;

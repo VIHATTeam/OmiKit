@@ -130,6 +130,15 @@ typedef void (^RegistrationCompletionBlock)(BOOL success, NSError * _Nullable er
 - (void)registerAccountWithCompletion:(_Nullable RegistrationCompletionBlock)completion;
 
 /**
+ *  Ensure ICE/NAT configuration is properly set for this account.
+ *  This should be called before processing incoming calls to ensure NAT traversal works.
+ *
+ *  The method checks if STUN/TURN/ICE config is already set and updates only if needed.
+ *  This prevents redundant updates while ensuring incoming calls have proper NAT configuration.
+ */
+- (void)ensureIceConfigUpdated;
+
+/**
  *  Unregister the account if registered.
  *
  *  If an account isn't registered, there will be no unregister message sent to the proxy, and will return success.

@@ -234,6 +234,16 @@
 - (__weak OMICall *_Nullable)firstActiveOutboundCallForAccount:(OMIAccount *_Nonnull)account;
 
 /**
+ *  Returns all ACTIVE calls for the given account.
+ *  Active calls are calls with state > OMICallStateNull and < OMICallStateDisconnected.
+ *
+ *  @param account The OMIAccount instance for which to return active calls.
+ *
+ *  @return An NSArray containing all active calls for the account, or empty array if none.
+ */
+- (NSArray <OMICall *> * _Nonnull)activeCallsForAccount:(OMIAccount * _Nonnull)account;
+
+/**
  *  Returns the last call for the given account
  *
  *  @param account The OMIAccount instance for which to return the last call.
