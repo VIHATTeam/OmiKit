@@ -38,7 +38,7 @@
 		</data>
 		<key>Headers/OMICall.h</key>
 		<data>
-		Jwe3oS2WAwDIiVe6scKvQk+mMSY=
+		amubLHfdJvqTCW//q9dC8LMyKbA=
 		</data>
 		<key>Headers/OMICallInfo.h</key>
 		<data>
@@ -64,6 +64,10 @@
 		<data>
 		88zafbMEaTQL3iZLG+7xHHP4dWg=
 		</data>
+		<key>Headers/OMIFloatingCallWindow.h</key>
+		<data>
+		T43gB2R3VH9Afn8D/iowteNfAhM=
+		</data>
 		<key>Headers/OMIIceConfiguration.h</key>
 		<data>
 		oyZxLM/vDhfXgsveRhUoJXzS3QY=
@@ -83,6 +87,10 @@
 		<key>Headers/OMIOpusConfiguration.h</key>
 		<data>
 		uzt33dClE+oFYlFcCEpziKGpjmU=
+		</data>
+		<key>Headers/OMIPictureInPictureManager.h</key>
+		<data>
+		VU0x/D89hfFOqbb3SHzdv3Fwqx4=
 		</data>
 		<key>Headers/OMIRingback.h</key>
 		<data>
@@ -122,7 +130,7 @@
 		</data>
 		<key>Headers/OMIVideoPreviewView.h</key>
 		<data>
-		TqDDH3LEL8Uqv0OTa/uZ/t/0KVc=
+		Hj7PL5UDZ+DKdQCZaRObU+4JhAc=
 		</data>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<data>
@@ -134,11 +142,11 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		zgV4pYLO+WuPIAE9a9XL7/jKJHk=
+		c5xFwafl4Olu2JZHUwcQoWa/gAA=
 		</data>
 		<key>Headers/OmiKit.h</key>
 		<data>
-		UWQ+TQ08XftReDYanaW/AvpRB9I=
+		/upvg9+GIS6CFHmVD/QmAQy8ZIk=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -231,7 +239,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8nyw5qI9mMhO4e/MshTDEZg4fHBeSGSq+1/UXDKR064=
+			X99ceU/wntJAYVJIWtFzFYCrapIauuxO0Fw+9Zp3Rl8=
 			</data>
 		</dict>
 		<key>Headers/OMICallInfo.h</key>
@@ -276,6 +284,13 @@
 			jbazAWdmYtIlOTX+KzV88C9QIn7+mAwaaVWtEZUKpQM=
 			</data>
 		</dict>
+		<key>Headers/OMIFloatingCallWindow.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pcQToIPS5B62BC4T+UvCF39II/6f1Ryp2C5aSo/EH2w=
+			</data>
+		</dict>
 		<key>Headers/OMIIceConfiguration.h</key>
 		<dict>
 			<key>hash2</key>
@@ -309,6 +324,13 @@
 			<key>hash2</key>
 			<data>
 			0maoX8YQCviOBoGHnqP6PxXwz2c3tjWEPtUtWUnxifM=
+			</data>
+		</dict>
+		<key>Headers/OMIPictureInPictureManager.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			gC2om/MCzmucuTWv1MMgpWEk/ys9IHzaPcbhyIa72Do=
 			</data>
 		</dict>
 		<key>Headers/OMIRingback.h</key>
@@ -378,7 +400,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Ukv3GL0kAWzHT72cnq/o3+VSj7vd3Y/A/kvouTjLQbQ=
+			SJbE39um8cQ/K2N77F8XWvlkQD9Q6Xf2J/RhyJrOUvI=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoViewManager.h</key>
@@ -399,14 +421,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			g0VHk5xTL5HJGyQV//rzw3IX5bKkM50DbKvgYrALggA=
+			t8U6n7n3xvfxGvIATM+s5xyb3UMU4/AQz0CF7DuU6vI=
 			</data>
 		</dict>
 		<key>Headers/OmiKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BMXOY5AI9AKr5A77RT3EKUdZ5+wgDhdQdXA3CRvTRiA=
+			/Qz2wRF0JMKJoeATeD6Bl2ov6k+SWogCEPpYkXILMJk=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>

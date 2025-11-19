@@ -731,3 +731,17 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 - (void)updateLastStatus:(NSInteger)statusCall lastStatusText:(NSString *) lastStatusText;
 
 @end
+
+// MARK: - Internal Methods (for OmiKit internal use only)
+@interface OMICall (Internal)
+
+/**
+ * Internal setter for hasInitialVideoOffer property
+ * This is used by OMIEndpoint when parsing SDP from incoming INVITE
+ * to set the flag based on actual SDP content (m=video presence)
+ *
+ * @param hasInitialVideoOffer YES if INVITE contains m=video line, NO otherwise
+ */
+- (void)setHasInitialVideoOfferInternal:(BOOL)hasInitialVideoOffer;
+
+@end

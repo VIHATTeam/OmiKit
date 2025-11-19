@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.56](https://github.com/VIHATTeam/OmiKit.git) (19/10/2025)
+- Fix crash when end call
+- Optimize call video
+
 ## [1.8.54](https://github.com/VIHATTeam/OmiKit.git) (12/10/2025)
 - Fix ice, turn and fix re-invite switch board
   
