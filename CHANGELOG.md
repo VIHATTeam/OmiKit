@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [1.8.58](https://github.com/VIHATTeam/OmiKit.git) (25/11/2025)
+## [1.8.58, 1.8.59](https://github.com/VIHATTeam/OmiKit.git) (25/11/2025)
 - Fix call video 
 
 ## [1.8.56](https://github.com/VIHATTeam/OmiKit.git) (19/10/2025)

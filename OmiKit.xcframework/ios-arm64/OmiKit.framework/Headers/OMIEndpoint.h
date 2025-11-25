@@ -168,6 +168,14 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  */
 @property (nonatomic) OMIEndpointState state;
 
+/**
+ * Generation counter that increments each time endpoint is created.
+ * Used to detect stale async operations from previous endpoint instances.
+ * When endpoint is destroyed and recreated, this counter increments,
+ * allowing async blocks to verify they're still operating on the correct instance.
+ */
+@property (nonatomic, readonly) NSUInteger endpointGeneration;
+
 @property (nonatomic) NSString* _Nonnull stateSignalSwitchBoard ;
 
 @property (assign) bool isV6Transport;
