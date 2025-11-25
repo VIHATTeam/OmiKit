@@ -38,6 +38,13 @@
 */
 - (UIView *)createViewForVideoRemote:(CGRect)frame;
 
+/**
+ * Cleanup video resources when call ends
+ * Should be called when dismissing video call view controller
+ * Stops video preview and releases PJSIP video resources
+ */
+- (void)cleanup;
+
 @end
 
 

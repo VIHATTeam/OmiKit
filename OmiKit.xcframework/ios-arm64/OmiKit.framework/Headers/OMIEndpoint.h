@@ -229,6 +229,14 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 - (void)destroyEndpointInstance;
 
 /**
+ *  This will remove the pjsua configuration with completion callback.
+ *  Use this for rapid consecutive calls to wait for destroy to complete.
+ *
+ *  @param completion Called when endpoint is fully destroyed (state = OMIEndpointStopped)
+ */
+- (void)destroyEndpointInstanceWithCompletion:(void (^ _Nullable)(void))completion;
+
+/**
  *  Adjust config realtime of Opus
  */
 -(void) adjustOpusConfig:(float)mos sampleRate:(int) sampleRate bitRate:(int) bitRate;
@@ -288,6 +296,24 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
 - (void)resetOpusCodecToDefault;
+
+/**
+ *  Initialize the video device subsystem on-demand.
+ *  With PJSUA_DONT_INIT_VID_DEV_SUBSYS=1, video devices are NOT initialized during pjsua_init()
+ *  to speed up audio-only call startup. Call this method before making/receiving video calls.
+ *
+ *  This method is thread-safe and can be called multiple times (only first call has effect).
+ *
+ *  @return YES if video subsystem is initialized successfully or was already initialized.
+ */
+- (BOOL)initVideoSubsystemIfNeeded;
+
+/**
+ *  Check if video subsystem has been initialized.
+ *
+ *  @return YES if video devices are ready to use.
+ */
+@property (nonatomic, readonly) BOOL videoSubsystemInitialized;
 
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSNumber *, NSString *> *codecInfoStorage; // 🔹 Lưu thông tin codec theo call_id
 

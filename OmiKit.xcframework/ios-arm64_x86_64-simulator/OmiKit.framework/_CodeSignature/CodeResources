@@ -58,7 +58,7 @@
 		</data>
 		<key>Headers/OMIEndpoint.h</key>
 		<data>
-		y7P7QC5UwjR2NgeQwrBdxLbJCbU=
+		MBGtx74YbfLKdsYVdxi2p32Zee8=
 		</data>
 		<key>Headers/OMIEndpointConfiguration.h</key>
 		<data>
@@ -75,6 +75,10 @@
 		<key>Headers/OMIIpChangeConfiguration.h</key>
 		<data>
 		B3iH+tdZ0h/13KoswNhwgy6ly8c=
+		</data>
+		<key>Headers/OMILocalVideoView.h</key>
+		<data>
+		Pbz+tzD5AKuZYV0tbSMCx+0k8uE=
 		</data>
 		<key>Headers/OMILogging.h</key>
 		<data>
@@ -130,23 +134,23 @@
 		</data>
 		<key>Headers/OMIVideoPreviewView.h</key>
 		<data>
-		Hj7PL5UDZ+DKdQCZaRObU+4JhAc=
+		a9AjQH5ncjqcFX8r/bOq7DTw0l8=
 		</data>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<data>
-		QVgFUaKTL6cFMgXBknxUraEiWEk=
+		CDC3ojWHu4hRwzlCBWW67jNjhb4=
 		</data>
 		<key>Headers/OmiClient.h</key>
 		<data>
-		NFkumtuJlq53davoauI0o2oJPhM=
+		x1ozOsv1HE1xX6lOg5P/PHxdNYE=
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		c5xFwafl4Olu2JZHUwcQoWa/gAA=
+		yaHNt6laHJN8bSqE2Q2m4Lyh/rU=
 		</data>
 		<key>Headers/OmiKit.h</key>
 		<data>
-		/upvg9+GIS6CFHmVD/QmAQy8ZIk=
+		KzDlaBvZ9PbFRD9xK0GdW1BsNno=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -274,7 +278,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			aZwdJRhQW8HTfygWLSYmloYOrcnQp6e/WAvfw1WUO8A=
+			1zdpy24x22gdj8W/+VCi9Gw3Hq8AYd77zEAsoW57jLM=
 			</data>
 		</dict>
 		<key>Headers/OMIEndpointConfiguration.h</key>
@@ -303,6 +307,13 @@
 			<key>hash2</key>
 			<data>
 			QzFUgoWy7G2tBBA/gBHXCWOoDIcOz0fwh1I+k7mbde0=
+			</data>
+		</dict>
+		<key>Headers/OMILocalVideoView.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lkNuCehcCI1arOUVzg9hQTMysGIrZNfsOzhW/EpZxBQ=
 			</data>
 		</dict>
 		<key>Headers/OMILogging.h</key>
@@ -400,35 +411,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			SJbE39um8cQ/K2N77F8XWvlkQD9Q6Xf2J/RhyJrOUvI=
+			rcbmlWTx41Ozvwr3gFhL2zKhOyQWs2FdLf6lh6yD3zM=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			OkZQBkfS3b0Q59TrNH5XJgM5eTursVayprz26/Q9Ez0=
+			lsFMmvqrj3MpvNhPZHS/sg2XBFvEkfUOSrKdF+F3/q4=
 			</data>
 		</dict>
 		<key>Headers/OmiClient.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5haExFXXj4RlfATOI7LNXI7cUoAdk4O0eaRavASYD4s=
+			ANTIc8ORn881WtcXkgiN2qywvRoUCr42Y4iABZfrnzo=
 			</data>
 		</dict>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			t8U6n7n3xvfxGvIATM+s5xyb3UMU4/AQz0CF7DuU6vI=
+			OgOG5e3QXqCQpCfub5LDt+R77mCnEqK+e6YTw5gta/w=
 			</data>
 		</dict>
 		<key>Headers/OmiKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			/Qz2wRF0JMKJoeATeD6Bl2ov6k+SWogCEPpYkXILMJk=
+			GEz3AmKQIh1opWrdfs1+p1EdYcSaDjYB103Jgugm6KM=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>

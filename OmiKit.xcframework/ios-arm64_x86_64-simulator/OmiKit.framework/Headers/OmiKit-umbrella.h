@@ -30,6 +30,7 @@
 #import "OMIIceConfiguration.h"
 #import "OMIIpChangeConfiguration.h"
 #import "OmiKit.h"
+#import "OMILocalVideoView.h"
 #import "OMILogging.h"
 #import "OMINetworkMonitor.h"
 #import "OMIOpusConfiguration.h"

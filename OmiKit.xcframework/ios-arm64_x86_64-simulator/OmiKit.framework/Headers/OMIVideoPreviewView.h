@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setPlayer:(AVPlayer *)player;
 
+/**
+ * Cleanup video resources - call when done with the view
+ * Hides PJSIP window and removes subviews to release memory
+ */
+- (void)cleanup;
+
 @end
 
 NS_ASSUME_NONNULL_END

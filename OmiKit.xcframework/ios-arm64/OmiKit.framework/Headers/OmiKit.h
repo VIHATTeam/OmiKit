@@ -45,6 +45,7 @@ FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];
 #import "VoIPPushHandler.h"
 #import "OMIVideoCallViewController.h"
 #import "OMIVideoPreviewView.h"
+#import "OMILocalVideoView.h"
 #import "OMIVideoViewManager.h"
 #import "OMIFloatingCallWindow.h"
 #import "OMIPictureInPictureManager.h"

@@ -44,6 +44,23 @@
  *  Start Service OMI - in Most case User ussually dont call this function
  */
 + (BOOL)startOmiService:(BOOL)isVideo;
+
+/**
+ *  Pre-warm the SIP endpoint to reduce call setup time.
+ *  Call this method early (e.g., at app launch or user login) to initialize
+ *  the PJSIP stack in the background. This avoids ~3-4 second delay when making
+ *  the first call, as video subsystem initialization happens ahead of time.
+ *
+ *  @param completion Callback with success status and any error that occurred.
+ *
+ *  Example usage:
+ *  - Call in AppDelegate didFinishLaunchingWithOptions
+ *  - Or call after user successfully logs in
+ *
+ *  Note: If endpoint is already initialized, this method returns immediately with success.
+ */
++ (void)preWarmEndpointWithCompletion:(void (^_Nullable)(BOOL success, NSError *_Nullable error))completion;
+
 /**
  *  Start call with option video call
  */
