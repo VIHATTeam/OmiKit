@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.1](https://github.com/VIHATTeam/OmiKit.git) (04/12/2025)
+- Build new version OMISIP 2.16
+- Fix call video
+
 ## [1.8.61](https://github.com/VIHATTeam/OmiKit.git) (28/11/2025)
 - Fix crash call video 
 

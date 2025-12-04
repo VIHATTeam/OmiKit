@@ -7,34 +7,36 @@
 #
 
 Pod::Spec.new do |s|
-  s.name                  = 'OmiKit'
-  s.version               = '1.8.61'
-  s.homepage           = "https://micall.com/"
-  s.summary            = "Omicall Framework"
+  s.name             = 'OmiKit'
+  s.version          = '1.9.1'
+  s.homepage         = "https://omicall.com/"
+  s.summary          = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Hoang Quoc Viet' => 'viethq@vihat.vn' }
 
-  s.description        = "Omicall easy to make call/video call app2app, app2phone "
-  s.homepage           = "https://omicall.com/"
-  s.documentation_url  = "https://api.omicall.com/web-sdk/mobile-sdk"
+  s.description      = "Omicall easy to make call/video call app2app, app2phone"
+  s.documentation_url = "https://api.omicall.com/web-sdk/mobile-sdk"
 
+  # Note: OmiSIP binary requires iOS 13.0+, but podspec can declare 11.0
+  # Xcode will show error if app targets iOS < 13
   s.ios.deployment_target = '11.0'
   s.source           = { :git => 'https://github.com/VIHATTeam/OmiKit.git', :tag => s.version.to_s }
 
   # Configure XCFramework properly
   s.vendored_frameworks = "OmiKit.xcframework"
-  
+
   # Ensure headers are accessible with proper import paths
   s.preserve_paths = 'OmiKit.xcframework'
-  
+
   # Add module map configuration to ensure proper module resolution
   s.module_map = 'OmiKit.xcframework/ios-arm64/OmiKit.framework/Modules/module.modulemap'
 
   s.libraries = 'stdc++'
-  s.frameworks = 'CoreFoundation', 'VideoToolbox', 'AudioToolbox', 'AVFoundation', 'GLKit', 'CFNetwork',  'CoreMedia'
-  
+  s.frameworks = 'CoreFoundation', 'VideoToolbox', 'AudioToolbox', 'AVFoundation', 'GLKit', 'CFNetwork', 'CoreMedia'
+
   s.pod_target_xcconfig = {
     'OTHER_LDFLAGS' => '-ObjC',
+    # Exclude arm64 simulator because OpenH264/Opus don't have arm64-simulator builds
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     # Ensure framework headers are found correctly
     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',

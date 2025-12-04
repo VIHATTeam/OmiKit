@@ -74,6 +74,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateLocalVideoView:(UIView *)localView remoteVideoView:(UIView *)remoteView;
 
+/**
+ * Check if any floating window is currently showing
+ * @return YES if there's an active floating window
+ */
++ (BOOL)hasActiveFloatingWindow;
+
 @end
 
 NS_ASSUME_NONNULL_END
