@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.3](https://github.com/VIHATTeam/OmiKit.git) (05/12/2025)
+- Fix crash call video
+
 ## [1.9.2](https://github.com/VIHATTeam/OmiKit.git) (04/12/2025)
 - Fix crash call video
 
