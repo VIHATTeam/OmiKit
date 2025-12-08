@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.4](https://github.com/VIHATTeam/OmiKit.git) (08/12/2025)
+- Fix open call video from background 
+
 ## [1.9.3](https://github.com/VIHATTeam/OmiKit.git) (05/12/2025)
 - Fix crash call video
 
