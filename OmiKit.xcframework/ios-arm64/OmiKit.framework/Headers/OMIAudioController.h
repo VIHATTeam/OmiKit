@@ -50,6 +50,16 @@ typedef NS_ENUM(NSInteger, OMIAudioControllerOutputs) {
 - (void)configureAudioSession;
 
 /**
+ *  Pre-warm VoiceProcessingIO audio unit to reduce initialization delay.
+ *  Call this early (e.g., when receiving VoIP push) to warm up the audio unit
+ *  before CallKit activates the audio session.
+ *
+ *  VoiceProcessingIO typically takes 5-10+ seconds to initialize on first use.
+ *  Pre-warming reduces this delay by initializing the audio components early.
+ */
+- (void)preWarmAudioUnit;
+
+/**
  *  Activate the audio session.
  */
 - (void)activateAudioSession;
@@ -58,6 +68,13 @@ typedef NS_ENUM(NSInteger, OMIAudioControllerOutputs) {
  *  Deactivate the audio session.
  */
 - (void)deactivateAudioSession;
+
+/**
+ *  Deactivate sound device only.
+ *  Call this before hangup to prevent deadlock when sound device activation is in progress.
+ *  This signals any in-progress activation to abort and prevents new activations.
+ */
+- (void)deactivateSoundDevice;
 
 /**
  * Toggle speaker mode and return true if speaker is enabled

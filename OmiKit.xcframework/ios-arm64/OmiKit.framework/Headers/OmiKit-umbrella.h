@@ -42,6 +42,7 @@
 #import "OMITransportConfiguration.h"
 #import "OMITurnConfiguration.h"
 #import "OMIUtils.h"
+#import "OMIVideoCallManager.h"
 #import "OMIVideoCallViewController.h"
 #import "OMIVideoCodecs.h"
 #import "OMIVideoPreviewView.h"

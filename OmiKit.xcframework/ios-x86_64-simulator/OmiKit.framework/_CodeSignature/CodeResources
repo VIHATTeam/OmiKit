@@ -34,7 +34,7 @@
 		</data>
 		<key>Headers/OMIAudioController.h</key>
 		<data>
-		r1/m6MakAilgT3cwMg7LTGLjlWY=
+		3UolCHFQ+kR+bMgaZiWKy0ly56w=
 		</data>
 		<key>Headers/OMICall.h</key>
 		<data>
@@ -124,6 +124,10 @@
 		<data>
 		cb1pWtSYfJzhUeBicHcP8HBH7no=
 		</data>
+		<key>Headers/OMIVideoCallManager.h</key>
+		<data>
+		olz6/LGQIMe0hgMNhY3qo2oClrs=
+		</data>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<data>
 		mbqE0hxJp7wBXewJHj/VVy8ZUzs=
@@ -134,7 +138,7 @@
 		</data>
 		<key>Headers/OMIVideoPreviewView.h</key>
 		<data>
-		a9AjQH5ncjqcFX8r/bOq7DTw0l8=
+		kHauMkLC784eEA4JZfzC04FKH/c=
 		</data>
 		<key>Headers/OMIVideoViewManager.h</key>
 		<data>
@@ -146,11 +150,11 @@
 		</data>
 		<key>Headers/OmiKit-umbrella.h</key>
 		<data>
-		yaHNt6laHJN8bSqE2Q2m4Lyh/rU=
+		UfTnuIUuq/sNtuGe8kNwSiWxknI=
 		</data>
 		<key>Headers/OmiKit.h</key>
 		<data>
-		KzDlaBvZ9PbFRD9xK0GdW1BsNno=
+		YREAG6qrSthe7UleXhFAcsrBsFI=
 		</data>
 		<key>Headers/PushKitManager.h</key>
 		<data>
@@ -166,7 +170,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		3Wz9bFsx43uWPj41eydLsAhw4Kw=
+		LTf4CR0HbnYuMEwMd73t7mF76js=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -174,7 +178,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		Zfe5IbQh7q5+zLmc55sUweVdkio=
+		AkVxfQf/SlzQSyCTcm7+exf3QjY=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -236,7 +240,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			7kHmLU+C6+4JdLhia09CNeq+XmXK/FRwqE2bOCv5r2U=
+			re8fh6IG3q7vH6e/RvtPdyADRI2QF9QN+eY9JsijQfc=
 			</data>
 		</dict>
 		<key>Headers/OMICall.h</key>
@@ -393,6 +397,13 @@
 			43agWq2V20sNeYer0VDnsYSC0rpMtEdAnTH/X8xcKY0=
 			</data>
 		</dict>
+		<key>Headers/OMIVideoCallManager.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			28X68iMdVoB2I96ITqKBbMKc1L+vdhZ1FoIf0Y2Rcwk=
+			</data>
+		</dict>
 		<key>Headers/OMIVideoCallViewController.h</key>
 		<dict>
 			<key>hash2</key>
@@ -411,7 +422,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rcbmlWTx41Ozvwr3gFhL2zKhOyQWs2FdLf6lh6yD3zM=
+			SqyuVZKgnIY/Fp3PceI+cquyeSl41Qk3C0ET7QWBZRY=
 			</data>
 		</dict>
 		<key>Headers/OMIVideoViewManager.h</key>
@@ -432,14 +443,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			OgOG5e3QXqCQpCfub5LDt+R77mCnEqK+e6YTw5gta/w=
+			uBe9ODg2JXHyMifMISHq+gZVPItBm+7rAv2oWNcqDa0=
 			</data>
 		</dict>
 		<key>Headers/OmiKit.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GEz3AmKQIh1opWrdfs1+p1EdYcSaDjYB103Jgugm6KM=
+			ktzh822b+Wlug8+K4nrKQyYvKDjZzqoMrtfI6O9gYUw=
 			</data>
 		</dict>
 		<key>Headers/PushKitManager.h</key>
@@ -474,7 +485,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dt5rSxv11kdpzbWSgxHeclRG1n15rqx/9Rsjt2ZiX4g=
+			7ddpfoaUKYVjKXgi94UAjH2b/fw6h2/yQvpgkprYZQU=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.5](https://github.com/VIHATTeam/OmiKit.git) (18/12/2025)
+- Update Sip 2.16
+- Optimize call video
+
 ## [1.9.4](https://github.com/VIHATTeam/OmiKit.git) (08/12/2025)
 - Fix open call video from background 
 

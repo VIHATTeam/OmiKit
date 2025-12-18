@@ -28,6 +28,25 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)cleanup;
 
+/**
+ * Show loading indicator overlay
+ * Used to indicate waiting for video frames to arrive
+ */
+- (void)showLoadingIndicator;
+
+/**
+ * Hide loading indicator overlay
+ * Called when video frames start rendering or video becomes unavailable
+ */
+- (void)hideLoadingIndicator;
+
+/**
+ * Check if video is currently receiving frames
+ * Uses RTCP statistics to verify if new RTP packets are arriving
+ * @return YES if frames received in last 2 seconds, NO otherwise
+ */
+- (BOOL)isReceivingFrames;
+
 @end
 
 NS_ASSUME_NONNULL_END
