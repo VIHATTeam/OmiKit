@@ -106,6 +106,37 @@ NS_ASSUME_NONNULL_BEGIN
 /// Force refresh video views (useful after orientation change)
 - (void)refreshVideoViews;
 
+#pragma mark - Background/Foreground Handling
+
+/**
+ * Prepare video for display after app comes to foreground.
+ *
+ * IMPORTANT: Call this method when your video call screen appears from background!
+ *
+ * WHEN TO USE:
+ * - In your video call ViewController's viewDidAppear:
+ * - When app transitions from background to foreground with active video call
+ * - After CallKit answer from background and video screen becomes visible
+ *
+ * WHY THIS IS NEEDED:
+ * When answering a call from background (via CallKit), iOS cannot start
+ * AVFoundation camera session while app is in background state. This causes:
+ * 1. "Unable to start AVFoundation capture session" error
+ * 2. Video window ID becomes invalid (wid=-1)
+ * 3. Remote video shows loading forever
+ *
+ * This method handles proper video initialization after foreground transition.
+ *
+ * USAGE EXAMPLE:
+ * @code
+ * - (void)viewDidAppear:(BOOL)animated {
+ *     [super viewDidAppear:animated];
+ *     [[OMIVideoCallManager shared] prepareForVideoDisplay];
+ * }
+ * @endcode
+ */
+- (void)prepareForVideoDisplay;
+
 #pragma mark - Cleanup (REQUIRED)
 
 /**
