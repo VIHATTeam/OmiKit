@@ -106,6 +106,29 @@ NS_ASSUME_NONNULL_BEGIN
 /// Force refresh video views (useful after orientation change)
 - (void)refreshVideoViews;
 
+#pragma mark - Video Recovery
+
+/**
+ * Attempts to recover video channel by sending SIP re-INVITE.
+ *
+ * WHEN TO USE:
+ * - When video channel was destroyed due to camera failure in background
+ * - When prepareForVideoDisplay() cannot recover video (win_in=-1 persists)
+ * - When remote video shows black screen but audio works
+ *
+ * HOW IT WORKS:
+ * 1. Sends SIP re-INVITE with PJSUA_CALL_REINIT_MEDIA flag
+ * 2. PJSIP recreates video channel from scratch
+ * 3. After 2 seconds, calls prepareForVideoDisplay() to setup views
+ *
+ * NOTE: This method is called AUTOMATICALLY when win_in=-1 persists after
+ * 10 retry attempts in prepareForVideoDisplay(). You only need to call this
+ * manually if you want to force video recovery at a specific time.
+ *
+ * @return YES if re-INVITE was sent, NO if call is not in correct state
+ */
+- (BOOL)attemptVideoRecovery;
+
 #pragma mark - Background/Foreground Handling
 
 /**
