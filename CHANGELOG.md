@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.7](https://github.com/VIHATTeam/OmiKit.git) (19/12/2025)
+- Tối ưu code flow nhận call
+- Tối ưu render Metal cho call video
+
+
 ## [1.9.6](https://github.com/VIHATTeam/OmiKit.git) (18/12/2025)
 - Re-build Sip 2.16
 - Optimize call video
