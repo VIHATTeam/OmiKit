@@ -144,6 +144,11 @@ typedef NS_ENUM(NSInteger, OMIVideoState) {
      *  Videl stream from remote is starting.
      */
     OMIVideoRemoteReady,
+    /**
+     *  Video media error - camera failed (typically from background).
+     *  SDK will attempt recovery when app returns to foreground.
+     */
+    OMIVideoMediaError,
 };
 
 typedef NS_ENUM(NSInteger, OMIStartCallStatus) {

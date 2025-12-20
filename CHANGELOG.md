@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.9.9](https://github.com/VIHATTeam/OmiKit.git) (19/12/2025)
+## [1.9.9, 1.9.11](https://github.com/VIHATTeam/OmiKit.git) (19/12/2025)
 - Fix reload video chậm
 
 ## [1.9.7, 1.9.8](https://github.com/VIHATTeam/OmiKit.git) (19/12/2025)

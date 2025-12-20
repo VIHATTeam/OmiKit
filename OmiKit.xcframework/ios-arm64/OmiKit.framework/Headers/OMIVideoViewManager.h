@@ -39,6 +39,12 @@
 - (UIView *)createViewForVideoRemote:(CGRect)frame;
 
 /**
+ * create view for remote stream (ASYNC - recommended)
+ * Does not block caller thread - avoids 9+ second delays during SIP transactions
+ */
+- (void)createViewForVideoRemoteAsync:(CGRect)frame completion:(void (^)(UIView *view))completion;
+
+/**
  * Cleanup video resources when call ends
  * Should be called when dismissing video call view controller
  * Stops video preview and releases PJSIP video resources
