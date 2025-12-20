@@ -744,4 +744,12 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  */
 - (void)setHasInitialVideoOfferInternal:(BOOL)hasInitialVideoOffer;
 
+/**
+ * Request keyframe (I-frame) from remote encoder
+ * Used to accelerate video recovery after MEDIA_ERROR or format changes
+ *
+ * @param callId The PJSIP call ID to request keyframe for (NSInteger cast from pjsua_call_id)
+ */
+- (void)requestKeyframeFromRemoteForCallId:(NSInteger)callId;
+
 @end
