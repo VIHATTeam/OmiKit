@@ -42,6 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL useAspectFit;
 
 /**
+ * Check if video view has been set (readonly)
+ * Use to avoid re-creating local video if already showing
+ */
+@property (nonatomic, readonly) BOOL hasVideoView;
+
+/**
  * Cleanup video resources - call when done with the view
  * Hides PJSIP window and removes subviews to release memory
  */
