@@ -16,6 +16,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// YES if this is local camera preview, NO if remote video
 @property (nonatomic, assign) BOOL isLocalVideo;
 
+/// YES to use Aspect FIT (show full video with letterboxing), NO for Aspect FILL (crop to fill, default)
+/// Aspect FIT is recommended for remote video to avoid cropping the face
+/// Default is NO (Aspect FILL)
+/// NOTE: If useAutoAspect is YES, this property is ignored
+@property (nonatomic, assign) BOOL useAspectFit;
+
+/// YES to automatically select aspect mode based on video and container orientation
+/// - Landscape video in portrait container → Aspect FIT (show full video)
+/// - Portrait video in portrait container → Aspect FILL (fill container)
+/// - Landscape video in landscape container → Aspect FILL (fill container)
+/// Default is YES for remote video (recommended for cross-platform compatibility)
+@property (nonatomic, assign) BOOL useAutoAspect;
+
 /// update preview view from ViewManager
 /// - Parameter view: the preview view from VideoViewManager
 - (void)setView: (UIView *)view;

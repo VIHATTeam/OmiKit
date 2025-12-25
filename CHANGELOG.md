@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.14](https://github.com/VIHATTeam/OmiKit.git) (25/12/2025)
+- Fix scale và zoom video 
+
+
 ## [1.9.13](https://github.com/VIHATTeam/OmiKit.git) (24/12/2025)
 - Fix reload video chậm 
 

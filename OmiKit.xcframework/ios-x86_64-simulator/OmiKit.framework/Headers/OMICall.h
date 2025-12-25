@@ -717,6 +717,19 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 - (void)reinvite;
 
 /**
+ * Enable video after app returns to foreground.
+ * When answering video call from background, video init is deferred.
+ * Call this method when app becomes active to send re-INVITE with video.
+ */
+- (void)enableVideoAfterForeground;
+
+/**
+ * Check if this call needs video to be enabled after foreground transition.
+ * @return YES if video was deferred during background answer, NO otherwise.
+ */
+@property (readonly, nonatomic) BOOL needsVideoAfterForeground;
+
+/**
  *  Will sent the UPDATE message to the call.
  */
 - (void)update;
