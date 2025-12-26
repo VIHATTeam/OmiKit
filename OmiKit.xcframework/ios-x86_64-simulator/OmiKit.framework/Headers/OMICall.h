@@ -336,11 +336,15 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
      */
     OMICallTerminateReasonCallCompletedElsewhere,
     /**
-     * The caller has hung up before the call was picked up.
+     * The caller has hung up before the call was picked up (CANCEL).
      */
     OMICallTerminateReasonOriginatorCancel,
+    /**
+     * Remote party ended the connected call (BYE).
+     */
+    OMICallTerminateReasonRemoteBye,
 };
-#define OMICallTerminateReasonString(OMICallTerminateReason) [@[@"OMICallTerminateReasonUnknown", @"OMICallTerminateReasonCallCompletedElsewhere", @"OMICallTerminateReasonOriginatorCancel"] objectAtIndex:OMICallTerminateReason]
+#define OMICallTerminateReasonString(OMICallTerminateReason) [@[@"OMICallTerminateReasonUnknown", @"OMICallTerminateReasonCallCompletedElsewhere", @"OMICallTerminateReasonOriginatorCancel", @"OMICallTerminateReasonRemoteBye"] objectAtIndex:OMICallTerminateReason]
 
 
 @interface OMICall : NSObject
@@ -728,6 +732,13 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  * @return YES if video was deferred during background answer, NO otherwise.
  */
 @property (readonly, nonatomic) BOOL needsVideoAfterForeground;
+
+/**
+ * Check if a re-INVITE is currently in progress.
+ * Used to prevent duplicate re-INVITE requests that cause mutex deadlock.
+ * @return YES if re-INVITE is being processed, NO otherwise.
+ */
+@property (readonly, nonatomic) BOOL isReInviteInProgress;
 
 /**
  *  Will sent the UPDATE message to the call.

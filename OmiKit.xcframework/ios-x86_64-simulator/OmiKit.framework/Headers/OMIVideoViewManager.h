@@ -33,6 +33,13 @@
  *  create view for local camera capture & stream to another leg
 */
 - (UIView *)createViewForVideoLocal:(CGRect)frame;
+
+/**
+ * create view for local camera capture (ASYNC - recommended for outgoing calls)
+ * Does not block caller thread - camera initialization runs in background
+ * Prevents 500-800ms UI freeze during camera startup
+ */
+- (void)createViewForVideoLocalAsync:(CGRect)frame completion:(void (^)(UIView *view))completion;
 /**
  * create view for remote stream
 */
@@ -50,6 +57,14 @@
  * Stops video preview and releases PJSIP video resources
  */
 - (void)cleanup;
+
+/**
+ * Pre-warm camera capture subsystem for faster video startup
+ * Call this when VoIP push is received for video call
+ * Scans available cameras and initializes capture device in background
+ * Does not block - runs asynchronously
+ */
+- (void)preWarmCameraCapture;
 
 @end
 
