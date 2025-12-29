@@ -78,6 +78,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Whether video is currently active
 @property (nonatomic, readonly) BOOL isVideoActive;
 
+/// Whether video setup is in progress (media rebuilding after re-INVITE)
+/// Use this to avoid sending concurrent re-INVITEs during media rebuild
+@property (nonatomic, readonly) BOOL isVideoSetupInProgress;
+
 /// Check if remote video is currently receiving frames
 /// Use this to check if video is actually working before triggering re-INVITE
 /// @return YES if frames received in last 2 seconds, NO otherwise

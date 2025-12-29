@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.18](https://github.com/VIHATTeam/OmiKit.git) (29/12/2025)
+- Improve call video
+
+
 ## [1.9.16, 1.9.17](https://github.com/VIHATTeam/OmiKit.git) (26/12/2025)
 - Improve call video
 
