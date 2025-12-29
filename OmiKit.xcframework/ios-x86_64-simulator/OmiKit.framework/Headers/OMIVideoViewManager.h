@@ -15,6 +15,11 @@
 
 @property (nonatomic, assign, readonly) BOOL isCameraOn;
 
+/// Flag indicating camera scan has completed
+/// Use this to check before sending re-INVITE to avoid mutex deadlock
+/// scanCameras holds PJSIP mutex for 9+ seconds, blocking re-INVITE attempts
+@property (nonatomic, assign, readonly) BOOL isCameraScanComplete;
+
 /// Turn on/off camera.
 - (void)toggleCamera;
 
