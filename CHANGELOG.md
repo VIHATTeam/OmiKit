@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.21](https://github.com/VIHATTeam/OmiKit.git) (30/12/2025)
+- Fix answer call at background off call video 
+
 ## [1.9.18, 1.9.19](https://github.com/VIHATTeam/OmiKit.git) (29/12/2025)
 - Improve call video
 
