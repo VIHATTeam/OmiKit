@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.26](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
+- Fix call video
+
+
 ## [1.9.25](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
 - Tăng thời gian delay
 
