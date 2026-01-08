@@ -1,7 +1,9 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## [1.9.29](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
+
+
+## [1.9.31, 1.9.32](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
 - Fix GPU SDK Call video
 
 ## [1.9.29](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
