@@ -57,6 +57,17 @@
 - (void)createViewForVideoRemoteAsync:(CGRect)frame completion:(void (^)(UIView *view))completion;
 
 /**
+ * create view for remote stream with specific windowId (ASYNC)
+ * Use this when windowId is already known (e.g., from stored notification)
+ * This avoids re-querying pjsua_call_get_info which may return wid=-1
+ *
+ * @param frame The frame for the video view
+ * @param windowId The PJSIP video window ID (must be >= 0)
+ * @param completion Called with the video view (or empty view if failed)
+ */
+- (void)createViewForVideoRemoteAsyncWithWindowId:(CGRect)frame windowId:(int)windowId completion:(void (^)(UIView *view))completion;
+
+/**
  * Cleanup video resources when call ends
  * Should be called when dismissing video call view controller
  * Stops video preview and releases PJSIP video resources
