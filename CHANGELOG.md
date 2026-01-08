@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.24](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
+- Chặn điều chỉnh Opus khi cuộc gọi chưa nghe
+- Fix đứng màn hình remote call trên call video
+
+
+
 ## [1.9.22, 1.9.23](https://github.com/VIHATTeam/OmiKit.git) (05/01/2026)
 - Tăng delay video call
 
