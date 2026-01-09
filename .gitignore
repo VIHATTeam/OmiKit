@@ -1,0 +1,14 @@
+Example/
+.Example/*
+# Xcode
+DerivedData/
+*.xcuserstate
+*.xcuserdata/
+*.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+
+# CocoaPods
+Pods/
+
+# SwiftPM
+.build/
+Package.resolved
