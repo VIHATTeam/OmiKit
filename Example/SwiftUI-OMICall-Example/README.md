@@ -93,7 +93,7 @@ OmiClient.setEnviroment(
 
 **Parameters:**
 - `environment`: `KEY_OMI_APP_ENVIROMENT_SANDBOX` or `KEY_OMI_APP_ENVIROMENT_PRODUCTION`
-- `userNameKey`: Key to extract caller name from push payload (e.g., "full_name", "EXTENSION")
+- `userNameKey`: Key to extract caller name from push payload (e.g., "full_name", "extension")
 - `maxCall`: Maximum concurrent calls (usually 1)
 - `callKitImage`: Image name for CallKit UI
 - `typePushVoip`: Push type (`TYPE_PUSH_CALLKIT_DEFAULT`, `TYPE_PUSH_CALLKIT_CUSTOM`, etc.)
@@ -103,11 +103,11 @@ OmiClient.setEnviroment(
 #### Login with SIP Credentials
 
 ```swift
+// Connect with Sale or Developer for get account testing
 OmiClient.initWithUsername(
     "extension_number",    // e.g., "100"
-    password: "password",
-    realm: "your_realm",   // e.g., "company.omicall.com"
-    proxy: "your_realm:5222"
+    password: "password", // e.g,. "pKaxGXvzQa8"
+    realm: "your_realm",   // e.g., "omicall"
 )
 
 // Configure decline call behavior
@@ -129,25 +129,47 @@ OmiClient.startCall("phone_number", isVideo: false) { status in
     switch status {
     case .startCallSuccess:
         print("Call started successfully")
+    case .invalidUUID:
+        print("Invalid UUID - cannot find on my page")
     case .invalidPhoneNumber:
         print("Invalid phone number")
     case .samePhoneNumber:
         print("Cannot call your own number")
+    case .maxRetry:
+        print("Call timeout exceeded, please try again later")
     case .permissionDenied:
         print("Microphone permission denied")
     case .couldNotFindEndpoint:
-        print("Connection error")
+        print("Please login before making your call")
     case .accountRegisterFailed:
-        print("Account not registered")
+        print("Can't log in to OMI (maybe wrong login information)")
+    case .startCallFail:
+        print("Call failed, please try again")
     case .haveAnotherCall:
         print("Another call in progress")
-    case .maxRetry:
-        print("Max retry reached")
+    case .extensionNumberIsOff:
+        print("Extension number is off - User has turned off")
     default:
         print("Unknown error")
     }
 }
 ```
+
+#### Start Call Status Reference
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `INVALID_UUID` | 0 | UUID is invalid (cannot find on my page) |
+| `INVALID_PHONE_NUMBER` | 1 | SIP user is invalid |
+| `SAME_PHONE_NUMBER_WITH_PHONE_REGISTER` | 2 | Cannot call same phone number |
+| `MAX_RETRY` | 3 | Call timeout exceeded, please try again later |
+| `PERMISSION_DENIED` | 4 | The user has not granted MIC or audio permissions |
+| `COULD_NOT_FIND_END_POINT` | 5 | Please login before making your call |
+| `REGISTER_ACCOUNT_FAIL` | 6 | Can't log in to OMI (maybe wrong login information) |
+| `START_CALL_FAIL` | 7 | Call failed, please try again |
+| `START_CALL_SUCCESS` | 8 | Start call successfully |
+| `HAVE_ANOTHER_CALL` | 9 | There is another call in progress; please wait for that call to end |
+| `EXTENSION_NUMBER_IS_OFF` | 10 | Extension number off - User has turned off |
 
 #### End Call
 
@@ -324,15 +346,46 @@ NotificationCenter.default.addObserver(
         return
     }
 
-    // End cause codes:
-    // 486 - Busy
-    // 600, 503, 403 - No Answer
-    // 480 - Subscriber Busy (Timeout)
-    // 408 - Request Timeout
-    // 404 - Network Error
-    // 603 - Declined
+    // Handle end cause - see Call End Cause Reference table below
+    print("Call ended with cause: \(endCause)")
 }
 ```
+
+#### Call End Cause Reference
+
+| Code | Description |
+|------|-------------|
+| **Network & General** |
+| 600, 503 | Network operator error or user did not answer the call |
+| 408 | Call request timeout (30 seconds waiting time expired) |
+| 403 | Service plan only allows calls to dialed numbers. Please upgrade service pack |
+| 404 | Current number is not allowed to make calls to the carrier |
+| 480 | Number has an error, please contact support |
+| **Call Rejection** |
+| 486 | The listener refuses the call and does not answer |
+| 601 | Call ended by the customer |
+| 602 | Call ended by the other employee |
+| 603 | Call was rejected. Check account limit or call barring configuration |
+| **Limit Exceeded** |
+| 850 | Simultaneous call limit exceeded, please try again later |
+| 851 | Call duration limit exceeded, please try again later |
+| **Account & Service Issues** |
+| 852 | Service package not assigned, please contact the provider |
+| 853 | Internal number has been disabled |
+| 854 | Subscriber is in the DNC (Do Not Call) list |
+| 855 | Exceeded allowed number of calls for trial package |
+| 856 | Exceeded allowed minutes for trial package |
+| 857 | Subscriber has been blocked in the configuration |
+| 858 | Unidentified or unconfigured number |
+| **Carrier Direction Issues** |
+| 859 | No available numbers for Viettel direction, please contact the provider |
+| 860 | No available numbers for VinaPhone direction, please contact the provider |
+| 861 | No available numbers for Mobifone direction, please contact the provider |
+| 862 | Temporary block on Viettel direction, please try again |
+| 863 | Temporary block on VinaPhone direction, please try again |
+| 864 | Temporary block on Mobifone direction, please try again |
+| **Advertising Restrictions** |
+| 865 | Advertising number is outside permitted calling hours, please try again later |
 
 ### 9. Network Quality Monitoring
 
@@ -497,6 +550,53 @@ func applicationWillTerminate(_ application: UIApplication) {
 | 6 | disconnected | Call ended |
 | 7 | hold | Call on hold |
 | 12 | disconnecting | Call ending |
+
+## 📞 Call State Lifecycle
+
+### Incoming Call Lifecycle
+
+```
+┌──────────┐    ┌────────────┐    ┌───────────┐    ┌──────────────┐
+│ incoming │ -> │ connecting │ -> │ confirmed │ -> │ disconnected │
+└──────────┘    └────────────┘    └───────────┘    └──────────────┘
+     │                                                     │
+     │ (User declines or timeout)                          │
+     └─────────────────────────────────────────────────────┘
+```
+
+**Flow:**
+1. `incoming` (2) - Incoming call received, CallKit UI displayed
+2. `connecting` (4) - User accepted, call connecting
+3. `confirmed` (5) - Call connected, audio established
+4. `disconnected` (6) - Call ended
+
+### Outgoing Call Lifecycle
+
+```
+┌─────────┐    ┌───────┐    ┌────────────┐    ┌───────────┐    ┌──────────────┐
+│ calling │ -> │ early │ -> │ connecting │ -> │ confirmed │ -> │ disconnected │
+└─────────┘    └───────┘    └────────────┘    └───────────┘    └──────────────┘
+     │                                                                │
+     │ (Call failed, busy, no answer, etc.)                           │
+     └────────────────────────────────────────────────────────────────┘
+```
+
+**Flow:**
+1. `calling` (1) - Outgoing call initiated
+2. `early` (3) - Remote party ringing
+3. `connecting` (4) - Remote party answered, connecting
+4. `confirmed` (5) - Call connected, audio established
+5. `disconnected` (6) - Call ended
+
+### Hold/Resume Flow
+
+```
+┌───────────┐    ┌──────┐    ┌───────────┐
+│ confirmed │ -> │ hold │ -> │ confirmed │
+└───────────┘    └──────┘    └───────────┘
+```
+
+**Note:** During a call, you can toggle between `confirmed` (5) and `hold` (7) states
 
 ## Troubleshooting
 
