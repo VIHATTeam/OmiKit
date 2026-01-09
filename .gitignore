@@ -1,5 +1,5 @@
-Example/
-.Example/*
+# Example/
+# .Example/*
 # Xcode
 DerivedData/
 *.xcuserstate
@@ -12,3 +12,5 @@ Pods/
 # SwiftPM
 .build/
 Package.resolved
+
+GoogleService-Info.plist

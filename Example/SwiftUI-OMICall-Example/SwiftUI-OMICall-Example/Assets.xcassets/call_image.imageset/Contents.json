@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "lg_omi_white_circle 2.svg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "lg_omi_white_circle 3.svg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "lg_omi_white_circle 4.svg",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
