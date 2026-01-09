@@ -33,6 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// - Parameter view: the preview view from VideoViewManager
 - (void)setView: (UIView *)view;
 
+/// update preview view with explicit window ID
+/// - Parameter view: the preview view from VideoViewManager
+/// - Parameter windowId: the PJSIP video window ID (used for showVideoWindow)
+/// Use this method when windowId is known to avoid layer.name extraction issues
+- (void)setView:(UIView *)view withWindowId:(int)windowId;
+
 - (void)setPlayer:(AVPlayer *)player;
 
 /**
