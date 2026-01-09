@@ -598,6 +598,18 @@ func applicationWillTerminate(_ application: UIApplication) {
 
 **Note:** During a call, you can toggle between `confirmed` (5) and `hold` (7) states
 
+## Push Notification Configuration
+
+For detailed push notification setup instructions including:
+- Creating VoIP Push Certificate in Apple Developer Portal
+- Uploading certificate to OMI system
+- Xcode project configuration
+- Testing push notifications
+
+Please refer to the official guide:
+
+📖 [Push Notification Configuration Guide](https://omicrm.com/post/detail/mobile-sdk-post89?lng=vi&p=BrwVVWCLGM)
+
 ## Troubleshooting
 
 ### VoIP Push Not Working
