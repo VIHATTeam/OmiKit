@@ -59,11 +59,124 @@ SwiftUI-OMICall-Example/
 └── Info.plist                        # App configuration
 ```
 
-## SDK Integration Guide
+## Quick Start (Minimal Integration)
 
-### 1. SDK Configuration
+The SDK provides a simplified integration through `CallManager`. You only need **2 lines of code** in your AppDelegate:
 
-Configure the SDK in `AppDelegate.didFinishLaunchingWithOptions`:
+### AppDelegate Setup
+
+```swift
+import SwiftUI
+import UIKit
+import UserNotifications
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        // Initialize OmiKit SDK (handles everything: CallKit, PushKit, observers, notifications)
+        CallManager.shared.initialize(application: application)
+
+        // Set notification delegate for missed call handling
+        UNUserNotificationCenter.current().delegate = CallManager.shared
+
+        return true
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Clean up SDK resources
+        CallManager.shared.cleanup()
+    }
+}
+
+@main
+struct YourApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var callManager = CallManager.shared
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(callManager)
+        }
+    }
+}
+```
+
+### What `CallManager.shared.initialize()` Does Automatically
+
+- Configures SDK environment (sandbox/production)
+- Sets up CallKit provider delegate
+- Initializes PushKit for VoIP notifications
+- Sets up all notification observers (call state, call end, CallKit events)
+- Requests notification permissions
+- Handles missed call notifications
+- **Manages UI navigation state** (`shouldShowActiveCallView`)
+
+### ContentView with Automatic Call Navigation
+
+The simplest way to handle call UI navigation - just bind to `shouldShowActiveCallView`:
+
+```swift
+struct ContentView: View {
+    @EnvironmentObject var callManager: CallManager
+
+    var body: some View {
+        LoginView()
+            .fullScreenCover(isPresented: $callManager.shouldShowActiveCallView) {
+                ActiveCallView(
+                    phoneNumber: callManager.activeCallPhoneNumber,
+                    isVideo: callManager.activeCallIsVideo,
+                    isPresented: $callManager.shouldShowActiveCallView
+                )
+            }
+    }
+}
+```
+
+**That's it!** CallManager automatically:
+- Shows `ActiveCallView` when incoming call is accepted
+- Shows `ActiveCallView` when outgoing call starts
+- Hides `ActiveCallView` when call ends
+
+### Using CallManager Properties in Views
+
+```swift
+struct CallingView: View {
+    @EnvironmentObject var callManager: CallManager
+
+    var body: some View {
+        VStack {
+            // Check login status
+            if callManager.isLoggedIn {
+                Text("Logged in")
+            }
+
+            // Check call state
+            if callManager.hasActiveCall {
+                Text("On call: \(callManager.callState.displayText)")
+                Text("Duration: \(callManager.formatDuration(callManager.callDuration))")
+            }
+
+            // Make a call
+            Button("Call") {
+                callManager.startCall(to: "1234567890") { status in
+                    print("Call status: \(status)")
+                }
+            }
+        }
+    }
+}
+```
+
+---
+
+## Advanced SDK Integration Guide
+
+### 1. SDK Configuration (Manual)
+
+If you need more control, configure the SDK manually in `AppDelegate.didFinishLaunchingWithOptions`:
 
 ```swift
 import OmiKit
@@ -261,17 +374,22 @@ Setup PushKit for receiving incoming calls when app is in background:
 
 ```swift
 import PushKit
+import OmiKit
 
 class PushKitManager: NSObject, PKPushRegistryDelegate {
+    private var voipRegistry: PKPushRegistry
+
     init(voipRegistry: PKPushRegistry) {
+        self.voipRegistry = voipRegistry
         super.init()
-        voipRegistry.delegate = self
-        voipRegistry.desiredPushTypes = [.voIP]
+        self.voipRegistry.delegate = self
+        self.voipRegistry.desiredPushTypes = [.voIP]
     }
 
     func pushRegistry(_ registry: PKPushRegistry,
                       didUpdate pushCredentials: PKPushCredentials,
                       for type: PKPushType) {
+        guard type == .voIP else { return }
         let token = pushCredentials.token.map { String(format: "%02.2hhx", $0) }.joined()
         print("VoIP Token: \(token)")
 
@@ -280,15 +398,35 @@ class PushKitManager: NSObject, PKPushRegistryDelegate {
     }
 
     func pushRegistry(_ registry: PKPushRegistry,
+                      didInvalidatePushTokenFor type: PKPushType) {
+        guard type == .voIP else { return }
+        print("VoIP push token invalidated")
+    }
+
+    // CRITICAL: Must report to CallKit immediately or iOS will terminate the app!
+    func pushRegistry(_ registry: PKPushRegistry,
                       didReceiveIncomingPushWith payload: PKPushPayload,
                       for type: PKPushType,
                       completion: @escaping () -> Void) {
-        // Handle incoming VoIP push
-        OmiClient.receiveIncomingPush(payload.dictionaryPayload)
-        completion()
+        guard type == .voIP else {
+            completion()
+            return
+        }
+
+        print("Received VoIP push: \(payload.dictionaryPayload)")
+
+        // IMPORTANT: Use VoIPPushHandler.handle() - NOT OmiClient.receiveIncomingPush()
+        // The SDK will report to CallKit internally
+        VoIPPushHandler.handle(payload) {
+            completion()
+        }
     }
 }
 ```
+
+**⚠️ IMPORTANT:** You MUST call `VoIPPushHandler.handle(payload)` when receiving VoIP push.
+If you don't report to CallKit immediately, iOS will terminate your app with error:
+`"Killing app because it never posted an incoming call to the system after receiving a PushKit VoIP push"`
 
 ### 7. Handling Call State Changes
 
@@ -456,7 +594,53 @@ NotificationCenter.default.addObserver(
 
 ### 12. Missed Call Notifications
 
-Handle user tapping on missed call notification:
+#### Show Local Notification for Missed Calls
+
+```swift
+// Track incoming call info
+private var lastIncomingCallerNumber: String = ""
+private var wasCallAnswered: Bool = false
+
+// In handleCallStateChanged - track incoming call
+if stateRaw == 2 && omiCall.isIncoming { // incoming state
+    lastIncomingCallerNumber = omiCall.callerNumber ?? ""
+    wasCallAnswered = false
+}
+
+if stateRaw == 5 { // confirmed state
+    wasCallAnswered = true
+}
+
+// In handleCallDealloc - show missed call notification
+if !wasCallAnswered && !lastIncomingCallerNumber.isEmpty {
+    showMissedCallNotification(callerNumber: lastIncomingCallerNumber)
+}
+
+// Show local notification
+func showMissedCallNotification(callerNumber: String, callerName: String, callTime: Date) {
+    let content = UNMutableNotificationContent()
+    content.title = "Missed Call"
+    content.body = "You missed a call from \(callerNumber)"
+    content.sound = .default
+    content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
+    content.userInfo = [
+        "type": "missed_call",
+        "omisdkCallerNumber": callerNumber,
+        "omisdkCallerName": callerName
+    ]
+
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+    let request = UNNotificationRequest(
+        identifier: "missed_call_\(UUID().uuidString)",
+        content: content,
+        trigger: trigger
+    )
+
+    UNUserNotificationCenter.current().add(request)
+}
+```
+
+#### Handle User Tap on Notification
 
 ```swift
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -466,6 +650,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         return true
     }
 
+    // Show notification in foreground
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound, .badge])
+    }
+
+    // Handle tap on notification
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
@@ -473,11 +667,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     ) {
         let userInfo = response.notification.request.content.userInfo
 
-        // Check for OmiKit missed call notification
-        if let _ = userInfo["omisdkCallerNumber"] {
-            OmikitNotification.didRecieve(userInfo)
+        if let type = userInfo["type"] as? String, type == "missed_call" {
+            let callerNumber = userInfo["omisdkCallerNumber"] as? String ?? ""
+            // Handle missed call tap - e.g., navigate to dial screen or call back
+            print("User tapped missed call from: \(callerNumber)")
         }
 
+        // Clear badge
+        UIApplication.shared.applicationIconBadgeNumber = 0
         completionHandler()
     }
 }
@@ -621,7 +818,8 @@ Please refer to the official guide:
 ### CallKit Not Showing
 1. Ensure CallKitProviderDelegate is initialized
 2. Check that PushKit is receiving push correctly
-3. Verify `OmiClient.receiveIncomingPush()` is called
+3. Verify `VoIPPushHandler.handle(payload)` is called in PushKit delegate
+4. Check that completion handler is called after `VoIPPushHandler.handle()`
 
 ### Audio Issues
 1. Request microphone permission before making calls
@@ -632,6 +830,66 @@ Please refer to the official guide:
 1. Verify SIP credentials (username, password, realm)
 2. Check network connectivity
 3. Ensure proxy format is correct: `realm:5222`
+
+## CallManager API Reference
+
+### Initialization
+
+| Method | Description |
+|--------|-------------|
+| `initialize(application:logLevel:)` | Initialize SDK with all components |
+| `cleanup()` | Clean up resources on app termination |
+
+### Authentication
+
+| Method | Description |
+|--------|-------------|
+| `login(username:password:realm:completion:)` | Login with SIP credentials |
+| `logout()` | Logout from SIP |
+
+### Call Operations
+
+| Method | Description |
+|--------|-------------|
+| `startCall(to:isVideo:completion:)` | Start outgoing call |
+| `endCall(completion:)` | End current call |
+| `toggleMute(completion:)` | Toggle mute state |
+| `toggleHold(completion:)` | Toggle hold state |
+| `toggleSpeaker()` | Toggle speaker |
+| `sendDTMF(_:)` | Send DTMF tone |
+| `transferCall(to:)` | Transfer call to another number |
+
+### Published Properties (for SwiftUI)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `isLoggedIn` | `Bool` | SIP login status |
+| `hasActiveCall` | `Bool` | Active call status |
+| `hasIncomingCall` | `Bool` | Incoming call flag |
+| `callState` | `CallStateStatus` | Current call state |
+| `callDuration` | `Int` | Call duration in seconds |
+| `isMuted` | `Bool` | Mute state |
+| `isSpeakerOn` | `Bool` | Speaker state |
+| `isOnHold` | `Bool` | Hold state |
+| `currentCall` | `OmiCallModel?` | Current call info |
+| `incomingCallerNumber` | `String` | Incoming caller number |
+| `incomingCallerName` | `String` | Incoming caller name |
+| `shouldShowActiveCallView` | `Bool` | **UI navigation state** - bind to fullScreenCover |
+
+### Computed Properties (for UI)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `activeCallPhoneNumber` | `String` | Phone number to display for active call |
+| `activeCallIsVideo` | `Bool` | Whether active call is video call |
+
+### Utilities
+
+| Method | Description |
+|--------|-------------|
+| `formatDuration(_:)` | Format seconds to "MM:SS" |
+| `getAudioOutputs()` | Get available audio devices |
+| `setAudioOutput(_:)` | Set audio output device |
 
 ## License
 
