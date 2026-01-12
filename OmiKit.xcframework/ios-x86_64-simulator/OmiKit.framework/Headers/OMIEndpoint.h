@@ -301,17 +301,6 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 
 -(void) reinviteWithVideoIfCalling;
 
-/**
- * Force re-INVITE to recover from GPU corruption (SubmissionsIgnored state).
- *
- * Unlike reinviteWithVideoIfCalling, this method does NOT check if video is receiving frames.
- * Use this ONLY when soft recovery (hide/show window) has failed and GPU is stuck in
- * kIOGPUCommandBufferCallbackErrorSubmissionsIgnored state.
- *
- * This destroys and recreates the entire video stream, getting a fresh GPU context.
- */
--(void) forceReinviteForGPURecovery;
-
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
 - (void)resetOpusCodecToDefault;
