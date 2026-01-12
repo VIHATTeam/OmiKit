@@ -301,6 +301,19 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 
 -(void) reinviteWithVideoIfCalling;
 
+/**
+ *  Force re-INVITE for GPU recovery scenarios.
+ *  Unlike reinviteWithVideoIfCalling, this method BYPASSES the checkIsVideoReceivingFrames() check.
+ *
+ *  When GPU crashes (CAMetalLayerDrawable corruption, kIOGPUCommandBufferCallbackErrorTimeout),
+ *  network packets still continue arriving, so checkIsVideoReceivingFrames() returns TRUE.
+ *  The normal reinviteWithVideoIfCalling would skip the re-INVITE, leaving GPU in corrupt state.
+ *
+ *  This method forces the re-INVITE to recreate Metal context and clear GPU corruption.
+ *  Only call this from GPU recovery paths (e.g., after soft recovery exhausted).
+ */
+-(void) forceReinviteForGPURecovery;
+
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
 - (void)resetOpusCodecToDefault;
