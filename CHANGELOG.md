@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.1](https://github.com/VIHATTeam/OmiKit.git) (13/01/2026)
+- Fix force GPU Call Video
+
+
 ## [1.9.44, 1.9.45, 1.9.46, 1.9.47, 1.9.49](https://github.com/VIHATTeam/OmiKit.git) (13/01/2026)
 - Fix force GPU Call Video
 
