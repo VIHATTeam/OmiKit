@@ -9,11 +9,11 @@ import OmiKit
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject var callManager: CallManager
+    @EnvironmentObject var callManager: CallManagerV2
 
-    @State private var username: String = "" // Please connect with Sale or Development team to get test account
-    @State private var realm: String = ""
-    @State private var password: String = ""
+    @State private var username: String = "100" // Please connect with Sale or Development team to get test account
+    @State private var realm: String = "namplh"
+    @State private var password: String = "Matkhau@2025"
 
     @State private var isLoading: Bool = false
     @State private var showError: Bool = false
@@ -156,18 +156,21 @@ struct LoginView: View {
         !savedUsername.isEmpty && !savedRealm.isEmpty && !savedPassword.isEmpty
     }
 
-    // MARK: - Actions
+    // MARK: - Actions (Async/Await)
 
     private func performLogin() {
         isLoading = true
 
-        // Use CallManager to login via OmiKit
-        callManager.login(
-            username: username,
-            password: password,
-            realm: realm
-        ) { success in
-            DispatchQueue.main.async {
+        // Use CallManagerV2 to login via OmiKit with async/await
+        Task {
+            do {
+                let success = try await callManager.login(
+                    username: username,
+                    password: password,
+                    realm: realm
+                )
+
+                // Handle success on main thread (already @MainActor)
                 isLoading = false
 
                 if success {
@@ -180,6 +183,11 @@ struct LoginView: View {
                     errorMessage = "Failed to connect. Please check your credentials and try again."
                     showError = true
                 }
+            } catch {
+                // Handle error
+                isLoading = false
+                errorMessage = "Login failed: \(error.localizedDescription)"
+                showError = true
             }
         }
     }
@@ -194,5 +202,5 @@ struct LoginView: View {
 
 #Preview {
     LoginView()
-        .environmentObject(CallManager.shared)
+        .environmentObject(CallManagerV2.shared)
 }

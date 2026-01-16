@@ -14,9 +14,9 @@ struct ActiveCallView: View {
     let isVideo: Bool
     @Binding var isPresented: Bool
 
-    @EnvironmentObject var callManager: CallManager
+    @EnvironmentObject var callManager: CallManagerV2
 
-    @State private var callState: CallStateStatus = .calling
+    @State private var callState: CallStateStatusV2 = .calling
     @State private var showKeypad: Bool = false
     @State private var showTransfer: Bool = false
     @State private var transferNumber: String = ""
@@ -60,12 +60,12 @@ struct ActiveCallView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name.OMICallStateChanged)) { notification in
             handleOMICallStateChange(notification)
         }
-        // Listen for custom call state changes
-        .onReceive(NotificationCenter.default.publisher(for: .callStateDidChange)) { notification in
+        // Listen for custom call state changes (V2)
+        .onReceive(NotificationCenter.default.publisher(for: .callStateDidChangeV2)) { notification in
             handleCallStateChange(notification)
         }
-        // Listen for call ended
-        .onReceive(NotificationCenter.default.publisher(for: .callDidEnd)) { _ in
+        // Listen for call ended (V2)
+        .onReceive(NotificationCenter.default.publisher(for: .callDidEndV2)) { _ in
             // Call ended - dismiss view
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isPresented = false
@@ -206,7 +206,7 @@ struct ActiveCallView: View {
                     isActive: callManager.isMuted,
                     isEnabled: isCallConnected
                 ) {
-                    callManager.toggleMute { _ in }
+                    toggleMute()
                 }
 
                 CallControlButton(
@@ -245,7 +245,7 @@ struct ActiveCallView: View {
                     isActive: callManager.isOnHold,
                     isEnabled: isCallConnected
                 ) {
-                    callManager.toggleHold { _ in }
+                    toggleHold()
                 }
 
                 // Placeholder for video toggle (if video call)
@@ -280,7 +280,7 @@ struct ActiveCallView: View {
             .padding(.bottom, 8)
 
             DTMFKeypadView { digit in
-                callManager.sendDTMF(digit)
+                sendDTMF(digit)
             }
         }
         .padding(.horizontal, 24)
@@ -348,7 +348,7 @@ struct ActiveCallView: View {
         callState == .confirmed
     }
 
-    // MARK: - Actions
+    // MARK: - Actions (Async/Await)
 
     private func setupCallStateObserver() {
         // Initial state is calling for outgoing calls
@@ -364,18 +364,16 @@ struct ActiveCallView: View {
     private func handleCallStateChange(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let stateRaw = userInfo[OMINotificationUserInfoCallStateKey] as? Int,
-              let newState = CallStateStatus(rawValue: stateRaw) else {
+              let newState = CallStateStatusV2(rawValue: stateRaw) else {
             return
         }
 
-        DispatchQueue.main.async {
-            callState = newState
+        callState = newState
 
-            if newState == .disconnected {
-                // Call ended - dismiss after brief delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    isPresented = false
-                }
+        if newState == .disconnected {
+            // Call ended - dismiss after brief delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                isPresented = false
             }
         }
     }
@@ -384,7 +382,7 @@ struct ActiveCallView: View {
     private func handleOMICallStateChange(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let stateRaw = userInfo[OMINotificationUserInfoCallStateKey] as? Int,
-              let newState = CallStateStatus(rawValue: stateRaw) else {
+              let newState = CallStateStatusV2(rawValue: stateRaw) else {
             return
         }
 
@@ -393,30 +391,28 @@ struct ActiveCallView: View {
             print("Call state changed: \(newState.displayText), isVideo: \(omiCall.isVideo), incoming: \(omiCall.isIncoming)")
         }
 
-        DispatchQueue.main.async {
-            self.callState = newState
+        self.callState = newState
 
-            switch newState {
-            case .calling:
-                print("📞 Outgoing call initiated")
-            case .incoming:
-                print("📞 Incoming call received")
-            case .early:
-                print("📞 Call ringing")
-            case .connecting:
-                print("📞 Call connecting")
-            case .confirmed:
-                print("📞 Call connected")
-            case .hold:
-                print("📞 Call on hold")
-            case .disconnected:
-                print("📞 Call disconnected")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    isPresented = false
-                }
-            default:
-                break
+        switch newState {
+        case .calling:
+            print("📞 Outgoing call initiated")
+        case .incoming:
+            print("📞 Incoming call received")
+        case .early:
+            print("📞 Call ringing")
+        case .connecting:
+            print("📞 Call connecting")
+        case .confirmed:
+            print("📞 Call connected")
+        case .hold:
+            print("📞 Call on hold")
+        case .disconnected:
+            print("📞 Call disconnected")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                isPresented = false
             }
+        default:
+            break
         }
     }
 
@@ -426,20 +422,18 @@ struct ActiveCallView: View {
 
         // Get MOS (Mean Opinion Score) - ranges from 1.0 (poor) to 5.0 (excellent)
         if let mos = userInfo[OMINotificationMOSKey] as? Float {
-            DispatchQueue.main.async {
-                self.networkQuality = mos
+            self.networkQuality = mos
 
-                // Update color based on quality
-                switch mos {
-                case 4.0...:
-                    self.networkQualityColor = .green
-                case 3.0..<4.0:
-                    self.networkQualityColor = .yellow
-                case 2.0..<3.0:
-                    self.networkQualityColor = .orange
-                default:
-                    self.networkQualityColor = .red
-                }
+            // Update color based on quality
+            switch mos {
+            case 4.0...:
+                self.networkQualityColor = .green
+            case 3.0..<4.0:
+                self.networkQualityColor = .yellow
+            case 2.0..<3.0:
+                self.networkQualityColor = .orange
+            default:
+                self.networkQualityColor = .red
             }
         }
 
@@ -460,25 +454,23 @@ struct ActiveCallView: View {
         guard let userInfo = notification.userInfo as? [String: Any],
               let audioRoute = userInfo["type"] as? String else { return }
 
-        DispatchQueue.main.async {
-            self.currentAudioRoute = audioRoute
+        self.currentAudioRoute = audioRoute
 
-            // Update speaker state based on audio route
-            switch audioRoute {
-            case "Speaker":
-                if !callManager.isSpeakerOn {
-                    callManager.isSpeakerOn = true
-                }
-            case "Receiver", "Bluetooth", "Headphones":
-                if callManager.isSpeakerOn {
-                    callManager.isSpeakerOn = false
-                }
-            default:
-                break
+        // Update speaker state based on audio route
+        switch audioRoute {
+        case "Speaker":
+            if !callManager.isSpeakerOn {
+                callManager.isSpeakerOn = true
             }
-
-            print("🔊 Audio route changed to: \(audioRoute)")
+        case "Receiver", "Bluetooth", "Headphones":
+            if callManager.isSpeakerOn {
+                callManager.isSpeakerOn = false
+            }
+        default:
+            break
         }
+
+        print("🔊 Audio route changed to: \(audioRoute)")
     }
 
     /// Handle video info updates from OmiKit SDK (for video calls)
@@ -492,19 +484,61 @@ struct ActiveCallView: View {
         }
     }
 
-    private func endCall() {
-        callManager.endCall { success in
-            if success {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    isPresented = false
-                }
+    /// Toggle mute using async/await
+    private func toggleMute() {
+        Task {
+            do {
+                try await callManager.toggleMute()
+            } catch {
+                print("Failed to toggle mute: \(error)")
             }
         }
     }
 
+    /// Toggle hold using async/await
+    private func toggleHold() {
+        Task {
+            do {
+                try await callManager.toggleHold()
+            } catch {
+                print("Failed to toggle hold: \(error)")
+            }
+        }
+    }
+
+    /// Send DTMF tone
+    private func sendDTMF(_ digit: String) {
+        do {
+            try callManager.sendDTMF(digit)
+        } catch {
+            print("Failed to send DTMF: \(error)")
+        }
+    }
+
+    /// End call using async/await
+    private func endCall() {
+        Task {
+            do {
+                try await callManager.endCall()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isPresented = false
+                }
+            } catch {
+                print("Failed to end call: \(error)")
+                // Still dismiss the view even if there's an error
+                isPresented = false
+            }
+        }
+    }
+
+    /// Transfer call
     private func performTransfer() {
         guard !transferNumber.isEmpty else { return }
-        callManager.transferCall(to: transferNumber)
+        do {
+            try callManager.transferCall(to: transferNumber)
+        } catch {
+            print("Failed to transfer call: \(error)")
+        }
         showTransfer = false
     }
 }
@@ -587,7 +621,7 @@ struct DTMFKeypadView: View {
         isVideo: false,
         isPresented: .constant(true)
     )
-    .environmentObject(CallManager.shared)
+    .environmentObject(CallManagerV2.shared)
 }
 
 #Preview("Video Call") {
@@ -596,5 +630,5 @@ struct DTMFKeypadView: View {
         isVideo: true,
         isPresented: .constant(true)
     )
-    .environmentObject(CallManager.shared)
+    .environmentObject(CallManagerV2.shared)
 }

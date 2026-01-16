@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OmiKit'
-  s.version          = '1.10.7'
+  s.version          = '1.10.8'
   s.homepage         = "https://omicall.com/"
   s.summary          = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -43,14 +43,20 @@ Pod::Spec.new do |s|
     'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers',
     # Skip missing header files during compilation to avoid PJSIP dependency issues
     'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'NO',
-    'CLANG_WARN_STRICT_PROTOTYPES' => 'NO'
+    'CLANG_WARN_STRICT_PROTOTYPES' => 'NO',
+    # Swift 6 compatibility: Disable strict concurrency checking for OmiKit (Objective-C framework)
+    # This prevents dispatch_assert_queue_fail crashes when using Swift 6
+    'SWIFT_STRICT_CONCURRENCY' => 'minimal',
+    'OTHER_SWIFT_FLAGS' => '$(inherited) -Xfrontend -disable-availability-checking'
   }
   s.user_target_xcconfig = {
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',
     'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers',
     'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'NO',
-    'CLANG_WARN_STRICT_PROTOTYPES' => 'NO'
+    'CLANG_WARN_STRICT_PROTOTYPES' => 'NO',
+    # Swift 6 compatibility for apps using OmiKit
+    'SWIFT_STRICT_CONCURRENCY' => 'minimal'
   }
 
 end

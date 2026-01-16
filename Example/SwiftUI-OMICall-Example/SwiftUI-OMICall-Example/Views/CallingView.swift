@@ -10,7 +10,7 @@ import OmiKit
 import SwiftUI
 
 struct CallingView: View {
-    @EnvironmentObject var callManager: CallManager
+    @EnvironmentObject var callManager: CallManagerV2
     @Environment(\.dismiss) private var dismiss
 
     @State private var phoneNumber: String = ""
@@ -165,7 +165,7 @@ struct CallingView: View {
         } message: {
             Text("Are you sure you want to logout? Your saved credentials will be cleared.")
         }
-        .onReceive(NotificationCenter.default.publisher(for: .callDidEnd)) { notification in
+        .onReceive(NotificationCenter.default.publisher(for: .callDidEndV2)) { notification in
             // Handle call end with error message if any
             isLoading = false
             if let message = notification.userInfo?["message"] as? String,
@@ -222,119 +222,116 @@ struct CallingView: View {
 
         isVideoCall = isVideo
 
-        // Request permissions before making call
-        requestPermissions(forVideo: isVideo) { granted in
+        // Request permissions before making call using async/await
+        Task {
+            let granted = await requestPermissions(forVideo: isVideo)
+
             guard granted else {
-                DispatchQueue.main.async {
-                    if isVideo {
-                        errorMessage = "Microphone and Camera permissions are required for video calls. Please enable them in Settings."
-                    } else {
-                        errorMessage = "Microphone permission is required for calls. Please enable it in Settings."
-                    }
-                    showError = true
+                if isVideo {
+                    errorMessage = "Microphone and Camera permissions are required for video calls. Please enable them in Settings."
+                } else {
+                    errorMessage = "Microphone permission is required for calls. Please enable it in Settings."
                 }
+                showError = true
                 return
             }
 
             // Permissions granted, proceed with call
-            DispatchQueue.main.async {
-                isLoading = true
-            }
+            isLoading = true
 
-            // Use CallManager to start call via OmiKit
-            callManager.startCall(to: phoneNumber, isVideo: isVideo) { status in
-                DispatchQueue.main.async {
-                    isLoading = false
+            do {
+                // Use CallManagerV2 to start call via OmiKit with async/await
+                let status = try await callManager.startCall(to: phoneNumber, isVideo: isVideo)
 
+                isLoading = false
+
+                // Call started successfully - navigate to ActiveCallView immediately
+                isCallActive = true
+
+                // Post notification to show ActiveCallView immediately
+                NotificationCenter.default.post(
+                    name: .outgoingCallStartedV2,
+                    object: nil,
+                    userInfo: ["phoneNumber": self.phoneNumber, "isVideo": isVideo]
+                )
+            } catch let error as CallManagerError {
+                isLoading = false
+
+                switch error {
+                case .callStartFailed(let status):
                     switch status {
-                    case .startCallSuccess:
-                        // Call started successfully - navigate to ActiveCallView immediately
-                        isCallActive = true
-
-                        // Post notification to show ActiveCallView immediately
-                        NotificationCenter.default.post(
-                            name: .outgoingCallStarted,
-                            object: nil,
-                            userInfo: ["phoneNumber": self.phoneNumber, "isVideo": isVideo]
-                        )
                     case .invalidPhoneNumber:
                         errorMessage = "Invalid phone number"
-                        showError = true
                     case .samePhoneNumber:
                         errorMessage = "Cannot call your own number"
-                        showError = true
                     case .permissionDenied:
                         errorMessage = "Microphone permission denied. Please enable it in Settings."
-                        showError = true
                     case .couldNotFindEndpoint:
                         errorMessage = "Connection error. Please login again."
-                        showError = true
                     case .accountRegisterFailed:
                         errorMessage = "Account not registered. Please login again."
-                        showError = true
                     case .haveAnotherCall:
                         errorMessage = "Another call is in progress"
-                        showError = true
                     case .maxRetry:
                         errorMessage = "Maximum retry attempts reached"
-                        showError = true
                     default:
                         errorMessage = "Failed to start call"
-                        showError = true
                     }
+                default:
+                    errorMessage = error.localizedDescription
                 }
+                showError = true
+            } catch {
+                isLoading = false
+                errorMessage = "Failed to start call: \(error.localizedDescription)"
+                showError = true
             }
         }
     }
 
-    // MARK: - Permission Handling
+    // MARK: - Permission Handling (Async/Await)
 
-    private func requestPermissions(forVideo: Bool, completion: @escaping (Bool) -> Void) {
+    private func requestPermissions(forVideo: Bool) async -> Bool {
         // Check and request microphone permission
-        requestMicrophonePermission { micGranted in
-            guard micGranted else {
-                completion(false)
-                return
-            }
+        let micGranted = await requestMicrophonePermission()
+        guard micGranted else { return false }
 
-            if forVideo {
-                // Also request camera permission for video calls
-                requestCameraPermission { camGranted in
-                    completion(camGranted)
-                }
-            } else {
-                completion(true)
-            }
+        if forVideo {
+            // Also request camera permission for video calls
+            let camGranted = await requestCameraPermission()
+            return camGranted
         }
+
+        return true
     }
 
-    private func requestMicrophonePermission(completion: @escaping (Bool) -> Void) {
+    private func requestMicrophonePermission() async -> Bool {
         switch AVAudioSession.sharedInstance().recordPermission {
         case .granted:
-            completion(true)
+            return true
         case .denied:
-            completion(false)
+            return false
         case .undetermined:
-            AVAudioSession.sharedInstance().requestRecordPermission { granted in
-                completion(granted)
+            return await withCheckedContinuation { continuation in
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    continuation.resume(returning: granted)
+                }
             }
         @unknown default:
-            completion(false)
+            return false
         }
     }
 
-    private func requestCameraPermission(completion: @escaping (Bool) -> Void) {
+    private func requestCameraPermission() async -> Bool {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            completion(true)
+            return true
         case .denied, .restricted:
-            completion(false)
+            return false
         case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { granted in
-                completion(granted)
-            }
+            return await AVCaptureDevice.requestAccess(for: .video)
         @unknown default:
-            completion(false)
+            return false
         }
     }
 
@@ -389,6 +386,6 @@ struct DialpadButtonView: View {
 #Preview {
     NavigationStack {
         CallingView()
-            .environmentObject(CallManager.shared)
+            .environmentObject(CallManagerV2.shared)
     }
 }

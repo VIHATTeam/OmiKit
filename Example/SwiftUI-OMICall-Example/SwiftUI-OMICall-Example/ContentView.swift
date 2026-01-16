@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var callManager: CallManager
+    @EnvironmentObject var callManager: CallManagerV2
 
     var body: some View {
         // Main content - LoginView as root
@@ -25,5 +25,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(CallManager.shared)
+        .environmentObject(CallManagerV2.shared)
 }

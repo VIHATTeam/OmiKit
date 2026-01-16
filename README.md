@@ -30,9 +30,40 @@ platform :ios, '13.0'
 pod 'OmiKit', :git => 'https://github.com/VIHATTeam/OmiKit.git'
 ```
 
+## Swift 6 Compatibility
 
+**OmiKit now supports Swift 6!** Starting from version **1.10.8**, the podspec includes configurations to prevent `dispatch_assert_queue_fail` crashes when using Swift 6.
 
+### What's included:
 
+The podspec automatically configures:
+- `SWIFT_STRICT_CONCURRENCY = minimal` - Disables strict concurrency checking for the Objective-C framework
+- This allows apps using Swift 6 Language Mode to work seamlessly with OmiKit
+
+### For app developers:
+
+**No additional configuration needed!** When you install OmiKit via CocoaPods:
+1. You can use Swift Language Version 6 in your app
+2. OmiKit will automatically use minimal concurrency checking
+3. Your app code can use `@preconcurrency import OmiKit` for best results
+
+Example in your Swift 6 code:
+```swift
+import Foundation
+@preconcurrency import OmiKit  // Recommended for Swift 6
+
+class CallManager {
+    // Your async/await code here
+}
+```
+
+### Migration from older versions:
+
+If you were previously using Swift 5 to avoid crashes:
+1. Update OmiKit to version >= 1.10.8
+2. Run `pod update OmiKit`
+3. Change Swift Language Version back to 6 in Build Settings
+4. Add `@preconcurrency` to your OmiKit imports
 
 # Use
 
