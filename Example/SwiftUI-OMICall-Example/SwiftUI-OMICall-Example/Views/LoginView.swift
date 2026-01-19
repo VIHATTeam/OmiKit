@@ -11,9 +11,9 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var callManager: CallManagerV2
 
-    @State private var username: String = "100" // Please connect with Sale or Development team to get test account
-    @State private var realm: String = "namplh"
-    @State private var password: String = "Matkhau@2025"
+    @State private var username: String = "" // Please connect with Sale or Development team to get test account
+    @State private var realm: String = ""
+    @State private var password: String = ""
 
     @State private var isLoading: Bool = false
     @State private var showError: Bool = false
