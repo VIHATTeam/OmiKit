@@ -65,6 +65,21 @@ If you were previously using Swift 5 to avoid crashes:
 3. Change Swift Language Version back to 6 in Build Settings
 4. Add `@preconcurrency` to your OmiKit imports
 
+## 📱 Example Project
+
+For a complete SwiftUI implementation example, see the [SwiftUI Example Project README](Example/SwiftUI-OMICall-Example/README.md).
+
+The example project includes:
+- **Two implementation patterns**:
+  - `CallManager` - Traditional callback-based approach (Swift 5 compatible)
+  - `CallManagerV2` - Modern async/await approach (Swift 6 optimized)
+- **Complete call flow diagrams** for incoming and outgoing calls
+- **Step-by-step integration guide** with best practices
+- **API reference** and migration guide
+- Working example app demonstrating all OmiKit features
+
+📖 **[View complete example documentation →](Example/SwiftUI-OMICall-Example/README.md)**
+
 # Use
 
 ## Setting up
