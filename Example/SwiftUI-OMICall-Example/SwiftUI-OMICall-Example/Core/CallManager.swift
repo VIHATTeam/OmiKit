@@ -412,14 +412,14 @@
 //         username: String, password: String, realm: String,
 //         completion: @escaping (Bool) -> Void
 //     ) {
-//         // Build proxy from realm
-//         let proxy = realm + ":5222"
+//
+//
 
 //         OmiClient.initWithUsername(
 //             username,
 //             password: password,
 //             realm: realm,
-//             proxy: proxy
+//             proxy: ""
 //         )
 
 //         // Configure decline call behavior

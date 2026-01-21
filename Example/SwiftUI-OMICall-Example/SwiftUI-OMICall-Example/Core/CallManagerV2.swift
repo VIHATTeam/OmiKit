@@ -573,14 +573,12 @@ class CallManagerV2: NSObject, ObservableObject {
     /// ```
     @discardableResult
     func login(username: String, password: String, realm: String) async throws -> Bool {
-        // Build proxy from realm
-        let proxy = realm + ":5222"
-
+    
         OmiClient.initWithUsername(
             username,
             password: password,
-            realm: realm,
-            proxy: proxy
+            realm: realm, 
+            proxy: ""
         )
 
         // Configure decline call behavior
@@ -590,6 +588,49 @@ class CallManagerV2: NSObject, ObservableObject {
         isLoggedIn = true
 
         return true
+    }
+
+    /// Login with UUID and Phone number
+    /// - Parameters:
+    ///   - usrUuid: User UUID from OMI system
+    ///   - fullName: Display name (optional)
+    ///   - apiKey: API Key provided by OMI
+    ///   - phone: Phone number associated with the account
+    /// - Returns: true if login successful
+    ///
+    /// Example:
+    /// ```swift
+    /// do {
+    ///     let success = try await CallManagerV2.shared.loginWithUUID(
+    ///         usrUuid: "user-uuid-123",
+    ///         fullName: "John Doe",
+    ///         apiKey: "your-api-key",
+    ///         phone: "0123456789"
+    ///     )
+    /// } catch {
+    ///     print("Login failed: \(error)")
+    /// }
+    /// ```
+    @discardableResult
+    func loginWithUUID(usrUuid: String, fullName: String?, apiKey: String, phone: String) async throws -> Bool {
+        let success = OmiClient.initWithUUIDAndPhone(
+            usrUuid,
+            fullName: fullName,
+            apiKey: apiKey,
+            phone: phone
+        )
+
+        // Configure decline call behavior
+        OmiClient.configureDeclineCallBehavior(true)
+
+        // Store login state
+        isLoggedIn = success
+
+        if !success {
+            throw CallManagerError.loginFailed
+        }
+
+        return success
     }
 
     /// Logout from SIP

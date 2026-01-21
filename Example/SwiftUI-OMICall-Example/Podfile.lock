@@ -1,16 +1,16 @@
 PODS:
-  - OmiKit (1.9.26)
+  - OmiKit (1.9.21)
 
 DEPENDENCIES:
-  - OmiKit (= 1.9.26)
+  - OmiKit (= 1.9.21)
 
 SPEC REPOS:
   trunk:
     - OmiKit
 
 SPEC CHECKSUMS:
-  OmiKit: 09a8a7c8daff830aed4ffcdc7f6571443c14d04b
+  OmiKit: e2c944ca4f8af05b4a80f2eb97e793b78a45fde2
 
-PODFILE CHECKSUM: f1fc5eb960c508d8712816c90b584b35abcf4fd7
+PODFILE CHECKSUM: 018d14ec0aa62addf879d50fa3a7457d62c71451
 
 COCOAPODS: 1.16.2
