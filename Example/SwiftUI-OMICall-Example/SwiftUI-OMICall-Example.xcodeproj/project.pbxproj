@@ -34,17 +34,29 @@
 		985DA9B32F10E36800D42C17 /* Exceptions for "SwiftUI-OMICall-Example" folder in "SwiftUI-OMICall-Example" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Core/CallManager.txt,
 				Info.plist,
 			);
 			target = 985DA90B2F10B47300D42C17 /* SwiftUI-OMICall-Example */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		988E43BF2F20D33E008B954D /* Exceptions for "SwiftUI-OMICall-Example" folder in "Compile Sources" phase from "SwiftUI-OMICall-Example" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 985DA9082F10B47300D42C17 /* Sources */;
+			membershipExceptions = (
+				Core/CallManager.txt,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		985DA90E2F10B47300D42C17 /* SwiftUI-OMICall-Example */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				985DA9B32F10E36800D42C17 /* Exceptions for "SwiftUI-OMICall-Example" folder in "SwiftUI-OMICall-Example" target */,
+				988E43BF2F20D33E008B954D /* Exceptions for "SwiftUI-OMICall-Example" folder in "Compile Sources" phase from "SwiftUI-OMICall-Example" target */,
 			);
 			path = "SwiftUI-OMICall-Example";
 			sourceTree = "<group>";

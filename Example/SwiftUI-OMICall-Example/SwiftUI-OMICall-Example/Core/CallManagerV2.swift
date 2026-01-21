@@ -158,6 +158,7 @@ class CallManagerV2: NSObject, ObservableObject {
         )
 
         // 3. Setup PushKit for VoIP notifications
+        // PushKitManager is provided by OmiKit SDK
         voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
         pushKitManager = PushKitManager(voipRegistry: voipRegistry!)
 
@@ -202,6 +203,7 @@ class CallManagerV2: NSObject, ObservableObject {
             typePushVoip: TYPE_PUSH_CALLKIT_DEFAULT
         )
 #endif
+        OmiClient.setFcmProjectId(PROJECT_ID_DEFAULT)
     }
 
     // MARK: - Notification Permissions (Async)
@@ -573,13 +575,13 @@ class CallManagerV2: NSObject, ObservableObject {
     /// ```
     @discardableResult
     func login(username: String, password: String, realm: String) async throws -> Bool {
-    
-        OmiClient.initWithUsername(
-            username,
-            password: password,
-            realm: realm, 
-            proxy: ""
-        )
+            OmiClient.initWithUsername(
+                username,
+                password: password,
+                realm: realm, 
+                proxy: ""
+            )
+        
 
         // Configure decline call behavior
         OmiClient.configureDeclineCallBehavior(true)
