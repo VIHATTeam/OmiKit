@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.10.9](https://github.com/VIHATTeam/OmiKit.git) (26/01/2026)
+- Add Turn/Sturn/ICE when calling 
+- Remove character "text" in switchboard SDP 
+
 ## [1.10.8](https://github.com/VIHATTeam/OmiKit.git) (16/01/2026)
 
 ### 🎉 Swift 6 Full Support
