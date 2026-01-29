@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.11](https://github.com/VIHATTeam/OmiKit.git) (29/01/2026)
+- Remove key BGTaskSchedulerPermittedIdentifiers at example 
+
+
 ## [1.10.9](https://github.com/VIHATTeam/OmiKit.git) (26/01/2026)
 - Add Turn/Sturn/ICE when calling 
 - Remove character "text" in switchboard SDP 

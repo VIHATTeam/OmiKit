@@ -13,7 +13,7 @@ struct CallingView: View {
     @EnvironmentObject var callManager: CallManagerV2
     @Environment(\.dismiss) private var dismiss
 
-    @State private var phoneNumber: String = ""
+    @State private var phoneNumber: String = "093835176"
     @State private var isCallActive: Bool = false
     @State private var isVideoCall: Bool = false
     @State private var showError: Bool = false

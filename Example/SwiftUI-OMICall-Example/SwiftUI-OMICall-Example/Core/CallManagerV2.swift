@@ -1016,6 +1016,7 @@ struct OmiCallModelV2: Hashable {
     var numberToCall: String = ""
     var connected: Bool = false
 
+    
     init(from omiCall: OMICall) {
         self.callId = omiCall.callId
         self.incoming = omiCall.isIncoming
@@ -1033,6 +1034,7 @@ struct OmiCallModelV2: Hashable {
         self.onHold = omiCall.onHold
         self.numberToCall = omiCall.numberToCall ?? ""
         self.connected = omiCall.connected
+  
     }
 
     // Simple initializer for outgoing calls

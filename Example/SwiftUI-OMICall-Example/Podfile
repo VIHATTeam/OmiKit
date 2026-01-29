@@ -8,6 +8,7 @@ target 'SwiftUI-OMICall-Example' do
   # Pods for SwiftUI-OMICall-Example
   # Use local development pod with Swift 6 support
   # pod 'OmiKit', :path => '../../'
-  pod 'OmiKit', '1.9.21' # Replace with the latest released version if available
+  # pod 'OmiKit', '1.9.21' # Replace with the latest released version if available
+  pod 'OmiKit'
 end
 

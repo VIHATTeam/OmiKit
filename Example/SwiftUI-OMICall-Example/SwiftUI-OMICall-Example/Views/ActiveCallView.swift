@@ -388,7 +388,7 @@ struct ActiveCallView: View {
 
         // Extract call info if available
         if let omiCall = userInfo[OMINotificationUserInfoCallKey] as? OMICall {
-            print("Call state changed: \(newState.displayText), isVideo: \(omiCall.isVideo), incoming: \(omiCall.isIncoming)")
+            print("Call state changed Example: \(newState.displayText), isVideo: \(omiCall.isVideo), incoming: \(omiCall.isIncoming) -- Call State \(omiCall.callState) -- UUID: \(omiCall.uuid) -- transaction_id: \(omiCall.omiId)")
         }
 
         self.callState = newState
