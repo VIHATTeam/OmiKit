@@ -17,9 +17,8 @@ Pod::Spec.new do |s|
   s.description      = "Omicall easy to make call/video call app2app, app2phone"
   s.documentation_url = "https://api.omicall.com/web-sdk/mobile-sdk"
 
-  # Note: OmiSIP binary requires iOS 13.0+, but podspec can declare 11.0
-  # Xcode will show error if app targets iOS < 13
-  s.ios.deployment_target = '11.0'
+  # Xcode 26+ requires minimum iOS 12.0, OmiSIP binary requires iOS 13.0+
+  s.ios.deployment_target = '13.0'
   s.source           = { :git => 'https://github.com/VIHATTeam/OmiKit.git', :tag => s.version.to_s }
 
   # Configure XCFramework properly
@@ -36,8 +35,8 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = {
     'OTHER_LDFLAGS' => '-ObjC',
-    # Exclude arm64 simulator because OpenH264/Opus don't have arm64-simulator builds
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    # Exclude x86_64 simulator - xcframework only has arm64 simulator slice
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
     # Ensure framework headers are found correctly
     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',
     'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers',
@@ -50,7 +49,7 @@ Pod::Spec.new do |s|
     'OTHER_SWIFT_FLAGS' => '$(inherited) -Xfrontend -disable-availability-checking'
   }
   s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64',
     'FRAMEWORK_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit',
     'HEADER_SEARCH_PATHS' => '$(inherited) $(PODS_ROOT)/OmiKit/OmiKit.xcframework/ios-arm64/OmiKit.framework/Headers',
     'GCC_WARN_ABOUT_MISSING_PROTOTYPES' => 'NO',
