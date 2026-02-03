@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.12](https://github.com/VIHATTeam/OmiKit.git) (03/02/2026)
+- Rebuild SDK, optimizes call video
+
 
 ## [1.10.11](https://github.com/VIHATTeam/OmiKit.git) (29/01/2026)
 - Remove key BGTaskSchedulerPermittedIdentifiers at example 

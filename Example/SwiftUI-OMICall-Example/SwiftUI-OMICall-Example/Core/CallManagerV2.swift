@@ -164,7 +164,9 @@ class CallManagerV2: NSObject, ObservableObject {
 
         // 4. Setup observers for SDK notifications
         setupObservers()
-
+        
+        OmiClient.setIsPartialPhoneNumber(true)
+        
         // 5. Request notification permissions for missed calls
         await requestNotificationPermissions(application)
     }
@@ -182,6 +184,7 @@ class CallManagerV2: NSObject, ObservableObject {
     /// 1 - OMILogVerbose, 2 - OMILogDebug, 3 - OMILogInfo, 4 - OMILogWarning, 5 - OMILogError
     func setLogLevel(_ level: Int = 2) {
         OmiClient.setLogLevel(Int32(level))
+
     }
 
     /// Configure SDK environment
