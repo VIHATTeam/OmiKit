@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.14](https://github.com/VIHATTeam/OmiKit.git) (04/02/2026)
+- Fix, call video and crash pj_atomic
+
+
 ## [1.10.12](https://github.com/VIHATTeam/OmiKit.git) (03/02/2026)
 - Rebuild SDK, optimizes call video
 

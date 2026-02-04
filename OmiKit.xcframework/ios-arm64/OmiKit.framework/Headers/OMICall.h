@@ -385,6 +385,27 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic, readonly) BOOL hasInitialVideoOffer;
 
 /**
+ * TIER 2 FIX (2026-02-04): Persistent video state for SwiftUI integration
+ *
+ * Track if video media is currently active (PJMEDIA_TYPE_VIDEO with ACTIVE status)
+ * This allows SwiftUI views to QUERY video state when they mount,
+ * instead of relying only on notification timing.
+ *
+ * @return YES if video media is currently active, NO otherwise
+ */
+@property (nonatomic, readonly) BOOL isVideoMediaActive;
+
+/**
+ * TIER 2 FIX (2026-02-04): Current active video window ID
+ *
+ * Returns the PJSIP video window ID if video media is active.
+ * Returns PJSUA_INVALID_ID (-1) if video is not active.
+ *
+ * @return Active video window ID, or -1 if no active video
+ */
+@property (nonatomic, readonly) int activeVideoWindowId;
+
+/**
  * The Call-ID that is present in the SIP messages.
  */
 @property (readonly, nonatomic) NSString * _Nonnull messageCallId;
@@ -758,6 +779,39 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 + (NSDictionary *)getCallerInfoFromRemoteUri:(NSString *)string;
 
 - (void)updateLastStatus:(NSInteger)statusCall lastStatusText:(NSString *) lastStatusText;
+
+/**
+ * TIER 2 FIX (2026-02-04): Notify SDK that video UI is ready
+ *
+ * Call this method from SwiftUI when your video view has mounted and is ready to display video.
+ * If video media is already active (PJSIP callback already fired), this will re-trigger
+ * video setup to show the video views.
+ *
+ * This fixes cases where:
+ * - SwiftUI view mounts AFTER video becomes ready (navigation delays, cold start)
+ * - User navigates from another screen to video call screen
+ * - App launches slowly and video ready notification was already posted
+ *
+ * Usage in SwiftUI:
+ * @code
+ * struct VideoCallScreen: View {
+ *     @State var call: OMICall?
+ *
+ *     var body: some View {
+ *         VideoPreviewContainer()
+ *             .onAppear {
+ *                 // Notify SDK that UI is ready
+ *                 call?.notifyVideoUIReady()
+ *             }
+ *     }
+ * }
+ * @endcode
+ *
+ * @discussion This method is safe to call multiple times and will only trigger video setup
+ *             if video media is actually active. If video is not yet active, it will be
+ *             ignored and video will start normally when PJSIP callback fires.
+ */
+- (void)notifyVideoUIReady;
 
 @end
 
