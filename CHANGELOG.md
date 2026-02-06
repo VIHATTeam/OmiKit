@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [1.10.22](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
+## [1.10.23](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
 - Remove Log
 
 
