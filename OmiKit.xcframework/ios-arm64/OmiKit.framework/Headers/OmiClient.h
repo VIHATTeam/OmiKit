@@ -34,6 +34,31 @@
                    proxy:(NSString *_Nonnull)proxy;
 
 /**
+ * Initialize with username/password and optional skip devices flag.
+ * Use this method when you need to skip device registration API call.
+ *
+ * @param userName SIP username
+ * @param password SIP password
+ * @param realm SIP realm/domain
+ * @param proxy SIP proxy server
+ * @param isSkipDevices If YES, skip device registration API (https://omisdk-v1-stg.omicrm.com/mobile_sdk/internal_phone/devices/add)
+ *                      If NO (default), call API normally
+ *
+ * Example:
+ * // Skip device registration API
+ * [OmiClient initWithUsername:@"user"
+ *                    password:@"pass"
+ *                       realm:@"realm"
+ *                       proxy:@"proxy"
+ *              isSkipDevices:YES];
+ */
++ (void)initWithUsername:(NSString *_Nonnull)userName
+                password:(NSString *_Nonnull)password
+                   realm:(NSString *_Nonnull)realm
+                   proxy:(NSString *_Nonnull)proxy
+          isSkipDevices:(BOOL)isSkipDevices;
+
+/**
  *  call this function when user logout to prevent notification came to this
  * device without login
  *
@@ -348,6 +373,170 @@
  */
 + (void)clearTestNetworkName;
 
+#pragma mark - Device Info Getters
+
+/**
+ * Get Firebase Cloud Messaging project ID
+ * @return Project ID or empty string if not set
+ */
++ (NSString * _Nonnull)getProjectId;
+
+/**
+ * Get application bundle identifier
+ * @return Bundle identifier or empty string
+ */
++ (NSString * _Nonnull)getAppId;
+
+/**
+ * Get unique device identifier (vendor UUID)
+ * @return Device ID in lowercase or empty string
+ */
++ (NSString * _Nonnull)getDeviceId;
+
+/**
+ * Get FCM (Firebase Cloud Messaging) token for push notifications
+ * @return FCM token or empty string if not set
+ */
++ (NSString * _Nonnull)getFcmToken;
+
+/**
+ * Get VoIP push token (iOS PushKit)
+ * @return VoIP token or empty string if not set
+ */
++ (NSString * _Nonnull)getVoipToken;
+
+/**
+ * Get current SIP extension/username
+ * @return SIP username or empty string if not logged in
+ */
++ (NSString * _Nonnull)getSipExtension;
+
+/**
+ * Get current user UUID
+ * @return User UUID or empty string if not set
+ */
++ (NSString * _Nonnull)getUserUuid;
+
+/**
+ * Get all device info as dictionary for easy access
+ * @return Dictionary with all device info parameters
+ *
+ * Dictionary keys:
+ * - projectId: Firebase project ID
+ * - appId: Application bundle identifier
+ * - deviceId: Unique device identifier
+ * - fcmToken: FCM push token
+ * - voipToken: VoIP push token
+ * - sipExtension: Current SIP username
+ * - userUuid: Current user UUID
+ *
+ * Example:
+ * NSDictionary *info = [OmiClient getDeviceInfo];
+ * NSLog(@"Device ID: %@", info[@"deviceId"]);
+ * NSLog(@"FCM Token: %@", info[@"fcmToken"]);
+ */
++ (NSDictionary * _Nonnull)getDeviceInfo;
+
+#pragma mark - Agent/Customer Login Flow
+
+/**
+ * Set authentication token for Agent/Customer login flows.
+ * MUST be called before loginAgent or loginCustomer.
+ *
+ * @param token Bearer token from your backend authentication
+ *
+ * Example:
+ * [OmiClient setAuthen:@"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."];
+ */
++ (void)setAuthen:(NSString * _Nonnull)token;
+
+/**
+ * Login with Agent extension flow.
+ * Calls Agent API endpoint and initializes SIP with provided credentials.
+ *
+ * @param uuid Agent UUID
+ * @param domain Agent domain (SIP realm)
+ * @param sipUser SIP username (extension number)
+ * @param password SIP password
+ * @param completion Callback with success status and error (if any)
+ *
+ * Example:
+ * [OmiClient loginAgent:@"agent-123"
+ *                domain:@"sip.example.com"
+ *               sipUser:@"11111112"
+ *              password:@"secret"
+ *            completion:^(BOOL success, NSError *error) {
+ *     if (success) {
+ *         NSLog(@"Agent login successful");
+ *     } else {
+ *         NSLog(@"Agent login failed: %@", error.localizedDescription);
+ *     }
+ * }];
+ */
++ (void)loginAgent:(NSString * _Nonnull)uuid
+            domain:(NSString * _Nonnull)domain
+           sipUser:(NSString * _Nonnull)sipUser
+          password:(NSString * _Nonnull)password
+        completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+
+/**
+ * Logout from Agent extension flow.
+ * Calls Agent logout API and clears session.
+ *
+ * @param completion Callback with success status and error (if any)
+ *
+ * Example:
+ * [OmiClient logoutAgent:^(BOOL success, NSError *error) {
+ *     if (success) {
+ *         NSLog(@"Agent logout successful");
+ *     }
+ * }];
+ */
++ (void)logoutAgent:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+
+/**
+ * Login with Customer extension flow.
+ * Calls Customer API endpoint and initializes SIP with provided credentials.
+ *
+ * @param uuid Customer UUID
+ * @param domain Customer domain (SIP realm)
+ * @param sipUser SIP username (extension number)
+ * @param password SIP password
+ * @param completion Callback with success status and error (if any)
+ *
+ * Example:
+ * [OmiClient loginCustomer:@"customer-456"
+ *                   domain:@"sip.example.com"
+ *                  sipUser:@"22222223"
+ *                 password:@"secret"
+ *               completion:^(BOOL success, NSError *error) {
+ *     if (success) {
+ *         NSLog(@"Customer login successful");
+ *     } else {
+ *         NSLog(@"Customer login failed: %@", error.localizedDescription);
+ *     }
+ * }];
+ */
++ (void)loginCustomer:(NSString * _Nonnull)uuid
+               domain:(NSString * _Nonnull)domain
+              sipUser:(NSString * _Nonnull)sipUser
+             password:(NSString * _Nonnull)password
+           completion:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
+
+/**
+ * Logout from Customer extension flow.
+ * Calls Customer logout API and clears session.
+ *
+ * @param completion Callback with success status and error (if any)
+ *
+ * Example:
+ * [OmiClient logoutCustomer:^(BOOL success, NSError *error) {
+ *     if (success) {
+ *         NSLog(@"Customer logout successful");
+ *     }
+ * }];
+ */
++ (void)logoutCustomer:(void (^ _Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 
 @end

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.10.22](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
+- Update func for user
+- Add field isSkipDevices for func register 
+
 ## [1.10.15, 1.10.16, 1.10.17, 1.10.18, 1.10.19](https://github.com/VIHATTeam/OmiKit.git) (04/02/2026)
 - add log debug call video
 
