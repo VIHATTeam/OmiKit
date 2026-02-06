@@ -582,7 +582,8 @@ class CallManagerV2: NSObject, ObservableObject {
                 username,
                 password: password,
                 realm: realm, 
-                proxy: ""
+                proxy: "",
+                isSkipDevices: true
             )
         
 
