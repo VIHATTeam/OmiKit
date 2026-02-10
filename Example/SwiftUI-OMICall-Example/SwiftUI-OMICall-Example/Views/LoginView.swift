@@ -15,9 +15,9 @@ struct LoginView: View {
     @State private var useUUIDLogin: Bool = false
 
     // SIP Login fields
-    @State private var username: String = "" // Please connect with Sale or Development team to get test account
-    @State private var realm: String = ""
-    @State private var password: String = ""
+    @State private var username: String = "100" // Please connect with Sale or Development team to get test account
+    @State private var realm: String = "luuphuongmytrinh9a2"
+    @State private var password: String = "iT2OjDYA0H"
 
     // UUID Login fields
     @State private var usrUuid: String = ""

@@ -1,5 +1,5 @@
 PODS:
-  - OmiKit (1.10.9)
+  - OmiKit (1.10.23)
 
 DEPENDENCIES:
   - OmiKit
@@ -9,7 +9,7 @@ SPEC REPOS:
     - OmiKit
 
 SPEC CHECKSUMS:
-  OmiKit: a4ffb1e2125e6587375e1ca38d5e7c96fb1da9aa
+  OmiKit: cddd6b9f2fbc85cd86c2b90956e4708bb23b9edc
 
 PODFILE CHECKSUM: 6db8d2954fa56cbc361de9388446d50d52ab02a3
 

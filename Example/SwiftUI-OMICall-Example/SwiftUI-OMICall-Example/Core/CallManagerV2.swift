@@ -300,6 +300,8 @@ class CallManagerV2: NSObject, ObservableObject {
                     print("📞 Call answered")
 
                 case .disconnected:
+            
+                    print("📞 [StateChange->Disconnected] Status text: %@", callModel?.lastStatus ?? "Unknown");
                     self.stopCallTimer()
                     self.resetCallState()
 
@@ -332,7 +334,7 @@ class CallManagerV2: NSObject, ObservableObject {
                   let endCause = userInfo[OMINotificationEndCauseKey] as? Int
             else { return }
 
-            print("Call ended with cause: \(endCause)")
+            print("Call ended with cause: \(endCause) ---> userInfo: \(userInfo)")
 
             // Get end cause message before entering MainActor context
             var message: String = ""
@@ -1019,6 +1021,10 @@ struct OmiCallModelV2: Hashable {
     var onHold: Bool = false
     var numberToCall: String = ""
     var connected: Bool = false
+    var lastStatus: Int = 0
+    var lastStatusText: String = ""
+    
+
 
     
     init(from omiCall: OMICall) {
@@ -1038,6 +1044,8 @@ struct OmiCallModelV2: Hashable {
         self.onHold = omiCall.onHold
         self.numberToCall = omiCall.numberToCall ?? ""
         self.connected = omiCall.connected
+        self.lastStatus = omiCall.lastStatus
+        self.lastStatusText = omiCall.lastStatusText ?? ""
   
     }
 

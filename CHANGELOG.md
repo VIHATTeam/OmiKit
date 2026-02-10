@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.24](https://github.com/VIHATTeam/OmiKit.git) (10/02/2026)
+
+### Security
+- **Disabled sensitive API body logging** in `sendAgentCustomerRequest` (OmiClient.m) and `HttpRequest.m` to prevent credential exposure in logs
+
+### Fixed
+- **Critical: NSRangeException crash in lookupAccount** - Fixed thread safety issue where PJSIP thread reads `accounts` array while main thread deallocates via `removeAccount:`. Applied atomic property + NSLock + copy-inside-lock pattern (OMIEndpoint.m)
+- **Critical: NSRangeException crash in callWithCallId** - Fixed same thread safety pattern in OMICallManager for `calls` array during concurrent access from PJSIP and main threads (OMICallManager.m)
+- **Critical: pjmedia_codec_mgr_enum_codecs crash** - Fixed race condition when enumerating codecs before PJSIP codec manager fully initialized. Added 300ms delay, retry logic with exponential backoff, and NULL checks (OMIEndpoint.m)
+- **Critical: PushKit NSInternalInconsistencyException** - Fixed app termination due to unhandled exceptions in VoIP push handler. Wrapped async SIP/Audio setup in @try-@catch-@finally to prevent PushKit 20s timeout kill (VoIPPushHandler.m)
+- **Property update order in OMICall.updateCallInfo** - Reordered property updates to set `callState` LAST, preventing notification observers from receiving stale `lastStatus`/`lastStatusText` values (OMICall.m)
+- **OMICall dealloc notification timing** - Fixed strong reference cycles preventing timely deallocation. Use `__weak self` in dispatch_after blocks and cleanup `disconnectedSoundPlayer` before removeCall (OMICall.m)
+- **refreshMiddlewareRegistration validation** - Added proper validation to only call API when user is logged in with Agent/Customer flow. Fixed stale session data causing API errors on app startup (OmiClient.m)
+- **UUID validation in refreshMiddlewareRegistration** - Made UUID optional (not required for refresh API) to fix false-positive validation failures
+
+### Changed
+- Added `lastStatusText` to OMICallDeallocNotification userInfo dictionary for better call end status tracking
+- Added comprehensive logging for call state changes and dealloc events in ViewController for debugging
+- Improved error logging with status code descriptions (Busy, Declined, etc.)
+
 ## [1.10.23](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
 - Remove Log
 
