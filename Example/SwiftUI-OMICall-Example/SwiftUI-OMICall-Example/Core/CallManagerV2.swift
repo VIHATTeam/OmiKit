@@ -29,12 +29,16 @@ import UserNotifications
 
 // MARK: - Notification Names Extension
 extension Notification.Name {
+    // Custom app notifications
     static let callStateDidChangeV2 = Notification.Name("callStateDidChangeV2")
     static let callDidEndV2 = Notification.Name("callDidEndV2")
     static let incomingCallReceivedV2 = Notification.Name("incomingCallReceivedV2")
     static let incomingCallAcceptedV2 = Notification.Name("incomingCallAcceptedV2")
     static let outgoingCallStartedV2 = Notification.Name("outgoingCallStartedV2")
     static let missedCallTappedV2 = Notification.Name("missedCallTappedV2")
+
+    // NOTE: OmiKit SDK notifications are auto-imported by Swift as NSNotification.Name
+    // Use NSNotification.Name.OMICallStateChanged and NSNotification.Name.OMICallDealloc directly
 }
 
 // MARK: - Call Manager Error
@@ -114,7 +118,7 @@ class CallManagerV2: NSObject, ObservableObject {
 
     // MARK: - Notification Observer Tokens (for closure-based observers)
     private var callStateChangedObserver: NSObjectProtocol?
-    private var callDeallocObserver: NSObjectProtocol?
+    // Note: callDeallocObserver uses selector-based pattern (no token needed)
     private var outboundCallStartedObserver: NSObjectProtocol?
     private var inboundCallAcceptedObserver: NSObjectProtocol?
     private var inboundCallRejectedObserver: NSObjectProtocol?
@@ -233,12 +237,14 @@ class CallManagerV2: NSObject, ObservableObject {
     // MARK: - Observers Setup
 
     private func setupObservers() {
+        print("📡 [CallManagerV2] Setting up observers...")
+//        print("📡 [CallManagerV2] OMICallStateChangedNotification constant value: \(OMICallStateChangedNotification)")
+//        print("📡 [CallManagerV2] OMICallDeallocNotification constant value: \(OMICallDeallocNotification)")
         // All observers use closure-based pattern with OperationQueue.main for Swift 6 compatibility
         // This prevents dispatch_assert_queue_fail crashes
 
-        // 1. Listen for call state changes from OmiKit SDK
         callStateChangedObserver = NotificationCenter.default.addObserver(
-            forName: NSNotification.Name.OMICallStateChanged,
+            forName: Notification.Name(NSNotification.Name.OMICallStateChanged.rawValue),
             object: nil,
             queue: .main  // Force main queue to avoid Swift 6 concurrency issues
         ) { [weak self] notification in
@@ -323,60 +329,8 @@ class CallManagerV2: NSObject, ObservableObject {
             )
         }
 
-        // 2. Listen for call dealloc (end reasons)
-        callDeallocObserver = NotificationCenter.default.addObserver(
-            forName: NSNotification.Name.OMICallDealloc,
-            object: nil,
-            queue: .main  // Force main queue
-        ) { [weak self] notification in
-            // Swift 6: Extract ALL data from userInfo BEFORE entering MainActor context
-            guard let userInfo = notification.userInfo,
-                  let endCause = userInfo[OMINotificationEndCauseKey] as? Int
-            else { return }
-
-            print("Call ended with cause: \(endCause) ---> userInfo: \(userInfo)")
-
-            // Get end cause message before entering MainActor context
-            var message: String = ""
-
-            // Now safely enter MainActor context with extracted data
-            MainActor.assumeIsolated {
-                guard let self = self else { return }
-
-                // Check for missed call
-                if !self.wasCallAnswered && !self.lastIncomingCallerNumber.isEmpty && self.lastIncomingCallTime != nil {
-                    let callerNumber = self.lastIncomingCallerNumber
-                    let callerName = self.lastIncomingCallerName
-                    let callTime = self.lastIncomingCallTime!
-
-                    Task {
-                        await self.showMissedCallNotification(
-                            callerNumber: callerNumber,
-                            callerName: callerName,
-                            callTime: callTime
-                        )
-                    }
-
-                    self.lastIncomingCallerNumber = ""
-                    self.lastIncomingCallerName = ""
-                    self.lastIncomingCallTime = nil
-                }
-
-                // Reset answered flag
-                self.wasCallAnswered = false
-
-                // Get end cause message
-                message = self.getEndCauseMessage(endCause)
-            }
-
-            // Post notification outside MainActor.assumeIsolated to avoid Sendable warning
-            // Safe because we're already on main queue (queue: .main)
-            NotificationCenter.default.post(
-                name: .callDidEndV2,
-                object: nil,
-                userInfo: ["message": message, "cause": endCause]
-            )
-        }
+        // 2. OMICallDealloc observer is now registered in AppDelegate for early registration
+        // See AppDelegate.didFinishLaunchingWithOptions for the observer setup
 
         // 3. CallKit inbound call accepted
         inboundCallAcceptedObserver = NotificationCenter.default.addObserver(
@@ -414,14 +368,10 @@ class CallManagerV2: NSObject, ObservableObject {
 
 
     private func removeObservers() {
-        // Remove all closure-based observers
+        // Remove closure-based observers
         if let observer = callStateChangedObserver {
             NotificationCenter.default.removeObserver(observer)
             callStateChangedObserver = nil
-        }
-        if let observer = callDeallocObserver {
-            NotificationCenter.default.removeObserver(observer)
-            callDeallocObserver = nil
         }
         if let observer = outboundCallStartedObserver {
             NotificationCenter.default.removeObserver(observer)
@@ -435,6 +385,59 @@ class CallManagerV2: NSObject, ObservableObject {
             NotificationCenter.default.removeObserver(observer)
             inboundCallRejectedObserver = nil
         }
+
+        // Note: OMICallDealloc observer is managed by AppDelegate (see AppDelegate.deinit)
+    }
+
+    // MARK: - OmiKit SDK Notification Handlers
+
+    /// Handle OMICallDealloc notification (called from AppDelegate)
+    /// This method is called when a call ends and the OMICall object is deallocated
+    @MainActor
+    func handleCallEnded(_ notification: Notification) {
+        print("🔔 [CallManagerV2] Processing call end notification...")
+
+        // Extract data from userInfo
+        guard let userInfo = notification.userInfo,
+              let endCause = userInfo[OMINotificationEndCauseKey] as? Int
+        else {
+            print("❌ [CallManagerV2] Failed to extract endCause from notification")
+            return
+        }
+
+        print("📞 [CallManagerV2] Call ended with cause: \(endCause)")
+
+        // Get end cause message
+        let message = getEndCauseMessage(endCause)
+
+        // Check for missed call
+        if !wasCallAnswered && !lastIncomingCallerNumber.isEmpty && lastIncomingCallTime != nil {
+            let callerNumber = lastIncomingCallerNumber
+            let callerName = lastIncomingCallerName
+            let callTime = lastIncomingCallTime!
+
+            Task { @MainActor in
+                await showMissedCallNotification(
+                    callerNumber: callerNumber,
+                    callerName: callerName,
+                    callTime: callTime
+                )
+            }
+
+            lastIncomingCallerNumber = ""
+            lastIncomingCallerName = ""
+            lastIncomingCallTime = nil
+        }
+
+        // Reset answered flag
+        wasCallAnswered = false
+
+        // Post notification for SwiftUI
+        NotificationCenter.default.post(
+            name: .callDidEndV2,
+            object: nil,
+            userInfo: ["message": message, "cause": endCause]
+        )
     }
 
     // MARK: - CallKit Notification Handlers (Swift 6 compatible)

@@ -15,3 +15,5 @@ Package.resolved
 
 GoogleService-Info.plist
 log_*
+
+Example/*

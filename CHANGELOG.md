@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.25](https://github.com/VIHATTeam/OmiKit.git) (11/02/2026)
+
+### Fixed
+- **Podspec: EXCLUDED_ARCHS for simulator** - Changed from `arm64` to `x86_64` to fix `pod lib lint` validation failure on Apple Silicon (arm64 simulator slice)
+- **Example: OMICallDeallocNotification observer not receiving events** - Moved observer registration from CallManagerV2 to AppDelegate using selector-based pattern (matching Objective-C example) for reliable notification delivery
+- **Example: Swift 6 Sendable warnings in notification observers** - Extract all data from `notification.userInfo` before entering `MainActor.assumeIsolated` context to prevent data race warnings
+- **Example: Logout not clearing saved credentials** - Added `UserDefaults.synchronize()` to force immediate save when clearing login credentials
+- **Example: Duplicate PushKitManager conflict** - Removed local PushKitManager.swift that conflicted with OmiKit SDK's built-in `PushKitManager.sharedInstance()`
+
+### Added
+- **Example: UUID + Phone login support** - Added `loginWithUUID(usrUuid:fullName:apiKey:phone:)` in CallManagerV2 with toggle UI in LoginView for switching between SIP and UUID login modes
+- **Example: Comprehensive README** - Added call flow diagrams (ASCII art), CallManager vs CallManagerV2 comparison, Swift 6 setup guide, and API reference
+- **Main README: Link to Example README** - Added section pointing to SwiftUI Example Project documentation
+
+### Changed
+- **Example: Notification observer pattern** - OMICallDealloc uses selector-based observer in AppDelegate; CallKit and CallState observers use closure-based pattern with `queue: .main` in CallManagerV2
+
 ## [1.10.24](https://github.com/VIHATTeam/OmiKit.git) (10/02/2026)
 
 ### Security

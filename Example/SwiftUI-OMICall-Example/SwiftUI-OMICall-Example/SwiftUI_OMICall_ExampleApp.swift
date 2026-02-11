@@ -8,6 +8,7 @@
 import SwiftUI
 import UIKit
 import UserNotifications
+@preconcurrency import OmiKit
 
 // MARK: - App Delegate (Minimal - all logic handled by CallManagerV2)
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -26,13 +27,51 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             UNUserNotificationCenter.current().delegate = CallManagerV2.shared
         }
 
+        // Register observer for OMICallDealloc notification (in AppDelegate to ensure early registration)
+        print("📡 [AppDelegate] Registering OMICallDealloc observer...")
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCallDeallocNotification(_:)),
+            name: NSNotification.Name.OMICallDealloc,
+            object: nil
+        )
+
         return true
+    }
+
+    // MARK: - OMICallDealloc Notification Handler
+
+    @objc func handleCallDeallocNotification(_ notification: Notification) {
+        print("🔔 [AppDelegate] ============================================")
+        print("🔔 [AppDelegate] OMICallDealloc notification RECEIVED!")
+        print("🔔 [AppDelegate] Notification name: \(notification.name.rawValue)")
+        print("🔔 [AppDelegate] ============================================")
+
+        guard let userInfo = notification.userInfo else {
+            print("❌ [AppDelegate] No userInfo in notification")
+            return
+        }
+
+        print("📞 [AppDelegate] userInfo: \(userInfo)")
+
+        if let endCause = userInfo[OMINotificationEndCauseKey] as? Int {
+            print("📞 [AppDelegate] Call ended with cause: \(endCause)")
+        }
+
+        // Forward to CallManagerV2 for processing
+        Task { @MainActor in
+            CallManagerV2.shared.handleCallEnded(notification)
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Clean up SDK resources
         Task { @MainActor in
-            CallManagerV2.shared.cleanup()
+//            CallManagerV2.shared.cleanup()
         }
     }
 

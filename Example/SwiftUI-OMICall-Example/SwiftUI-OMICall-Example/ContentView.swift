@@ -20,6 +20,7 @@ struct ContentView: View {
                     isPresented: $callManager.shouldShowActiveCallView
                 )
             }
+            .environmentObject(CallManagerV2.shared)
     }
 }
 
