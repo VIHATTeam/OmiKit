@@ -507,13 +507,38 @@ class CallManagerV2: NSObject, ObservableObject {
 
     private func getEndCauseMessage(_ cause: Int) -> String {
         switch cause {
+        // Standard SIP codes
+        case 200: return "Call ended normally"
+        case 408: return "Request timeout"
+        case 480: return "Temporarily unavailable"
         case 486: return "Busy"
-        case 600, 503, 403: return "No Answer"
-        case 480: return "Subscriber Busy (Timeout)"
-        case 408: return "Request Timeout"
-        case 404: return "Network Error"
-        case 603: return "Declined"
-        default: return "Call Ended"
+        case 487: return "Call cancelled"
+        case 500: return "Server error"
+        case 503: return "Service unavailable"
+        case 600: return "Call rejected"
+        case 601: return "Call ended by customer"
+        case 602: return "Call answered/ended by another agent"
+        case 603: return "Call declined"
+
+        // OmiCall custom codes (850-865)
+        case 850: return "Exceeded concurrent call limit"
+        case 851: return "Exceeded call limit"
+        case 852: return "No service package assigned, please contact provider"
+        case 853: return "Internal number has been deactivated"
+        case 854: return "Subscriber is in DNC list"
+        case 855: return "Exceeded trial package call limit"
+        case 856: return "Exceeded trial package minutes limit"
+        case 857: return "Subscriber blocked in configuration"
+        case 858: return "Undefined or unconfigured prefix"
+        case 859: return "No available prefix for Viettel route, please contact provider"
+        case 860: return "No available prefix for Vinaphone route, please contact provider"
+        case 861: return "No available prefix for Mobifone route, please contact provider"
+        case 862: return "Prefix temporarily blocked for Viettel route"
+        case 863: return "Prefix temporarily blocked for Vinaphone route"
+        case 864: return "Prefix temporarily blocked for Mobifone route"
+        case 865: return "Advertising call outside allowed time, please call back later"
+
+        default: return "Call ended (code: \(cause))"
         }
     }
 
