@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.28](https://github.com/VIHATTeam/OmiKit.git) (27/02/2026)
+
+### Added
+- **OMIEndpoint: `ensureVideoCodecsConfigured`** - Lazy initialization of video codecs on first video call. Calls `adjustVideoStreamConfig` only once, safe to call multiple times (no-op after first configuration)
+
+### Fixed
+- **Video: Codec initialization timing** - Prevent codec configuration race condition by deferring `adjustVideoStreamConfig` until first video call instead of during SDK startup
+
+## [1.10.27](https://github.com/VIHATTeam/OmiKit.git) (25/02/2026)
+
+### Fixed
+- **Video: CAMetalLayerDrawable corruption recovery** - Added `forceRestartVideoStreamForDrawableRecovery` method to OMIEndpoint for fast Metal video stream restart (~165ms) when `addPresentedHandler` errors occur. Resets codec cache to force fresh drawable pool without full re-INVITE (~2-5s)
+- **Video: VideoToolbox -12909 decode error cascade detection** - Added `isVTDecodeCascadeActive` method to OMIEndpoint to prevent false "resolved" detection when RTCP packets arrive but decoded frames are zero
+- **Video: Metal recovery coordination** - Added `isRecoveryInProgress` flag and `lastRecoveryCompletedTime` cooldown (2s) in OMIVideoCallManager to prevent overlapping recovery operations
+
+### Added
+- **OMIVideoPreviewView: `hasShownWindow` property** - Read-only property to check if PJSIP video window has been successfully shown (`pjsua_vid_win_set_show` called). Used to verify video is rendering before triggering recovery
+- **Example: Complete SIP end cause messages** - Added 27 status codes in `getEndCauseMessage` including standard SIP codes (200, 408, 480, 486, 487, 500, 503, 600-603) and OmiCall custom codes (850-865: call limits, DNC list, prefix routing, trial package limits, advertising time restrictions)
+- **Example: AppDelegate-based OMICallDealloc observer** - Moved observer from CallManagerV2 to AppDelegate with `handleCallEnded` forwarding for reliable notification delivery
+
 ## [1.10.25](https://github.com/VIHATTeam/OmiKit.git) (11/02/2026)
 
 ### Fixed

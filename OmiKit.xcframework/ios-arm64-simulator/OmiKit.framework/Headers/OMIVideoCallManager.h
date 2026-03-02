@@ -175,6 +175,21 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)cleanup;
 
+#pragma mark - Internal (SDK use only)
+
+/**
+ * Flag to indicate video recovery is in progress.
+ * Used internally to coordinate between Metal recovery and other operations.
+ * DO NOT set this directly from app code.
+ */
+@property (atomic, assign) BOOL isRecoveryInProgress;
+
+/**
+ * Timestamp when last Metal recovery completed.
+ * Used to implement cooldown period - skip refreshVideoViews for 2 seconds after recovery.
+ */
+@property (atomic, assign) NSTimeInterval lastRecoveryCompletedTime;
+
 @end
 
 NS_ASSUME_NONNULL_END

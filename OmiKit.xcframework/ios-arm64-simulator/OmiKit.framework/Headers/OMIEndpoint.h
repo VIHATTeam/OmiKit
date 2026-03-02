@@ -314,6 +314,24 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  */
 -(void) forceReinviteForGPURecovery;
 
+/**
+ *  Force restart the Metal video stream by triggering pjsua_vid_codec_set_param.
+ *  Used to recover from CAMetalLayerDrawable corruption (addPresentedHandler errors).
+ *
+ *  Unlike forceReinviteForGPURecovery (full re-INVITE ~2-5s), this method restarts
+ *  only the Metal rendering thread via codec parameter reset (~165ms recovery time).
+ *  Resets codec cache to force "first-time" codec application → Metal stream restart
+ *  → fresh drawable pool → resolves addPresentedHandler/drawable reuse errors.
+ */
+-(void) forceRestartVideoStreamForDrawableRecovery;
+
+/**
+ *  Check if VideoToolbox -12909 decode error cascade is currently active.
+ *  Used by OMIVideoPreviewView to prevent false "resolved" detection
+ *  when RTCP packets arrive but decoded frames are zero.
+ */
+-(BOOL) isVTDecodeCascadeActive;
+
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
 - (void)resetOpusCodecToDefault;
@@ -328,6 +346,13 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  *  @return YES if video subsystem is initialized successfully or was already initialized.
  */
 - (BOOL)initVideoSubsystemIfNeeded;
+
+/**
+ *  Ensure video codecs are configured (lazy initialization).
+ *  Calls adjustVideoStreamConfig on first video call only.
+ *  Safe to call multiple times — no-op after first configuration.
+ */
+- (void)ensureVideoCodecsConfigured;
 
 /**
  *  Check if video subsystem has been initialized.

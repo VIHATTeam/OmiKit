@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// YES if this is local camera preview, NO if remote video
 @property (nonatomic, assign) BOOL isLocalVideo;
 
+/// YES if the PJSIP video window has been successfully shown (pjsua_vid_win_set_show called)
+/// Use this to check if video is already rendering before triggering recovery.
+@property (nonatomic, assign, readonly) BOOL hasShownWindow;
+
 /// YES to use Aspect FIT (show full video with letterboxing), NO for Aspect FILL (crop to fill, default)
 /// Aspect FIT is recommended for remote video to avoid cropping the face
 /// Default is NO (Aspect FILL)
