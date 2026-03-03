@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.29](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
+
+### Added
+- **VoIPPushHandler: `reportAndEndDummyCallWithCompletion:`** - New static method to report and end dummy CallKit call with completion handler, improving PushKit compliance when no valid incoming call is available
+
+### Fixed
+- **XCFramework: Info.plist library identifiers** - Fixed incorrect `LibraryIdentifier` mapping in XCFramework Info.plist. Correctly associates `ios-arm64-simulator` with simulator variant and `ios-arm64` with device
+
 ## [1.10.28](https://github.com/VIHATTeam/OmiKit.git) (27/02/2026)
 
 ### Added

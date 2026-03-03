@@ -19,6 +19,7 @@
 + (instancetype)sharedInstance;
 + (void)establishConnection:(PKPushPayload * _Nonnull)payload completion: (void (^)(BOOL))completion;
 + (void) removeCallFromIncomming:(OMICall * _Nonnull) call;
++ (void)reportAndEndDummyCallWithCompletion:(void (^ _Nullable)(void))completion;
 - (BOOL)enableShowCallKit;
 @end
 
