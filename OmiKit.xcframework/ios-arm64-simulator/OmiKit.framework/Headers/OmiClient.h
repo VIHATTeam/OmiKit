@@ -87,6 +87,11 @@
 + (void)preWarmEndpointWithCompletion:(void (^_Nullable)(BOOL success, NSError *_Nullable error))completion;
 
 /**
+ *  Check if network is available (WiFi or Cellular)
+ */
++ (BOOL)isNetworkAvailable;
+
+/**
  *  Start call with option video call
  */
 + (void)startCall:(NSString *_Nonnull) toNumber isVideo:(BOOL) isVideo result: (void (^)(OMIStartCallStatus status)) completion;

@@ -141,7 +141,7 @@ A complete SwiftUI example app demonstrating how to integrate the OmiKit iOS SDK
 - iOS 13.0+
 - Xcode 13.0+ (Xcode 15+ recommended for Swift 6)
 - CocoaPods
-- OmiKit SDK >= 1.10.8 (for Swift 6 support)
+- OmiKit SDK >= 1.10.31 (latest, with network check support)
 
 ## Installation
 
@@ -231,7 +231,7 @@ NotificationCenter.default.addObserver(
 - You're using Swift 6 Language Mode
 - Your project uses modern Swift concurrency (async/await)
 - You want cleaner, more maintainable code
-- **Requires OmiKit >= 1.10.8**
+- **Requires OmiKit >= 1.10.31**
 
 **Pattern:**
 ```swift
@@ -265,7 +265,7 @@ callStateObserver = NotificationCenter.default.addObserver(
 - ✅ No data race risks
 
 **Cons:**
-- Requires Swift 6 and OmiKit >= 1.10.8
+- Requires Swift 6 and OmiKit >= 1.10.31
 - Breaking changes if migrating from CallManager
 
 **Swift 6 Optimizations in CallManagerV2:**
@@ -328,13 +328,13 @@ do {
 2. Add `await` to all async methods
 3. Wrap in `do-catch` for error handling
 4. Remove completion handler parameters
-5. Update Podfile to use OmiKit >= 1.10.8
+5. Update Podfile to use OmiKit >= 1.10.31
 
 ## 🚀 Quick Start Guide
 
 ### Swift 6 Setup (Recommended for New Projects)
 
-**Good news!** OmiKit >= 1.10.8 automatically configures Swift 6 compatibility via the podspec. You only need:
+**Good news!** OmiKit >= 1.10.31 automatically configures Swift 6 compatibility via the podspec. You only need:
 
 **1. Update your Podfile:**
 
@@ -343,7 +343,7 @@ platform :ios, '13.0'
 
 target 'YourApp' do
   use_frameworks!
-  pod 'OmiKit', '~> 1.10.8'  # Swift 6 compatible version
+  pod 'OmiKit', '~> 1.10.31'  # Latest version with network check
 end
 ```
 
@@ -667,6 +667,8 @@ OmiClient.startCall("phone_number", isVideo: false) { status in
         print("Another call in progress")
     case .extensionNumberIsOff:
         print("Extension number is off - User has turned off")
+    case .noNetwork:
+        print("No network connection available")
     default:
         print("Unknown error")
     }
@@ -688,6 +690,7 @@ OmiClient.startCall("phone_number", isVideo: false) { status in
 | `START_CALL_SUCCESS` | 8 | Start call successfully |
 | `HAVE_ANOTHER_CALL` | 9 | There is another call in progress; please wait for that call to end |
 | `EXTENSION_NUMBER_IS_OFF` | 10 | Extension number off - User has turned off |
+| `NO_NETWORK` | 11 | No network connection available (WiFi or Cellular) |
 
 #### End Call
 
@@ -1425,7 +1428,7 @@ struct CallingView: View {
 - ✅ You want modern async/await syntax
 - ✅ You want zero Swift 6 concurrency warnings
 - ✅ You prefer cleaner, more maintainable code
-- ✅ You have OmiKit >= 1.10.8
+- ✅ You have OmiKit >= 1.10.31
 - 📁 **Reference:** `Core/CallManagerV2.swift`
 
 ### Migration Path:

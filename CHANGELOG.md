@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.10.31](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
+
+### Added
+- **OmiClient: `isNetworkAvailable`** - New static method to check if network is available (WiFi or Cellular) before starting a call
+- **OMICall: `OMINoNetwork` status** - New `OMIStartCallStatus` enum value returned when attempting to start a call with no network connectivity
+
+### Improved
+- **OMIStartCallStatus enum formatting** - Code style cleanup in enum declaration
+
 ## [1.10.29](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
 
 ### Added

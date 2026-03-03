@@ -240,6 +240,7 @@ We provide 2 way to make call
 | OMIStartCallSuccess | The call was successfully initiated. |
 | OMIHaveAnotherCall | Another ongoing call has not ended. |
 | OMIAccountTurnOffNumberInternal | The account is disabled by the business owner. |
+| OMINoNetwork | No network connection available (WiFi or Cellular). |
 
 
 

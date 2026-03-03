@@ -152,28 +152,30 @@ typedef NS_ENUM(NSInteger, OMIVideoState) {
 };
 
 typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
-    
+
     OMIInvalidUuid,
-    
+
     OMIInvalidPhoneNumber,
-    
+
     OMISamePhoneNumber,
-    
+
     OMIMaxRetry,
 
     OMIPermissionDenied,
-    
+
     OMICouldNotFindEndpoint,
-    
+
     OMIAccountRegisterFailed,
-    
+
     OMIStartCallFailed,
-    
+
     OMIStartCallSuccess,
-    
+
     OMIHaveAnotherCall,
-    
-    OMIAccountTurnOffNumberInternal
+
+    OMIAccountTurnOffNumberInternal,
+
+    OMINoNetwork
 };
 
 
