@@ -1,4 +1,5 @@
 # Uncomment the next line to define a global platform for your project
+source 'https://cdn.cocoapods.org/'
 platform :ios, '13.0'
 
 target 'SwiftUI-OMICall-Example' do
@@ -7,9 +8,9 @@ target 'SwiftUI-OMICall-Example' do
 
   # Pods for SwiftUI-OMICall-Example
   # Use local development pod with Swift 6 support
-  # pod 'OmiKit', :path => '../../'
+  pod 'OmiKit', :path => '../../'
 
   # Always get the latest patch version (1.10.x)
-  pod 'OmiKit'
+  # pod 'OmiKit', '1.10.32'
 end
 

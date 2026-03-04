@@ -343,11 +343,13 @@ struct CallingView: View {
         // Clear saved credentials
         LoginView.clearSavedCredentials()
 
-        // Logout from OmiKit
-        callManager.logout()
+        Task {
+            // Logout from OmiKit and wait for completion before dismissing
+            await callManager.logoutWithCompletion()
 
-        // Navigate back to login
-        dismiss()
+            // Navigate back to login
+            dismiss()
+        }
     }
 }
 

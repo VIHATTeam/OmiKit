@@ -1,16 +1,16 @@
 PODS:
-  - OmiKit (1.10.31)
+  - OmiKit (1.10.32)
 
 DEPENDENCIES:
-  - OmiKit
+  - OmiKit (from `../../`)
 
-SPEC REPOS:
-  trunk:
-    - OmiKit
+EXTERNAL SOURCES:
+  OmiKit:
+    :path: "../../"
 
 SPEC CHECKSUMS:
-  OmiKit: 819d75fbe2447bad6379c64e39e9157640e452b9
+  OmiKit: ab2ce9c82761ffb6e1718c01e6986677cce7142c
 
-PODFILE CHECKSUM: 5385844494384390d66c0d4786ff96d563e2724e
+PODFILE CHECKSUM: 39d19ccfab426090d9efbf788ded12a55564dae9
 
 COCOAPODS: 1.16.2

@@ -16,8 +16,8 @@ struct LoginView: View {
 
     // SIP Login fields
     @State private var username: String = "100" // Please connect with Sale or Development team to get test account
-    @State private var realm: String = "luuphuongmytrinh9a2"
-    @State private var password: String = "iT2OjDYA0H"
+    @State private var realm: String = ""
+    @State private var password: String = ""
 
     // UUID Login fields
     @State private var usrUuid: String = ""
@@ -296,6 +296,11 @@ struct LoginView: View {
 
         Task {
             do {
+                // Logout existing session before logging in with new credentials
+                if callManager.isLoggedIn {
+                    await callManager.logoutWithCompletion()
+                }
+
                 let success: Bool
 
                 if useUUIDLogin {

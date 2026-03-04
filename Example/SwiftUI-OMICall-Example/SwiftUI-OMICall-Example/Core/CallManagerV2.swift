@@ -672,18 +672,15 @@ class CallManagerV2: NSObject, ObservableObject {
         return success
     }
 
-    /// Logout from SIP (fire-and-forget).
-    /// State resets only after logout finishes, safe to re-login inside OmiKit completion.
+    /// Logout from OMISIP (fire-and-forget). Resets local state immediately.
     func logout() {
-        OmiClient.logout { [weak self] _ in
-            // Completion is guaranteed on main thread by OmiKit SDK
-            self?.isLoggedIn = false
-            self?.currentCall = nil
-            self?.callState = .null
-        }
+        OmiClient.logout()
+        isLoggedIn = false
+        currentCall = nil
+        callState = .null
     }
 
-    /// Async logout — awaitable when you need to re-login immediately after.
+    /// Async logout with completion — awaitable when you need to re-login immediately after.
     ///
     /// Example:
     /// ```swift
@@ -696,7 +693,6 @@ class CallManagerV2: NSObject, ObservableObject {
     func logoutWithCompletion() async -> Bool {
         return await withCheckedContinuation { continuation in
             OmiClient.logout { [weak self] success in
-                // Completion is guaranteed on main thread by OmiKit SDK
                 self?.isLoggedIn = false
                 self?.currentCall = nil
                 self?.callState = .null
