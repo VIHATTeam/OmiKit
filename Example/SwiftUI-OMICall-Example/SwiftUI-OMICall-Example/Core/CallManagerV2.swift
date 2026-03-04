@@ -48,6 +48,7 @@ enum CallManagerError: Error, LocalizedError {
     case operationFailed(String)
     case loginFailed
     case callStartFailed(OMIStartCallStatus)
+    case noNetwork
 
     var errorDescription: String? {
         switch self {
@@ -59,6 +60,8 @@ enum CallManagerError: Error, LocalizedError {
             return message
         case .loginFailed:
             return "Login failed"
+        case .noNetwork:
+            return "No network connection. Please check your internet and try again."
         case .callStartFailed(let status):
             return "Failed to start call with status: \(status)"
         }
@@ -669,12 +672,37 @@ class CallManagerV2: NSObject, ObservableObject {
         return success
     }
 
-    /// Logout from SIP
+    /// Logout from SIP (fire-and-forget).
+    /// State resets only after logout finishes, safe to re-login inside OmiKit completion.
     func logout() {
-        OmiClient.logout()
-        isLoggedIn = false
-        currentCall = nil
-        callState = .null
+        OmiClient.logout { [weak self] _ in
+            // Completion is guaranteed on main thread by OmiKit SDK
+            self?.isLoggedIn = false
+            self?.currentCall = nil
+            self?.callState = .null
+        }
+    }
+
+    /// Async logout — awaitable when you need to re-login immediately after.
+    ///
+    /// Example:
+    /// ```swift
+    /// let success = await callManager.logoutWithCompletion()
+    /// if success {
+    ///     try await callManager.login(username: "new_user", password: "pass", realm: "realm")
+    /// }
+    /// ```
+    @discardableResult
+    func logoutWithCompletion() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            OmiClient.logout { [weak self] success in
+                // Completion is guaranteed on main thread by OmiKit SDK
+                self?.isLoggedIn = false
+                self?.currentCall = nil
+                self?.callState = .null
+                continuation.resume(returning: success)
+            }
+        }
     }
 
     // MARK: - Call Operations (Async/Await)
@@ -702,9 +730,13 @@ class CallManagerV2: NSObject, ObservableObject {
             OmiClient.startCall(phoneNumber, isVideo: isVideo) { status in
                 // Resume continuation on main queue to avoid dispatch assertion failures
                 DispatchQueue.main.async {
-                    if status == .startCallSuccess {
+                    switch status {
+                    case .startCallSuccess:
                         continuation.resume(returning: status)
-                    } else {
+                    case .noNetwork:
+                        // Fast-fail: SDK detected no network before attempting SIP
+                        continuation.resume(throwing: CallManagerError.noNetwork)
+                    default:
                         continuation.resume(throwing: CallManagerError.callStartFailed(status))
                     }
                 }

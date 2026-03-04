@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.32](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
+
+### Added
+
+- **`logoutWithCompletion:` method** — Added async logout with completion callback so app can call login immediately after logout without arbitrary delay. HTTP deregister request runs on background queue; completion is always called on main thread with `success=YES/NO`. Original `logout` method preserved for backward compatibility (OmiClient.m, OmiClient.h)
+
+### Changed
+
+- `logout` now internally delegates to `logoutWithCompletion:nil` — identical behavior, no breaking change
+
 
 ## [1.10.31](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
 

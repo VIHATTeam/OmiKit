@@ -66,6 +66,20 @@
 + (void)logout;
 
 /**
+ *  Logout with completion callback.
+ *  Use this when you need to login again immediately after logout.
+ *
+ *  @param completion Called on main thread when logout finishes. success=YES if API call succeeded.
+ *                    Pass nil to fire-and-forget (same behavior as logout).
+ *
+ *  Example:
+ *  [OmiClient logoutWithCompletion:^(BOOL success) {
+ *      [OmiClient initWithUUID:... fullName:... ...];
+ *  }];
+ */
++ (void)logoutWithCompletion:(void (^ _Nullable)(BOOL success))completion;
+
+/**
  *  Start Service OMI - in Most case User ussually dont call this function
  */
 + (BOOL)startOmiService:(BOOL)isVideo;
