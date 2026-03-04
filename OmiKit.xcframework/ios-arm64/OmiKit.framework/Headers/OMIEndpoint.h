@@ -332,6 +332,13 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
  */
 -(BOOL) isVTDecodeCascadeActive;
 
+/**
+ *  Pre-warm OS DNS cache for TURN/STUN hostnames to avoid 5+ second cold-start delay.
+ *  Call this with actual dynamic hostnames from the ICE provider (not hardcoded).
+ *  Runs getaddrinfo on a HIGH priority background thread — does not block caller.
+ */
++ (void)prewarmDNSForHosts:(NSArray<NSString *> *)hosts;
+
 -(void)updateLastStatusCall:(NSString *) statusCode lastStatusText:(NSString *) lastStatusText;
 
 - (void)resetOpusCodecToDefault;

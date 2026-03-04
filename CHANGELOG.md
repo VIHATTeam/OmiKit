@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.33](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
+
+### Added
+
+- **DNS pre-warm for TURN/STUN servers** — Added `+prewarmDNSForHosts:` class method on `OMIEndpoint` that runs `getaddrinfo` on a HIGH priority background thread to warm the OS DNS cache before PJSIP needs to resolve TURN/STUN hostnames. Called automatically in `createAccountWithSipUser:` with the actual dynamic STUN/TURN servers from the account configuration (vary per country/network). Eliminates TURN DNS cold-start delay of 5+ seconds that caused `PJ_ETIMEDOUT` on first outgoing call after a cold app launch (OMIEndpoint.m, OMIEndpoint.h, OMISIPLib.m)
+
+
 ## [1.10.32](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
 
 ### Added
