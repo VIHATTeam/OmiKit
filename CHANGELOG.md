@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.10.34](https://github.com/VIHATTeam/OmiKit.git) (05/03/2026)
+
+
+### Fixed
+
+- **Outgoing call disconnects immediately when remote answers** — Audio underflow storm detector (Fix N) was false-triggering on ringback teardown at `CONFIRMED` state. When the remote party answers, PJSIP disconnects the ringback tone port (`Conf disconnect: 1 -x- 0`) causing a brief `playdbuf/capdbuf` underflow burst (~30 underflows in 0.4s) — a normal, self-resolving audio glitch. This burst incorrectly matched the TCP RST storm threshold (30 underflows in 2s), causing `CXEndCallAction` to fire at `call_secs=0` and disconnect the call. Fixed by adding a 3-second suppression window after call enters `CONFIRMED`: underflow bursts within 3s of `CONFIRMED` are discarded and the counter reset. Real TCP RST storms (which occur after the call has been running for several seconds) are unaffected. Uses a file-scope `_lastCallConfirmedTimestamp` static (ARM64 atomic double) set in `onCallState` — safe to read from the audio thread without ObjC object access (OMIEndpoint.m)
+
+
+
 ## [1.10.33](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
 
 ### Added
