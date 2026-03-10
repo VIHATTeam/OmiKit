@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.35](https://github.com/VIHATTeam/OmiKit.git) (10/03/2026)
+
+### Fixed
+
+- **Rapid repeated `startCall` creates duplicate calls** — Added static `_isStartingCall` guard at `startCall:` entry to prevent concurrent call setups. When client calls `startCall` multiple times rapidly, only the first invocation proceeds; subsequent calls receive `OMIHaveAnotherCall` immediately. Guard is reset via `wrappedCompletion` in `makeCall` (covers all exit paths: success, 403, fail, register fail). Additional resets in `handleCallSetupForNumber` (disconnect fail), `startCall2` (max retry). 30-second safety timeout auto-resets the flag if stuck due to missed edge case (OmiClient.m)
+
+- **Call immediately after hangup causes 3-5s silent freeze** — When endpoint is mid-destroy (`OMIEndpointClosing`) after previous call ended, `startOmiService` kicked off async config that raced with the ongoing destroy. Now `startCall2` detects `OMIEndpointClosing` and skips `startOmiService`, going directly to `handleEndpointNotAvailable` which properly waits for destroy completion before retrying (OmiClient.m)
+
+- **Declining incoming call B kills audio of active call A** — `performEndCallAction` called `deactivateSoundDevice` unconditionally for every end call action. `pjsua_set_no_snd_dev()` is GLOBAL — it closes the single shared audio device for all PJSIP calls. When user declines call B while call A is active, this killed call A's audio immediately. Fixed by checking if other active calls exist before deactivating; skips `deactivateSoundDevice` when other calls are still running (CallKitProviderDelegate.m). Secondary fix: `setCallState` Disconnected handler now uses account-agnostic `getAllCalls` check alongside `activeCallsForAccount` to prevent false-empty from account mismatch triggering redundant audio deactivation (OMICall.m)
+
+- **End call A + accept call B → audio lost on call B** — CallKit transition fires `AVAudioSessionInterruptionTypeBegan` temporarily. `audioInterruption:` unconditionally called `deactivateSoundDevice` → posted `OMIAudioControllerAudioInterrupted` → `OMICall.audioInterruption:` called `toggleHold` → re-INVITE with sendonly SDP → call B permanently on HOLD. Fixed by adding active-calls guard: when `InterruptionTypeBegan` fires and active calls exist, skip `deactivateSoundDevice` and do NOT post the interrupted notification (OMIAudioController.m)
+
+- **Decline call B kills active call A — spam check targets wrong call** — `startCheckSpamCalls` was a GLOBAL check without per-call targeting. VoIP Push for Call B starts spam timer → user declines Call B → Call B removed → 2s timer fires → finds 1 remaining call (Call A) + empty `stateSignalSwitchBoard` → ends Call A. Fixed by adding `forCallUUID:` parameter binding spam check to the specific VoIP push call UUID. If target call no longer exists when timer fires, spam check exits early (OMICallManager.m, OMICallManager.h, VoIPPushHandler.m)
+
+### Added
+
+- **`OMICallWaitingForEndpoint` status** — New `OMIStartCallStatus` enum value sent as intermediate callback when `startCall` is waiting for endpoint teardown. Completion block fires twice: first `OMICallWaitingForEndpoint` (client shows loading), then final status (success/fail). Sent from `startCall2` and `handleExistingEndpoint` when detecting `OMIEndpointClosing` state (OMICall.h, OmiClient.m)
+
+---
+
 
 ## [1.10.34](https://github.com/VIHATTeam/OmiKit.git) (05/03/2026)
 

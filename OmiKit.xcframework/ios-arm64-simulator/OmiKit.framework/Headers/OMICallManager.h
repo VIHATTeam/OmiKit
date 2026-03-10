@@ -282,6 +282,7 @@
 - (void)endCallWithUUID:(NSUUID *_Nonnull)uuid;
 
 - (void)startCheckSpamCalls:(NSInteger)retry;
+- (void)startCheckSpamCalls:(NSInteger)retry forCallUUID:(NSUUID *_Nullable)callUUID;
 
 - (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
 

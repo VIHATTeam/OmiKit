@@ -175,7 +175,9 @@ typedef NS_ENUM(NSInteger, OMIStartCallStatus) {
 
     OMIAccountTurnOffNumberInternal,
 
-    OMINoNetwork
+    OMINoNetwork,
+
+    OMICallWaitingForEndpoint
 };
 
 
