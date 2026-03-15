@@ -839,4 +839,11 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  */
 - (void)requestKeyframeFromRemoteForCallId:(NSInteger)callId;
 
+/**
+ * Reset videoReadyNotificationPosted flag so new Metal views can receive their window ID.
+ * Called by OMIVideoCallManager.createInternalVideoViews when Metal views are recreated.
+ * Allows the next mediaStateChanged (same wid) to re-post OMIVideoRemoteReady to fresh views.
+ */
+- (void)resetVideoReadyNotificationState;
+
 @end

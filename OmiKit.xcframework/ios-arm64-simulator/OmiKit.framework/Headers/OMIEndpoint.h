@@ -333,6 +333,14 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 -(BOOL) isVTDecodeCascadeActive;
 
 /**
+ *  FIX HH: Check if "Bad RTP pt" storm is active (payload type mismatch).
+ *  When two H264 codecs (PT=97 + PT=98) are in SDP, FreeSWITCH may pick different PTs
+ *  during 183 vs 200 OK renegotiation → ALL video RTP packets rejected.
+ *  WATCHDOG uses this to override hasNewFrames (RTCP shows packets but decoder gets nothing).
+ */
+-(BOOL) hasRtpPayloadMismatch;
+
+/**
  *  Pre-warm OS DNS cache for TURN/STUN hostnames to avoid 5+ second cold-start delay.
  *  Call this with actual dynamic hostnames from the ICE provider (not hardcoded).
  *  Runs getaddrinfo on a HIGH priority background thread — does not block caller.

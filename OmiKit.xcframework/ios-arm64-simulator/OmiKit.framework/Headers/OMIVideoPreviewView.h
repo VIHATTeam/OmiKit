@@ -70,6 +70,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)isReceivingFrames;
 
+/**
+ * FIX-LL: Centralized gatekeeper for pjsua_vid_win_set_show(TRUE).
+ * Prevents duplicate set_show(TRUE) which corrupts vid_conf routing table.
+ * @param wid PJSIP video window ID
+ * @param reason Logging reason string
+ * @return YES if set_show was called, NO if skipped (already visible or invalid)
+ */
+- (BOOL)safeShowVideoWindow:(int)wid reason:(NSString *)reason;
+
+/**
+ * FIX-LL: Centralized gatekeeper for pjsua_vid_win_set_show(FALSE).
+ * @param wid PJSIP video window ID
+ * @param reason Logging reason string
+ */
+- (void)safeHideVideoWindow:(int)wid reason:(NSString *)reason;
+
+/**
+ * FIX XX: Invalidate all pending recovery callbacks (TRANSIENT-FIX, PLI burst, etc.).
+ * Call after stream RECREATED to prevent stale callbacks from triggering unnecessary re-INVITEs.
+ */
+- (void)invalidatePendingRecoveryCallbacks;
+
 @end
 
 NS_ASSUME_NONNULL_END

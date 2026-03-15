@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.0](https://github.com/VIHATTeam/OmiKit.git) (15/03/2026)
+
+### Fixed
+
+- **App freeze (deadlock) after FORMAT_CHANGE during video call** — ABBA deadlock between PJSIP decode thread (holding stream mutex, waiting for PJSUA_LOCK) and PLI retry thread (holding PJSUA_LOCK, waiting for stream mutex). `onCallMediaEvent` FMCH callback called `pjsua_call_get_info()` directly on decode thread → deadlock → app completely unresponsive.
+
+  **Fix II** (`OMIEndpoint.m`): Capture event data (`size`, `call_id`, `med_idx`) by value before async dispatch, then wrap all FMCH processing in `[OMIThread run:^{...}]` to execute on GCD queue with PJSIP thread registration instead of on the decode thread holding stream mutex.
+
+- **EXC_BAD_ACCESS crash after ~30s in video call** — `attemptViewSwapRecovery` called from `handlePJIgnoredBurstDetected` on GCD background thread created UIView and accessed `self.remoteContainerView.bounds` off main thread → crash at `objc_msgSend`.
+
+  **Fix JJ-1** (`OMIVideoCallManager.m`): Wrapped UIView creation in `dispatch_sync(dispatch_get_main_queue(), ^{...})` with `[NSThread isMainThread]` guard.
+
+- **Outgoing video call: local camera shows briefly then goes blank until CONFIRMED** — `startLocalVideoImmediately` starts camera at call initiation (`isLocalVideoInitComplete=YES`). `prepareForVideoDisplay` fires during EARLY state → after 100ms delay calls `createInternalVideoViews` → destroys localVideoView with running camera → blank screen until CONFIRMED state recreates views.
+
+  **Fix KK** (`OMIVideoCallManager.m`): In `prepareForVideoDisplay`, skip `createInternalVideoViews` if `isLocalVideoInitComplete == YES` — both remote and local views already exist with camera running.
+
+---
+
+## [1.10.38](https://github.com/VIHATTeam/OmiKit.git) (15/03/2026)
+
+### Fixed
+
+- **Incoming video call: screen freezes permanently after answer** — Race condition in `handlePJIgnoredBurstDetected` re-setting `hasMetalDrawableError=YES` during the Metal stream restart stabilization window after FMCH, permanently blocking `hideLoadingIndicator`.
+
+  **Root cause chain** (Fix QQ-3, `OMIVideoPreviewView.m`):
+  1. VT decode cascade (15 errors / 0.5s) fires → `handleH264DecodeErrorBurst` (FIX PP) sets `hasMetalDrawableError=YES` + schedules 5000ms Metal recovery
+  2. FMCH (format change 1920x1080→640x480) fires ~1.6s later → `handleMetalStreamRestarted` clears `hasMetalDrawableError=NO` + increments `keyframeRetryGeneration` (cancels 5000ms block) + schedules `dispatch_async(main_queue, ^{ hideLoadingIndicator })`
+  3. Metal stream physically restarts immediately ("Starting Metal video stream gen=1")
+  4. Within the ~100-200ms stabilization window before drawable pool is fully initialized, PJSIP delivers frames → PJ_EIGNORED burst fires
+  5. `handlePJIgnoredBurstDetected` sets `hasMetalDrawableError=YES` AGAIN
+  6. `dispatch_async(main_queue, ^{ hideLoadingIndicator })` from step 2 arrives, sees `hasMetalDrawableError=YES` → BLOCKED → loading spinner stuck FOREVER → user sees frozen screen
+
+  **Fix**: Added 500ms grace period in `handlePJIgnoredBurstDetected` using existing `lastMetalStreamRestartTimestamp` property (already set in `handleMetalStreamRestarted`). PJ_EIGNORED during this window is expected (same pattern as existing camera switch guard FIX W1). After 500ms, drawable pool is fully initialized and genuine burst detection resumes normally.
+
+---
+
+## [1.10.37](https://github.com/VIHATTeam/OmiKit.git) (12/03/2026)
+
+### Fixed
+
+- **Outgoing video CONFIRMED state: app frozen 4.6s, video never shows** — Two-stage deadlock in `executeShowVideoWindow:` (`OMIVideoPreviewView.m`):
+
+  **Stage 1 (Fix D)**: `[OMIThread runSync:]` → `dispatch_sync(GLOBAL_DEFAULT)` on main thread + `createViewForVideoLocalAsync` on `GLOBAL_HIGH` holding PJSUA_LOCK during camera init → 3-party deadlock. `hasShownWindow` never set → video never shown. Fixed by replacing `dispatch_sync` with `dispatch_async(GLOBAL_HIGH)`.
+
+  **Stage 2 (Fix E)**: After Fix D, `pjsua_call_get_stream_stat` was still called on the main thread (lines 1281-1290) for packet baseline initialization. This call acquires PJSUA_LOCK → blocked main thread for 4.6s while `createViewForVideoLocalAsync` (camera restart at CONFIRMED) held the lock. Main thread frozen → `dispatch_async(GLOBAL_HIGH)` for `pjsua_vid_win_set_show` never queued → `dispatch_after` keyframe requests never fired → video never shown for the duration of the log. Fixed by moving `pjsua_call_get_stream_stat` inside the `dispatch_async(GLOBAL_HIGH)` block so the main thread is NEVER blocked on PJSUA_LOCK.
+
+---
+
+## [1.10.36](https://github.com/VIHATTeam/OmiKit.git) (12/03/2026)
+
+### Fixed
+
+- **Outgoing video call takes 10s+ to connect, freezes at 20s** — Three compounding bugs caused the delay and freeze:
+
+  1. **Fix A — Premature video start at EARLY (183) state** (`OMIVideoCallManager.m`): `onCallMediaState` fired `OMIVideoRemoteReady` during 183 ringing (remote doesn't send video until `CONFIRMED`). SDK attempted to show Metal window → no frames for ~5s → 5s watchdog timer fired → re-INVITE skipped (EARLY state) → wasted 5s. Fixed by detecting outgoing+EARLY state in `handleVideoNotification:` and deferring video start to `CONFIRMED`. `pendingWindowId` stores the wid; `handleCallStateChanged` triggers `startVideoPreviewWithRetry` when CONFIRMED fires.
+
+  2. **Fix B — New Metal views stuck with wid=-1 after CONFIRMED** (`OMIVideoCallManager.m`, `OMICall.m`): At `CONFIRMED`, `SampleVideoCallViewController` pushed → `createInternalVideoViews` destroyed old Metal views and created fresh ones. `mediaStateChanged` fired again with same wid=1 → `videoReadyNotificationPosted` flag blocked the notification → new Metal views never received their wid → black screen forever. Fixed by calling `resetVideoReadyNotificationState` on the active `OMICall` inside `createInternalVideoViews`, allowing the next `mediaStateChanged` to re-post `OMIVideoRemoteReady` to the fresh views.
+
+  3. **Fix C — IFRM cascade fires force re-INVITE on working video** (`OMIEndpoint.m`): After ~15s of IFRM (keyframe-missing) events (normal during PLI/keyframe request cycles), `forceReinviteForGPURecovery` was called unconditionally, destroying ALL media (audio+video) and causing 5-10s freeze + audio underflow storms. Fixed by checking `checkIsVideoReceivingFrames` before escalating: if video frames are flowing normally → reset IFRM cascade tracking (no re-INVITE); if video is genuinely not flowing → escalate as before.
+
+- **Declining call B (CallingView) causes broken state when call A is active** — CallingView was presented at `OMICallStateIncoming` (before CallKit answer). When user declined via CallingView while call A active, old CallingView not dismissed cleanly. Fixed by moving CallingView presentation to `OMICallStateConfirmed` only (after actual answer). Added dismiss-existing-CallingView guard before presenting new one (Example/ViewController.m)
+
+### Added
+
+- **`OMICallWaitingForEndpoint` status** — New `OMIStartCallStatus` enum value sent as intermediate callback when `startCall` is waiting for endpoint teardown. Completion block fires twice: first `OMICallWaitingForEndpoint` (client shows loading), then final status (success/fail). Sent from `startCall2` and `handleExistingEndpoint` when detecting `OMIEndpointClosing` state (OMICall.h, OmiClient.m)
+
+---
+
+
 ## [1.10.35](https://github.com/VIHATTeam/OmiKit.git) (10/03/2026)
 
 ### Fixed
