@@ -69,7 +69,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           # Extract only the section for current version from CHANGELOG.md
-          awk "/^## \[$VERSION\]/{found=1; next} /^## \[/{if(found) exit} found" CHANGELOG.md > /tmp/release_notes.md
+          awk "/^## \[$VERSION\]/{found=1} /^## \[/ && found>1{exit} found{found++}" CHANGELOG.md > /tmp/release_notes.md
           if [ ! -s /tmp/release_notes.md ]; then
             echo "Release version $VERSION" > /tmp/release_notes.md
           fi
