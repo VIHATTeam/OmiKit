@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.4](https://github.com/VIHATTeam/OmiKit.git) (19/03/2026)
+
+### CI/CD
+
+- Added GitHub Actions workflow for automated CocoaPods release (tag + lint + trunk push on version bump)
+- Added `s.changelog` URL to podspec for CocoaPods changelog display
+
+---
+
 ## [1.11.3](https://github.com/VIHATTeam/OmiKit.git) (19/03/2026)
 
 ### Crash Fixes (Crashlytics top crashes — ~503 crashes eliminated)

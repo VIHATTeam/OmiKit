@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OmiKit'
-  s.version          = '1.11.3'
+  s.version          = '1.11.4'
   s.homepage         = "https://omicall.com/"
   s.summary          = "Omicall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
 
   s.description      = "Omicall easy to make call/video call app2app, app2phone"
   s.documentation_url = "https://api.omicall.com/web-sdk/mobile-sdk"
+  s.changelog        = "https://raw.githubusercontent.com/VIHATTeam/OmiKit/main/CHANGELOG.md"
 
   # Xcode 26+ requires minimum iOS 12.0, OmiSIP binary requires iOS 13.0+
   s.ios.deployment_target = '13.0'
