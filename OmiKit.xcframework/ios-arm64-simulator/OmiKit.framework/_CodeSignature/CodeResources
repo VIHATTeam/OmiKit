@@ -58,7 +58,7 @@
 		</data>
 		<key>Headers/OMIEndpoint.h</key>
 		<data>
-		4hAY+aqLLH/z/FJrqBr995QESr8=
+		ljWcoA0Vuc9A4fOthzWW7rJHuBc=
 		</data>
 		<key>Headers/OMIEndpointConfiguration.h</key>
 		<data>
@@ -170,7 +170,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		KKrU+l9j4EkxS3lvaPGsKv/KIjk=
+		q7ZU9JtojwSWkps4C3LOTreONms=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -178,7 +178,7 @@
 		</data>
 		<key>OmiKit.bundle/Info.plist</key>
 		<data>
-		64+2rGzWu3C6uOUBiqfOjaYnaNE=
+		5MhoOJF7ZbLFna5XNzrnsX7vDtg=
 		</data>
 		<key>OmiKit.bundle/disconnected.wav</key>
 		<data>
@@ -282,7 +282,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			emmzc1Eion/D+wv38VX9dqg9pVtL7SHN/PEW9sfIE1E=
+			54JEjr/PK0jTsZt4WzgeSdo7jCMZ5VZUGmBqnH/WfdQ=
 			</data>
 		</dict>
 		<key>Headers/OMIEndpointConfiguration.h</key>
@@ -485,7 +485,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			aviwytumK/tP/vZ2Cd16k33P7pgSghLChonhJf+GPAo=
+			LquSNpvp+gsBPJEtoMQDmZcmPr0Yq06Tu/EXcEsWpGo=
 			</data>
 		</dict>
 		<key>OmiKit.bundle/disconnected.wav</key>

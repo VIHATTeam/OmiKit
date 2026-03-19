@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.3](https://github.com/VIHATTeam/OmiKit.git) (19/03/2026)
+
+### Crash Fixes (Crashlytics top crashes — ~503 crashes eliminated)
+
+- **NSRangeException crash** (`OMIEndpoint.h`, Crash #2/#7/#8 — 255 crashes) — `OMIEndpointStateString` macro had 3 elements but enum had 4 (`OMIEndpointClosing`). `objectAtIndex:3` on 3-element array → crash. Fixed: added `"OMIEndpointClosing"` + safe bounds check returns `"Unknown"` for any future out-of-range values.
+
+- **EXC_BAD_ACCESS pjmedia_codec_mgr_enum_codecs** (`OMIEndpoint.m`, `OMICallStats.m`, Crash #3 — 72 crashes) — `pjsua_enum_codecs()` called with NULL codec_mgr during VoIP push cold start. 4 call sites missing NULL guard (1 already had it). Fixed: added `pjsua_get_pjmedia_endpt()` + `pjmedia_endpt_get_codec_mgr()` NULL check before every `pjsua_enum_codecs` call.
+
+- **PushKit VoIP kill by iOS** (`VoIPPushHandler.m`, Crash #4 — 85 crashes) — Duplicate VoIP push detection (FIX PUSH-1) called `completion()` without `reportNewIncomingCall` → iOS killed app. Fixed: duplicate push path now calls `reportAndEndDummyCallWithCompletion` to satisfy PushKit requirement.
+
+- **pjsip_timer_init_session crash** (`OMICallManager.m`, Crash #5 — 91 crashes) — `startCallToNumberNoReg` created PJSIP session while endpoint transitioning to Closing state → session pool corrupt → crash. Fixed: added `pjsua_get_state() != PJSUA_STATE_RUNNING` guard before call creation.
+
+### Call Handling
+
+- **OMIHaveAnotherCall false positive** (`OmiClient.m`) — `getNewestCall != nil` rejected new calls even when existing call was already `disconnected`/`disconnecting` (PJSIP cleanup delay). Most common customer complaint. Fixed: added `callState` check — only reject if existing call is truly active (not disconnected/disconnecting).
+
+- **OMIHaveAnotherCall diagnostic logging** (`OmiClient.m`) — All 3 HaveAnotherCall exit paths now log full context (SIP user, endpoint state, all active calls with uuid/state/phone/createDate) and auto-upload log file. Search `[HaveAnotherCall]` on server to diagnose.
+
+### Audio
+
+- **AUDIO-STORM speaker toggle fix** (`OMIEndpoint.m`) — Toggle speaker caused ~30 audio underflows in 0.3s → AUDIO-STORM detector killed the call. Fixed: increased threshold from 30→60 and decreased window from 2s→0.5s. Speaker switch (~30 underflows) stays below threshold, real network death (100+ underflows) still detected.
+
+### Sample App
+
+- **CallingView timer not starting** (`ViewController.m`) — Outgoing call: CallingView presented at CALLING state, then CONFIRMED created a NEW CallingView → timer reset to 0. Fixed: CONFIRMED reuses existing CallingView, only updates `callUUID`. Incoming call: CallingView presented AT CONFIRMED → missed CONFIRMED notification. Fixed: `startCallTimer` called in present completion block.
+
+---
+
+## [1.11.2](https://github.com/VIHATTeam/OmiKit.git) (18/03/2026)
+
+### Video Call Stability (PJSIP Metal Renderer)
+
+- **CADisplayLink renderer replaces performSelectorOnMainThread** (`metal_dev.m`) — Metal rendering no longer competes with SwiftUI/RN/Flutter for main thread time. Frames render at display vsync via dedicated CADisplayLink, bypassing main thread entirely. Video stable 5+ minutes on SwiftUI client (was 5-8 seconds before).
+
+- **CADisplayLink auto pause/resume on background/foreground** (`metal_dev.m`) — Prevents iOS GPU penalty box when app enters background. CADisplayLink pauses automatically via `UIApplicationDidEnterBackgroundNotification`, resumes on `UIApplicationWillEnterForegroundNotification`.
+
+- **A/V sync threshold relaxed for VoIP** (`vid_stream.c`) — Changed sync threshold from 0ms to -100ms and MAX_SKIP_MS from 0 to 33ms (1 frame). VoIP doesn't need perfect lip-sync; showing every frame with slight delay is better than dropping frames for sync accuracy. Reduces video stutter.
+
+### Video Recovery
+
+- **PJ_EIGNORED codec filter** (`OMIEndpoint.m`, Fix JJ-11) — PJ_EIGNORED counter now distinguishes `vid_conf.c` Metal errors (need recovery) from `vid_toolbox.m` codec errors (harmless). Previously codec unpacketize errors false-triggered Metal recovery → re-INVITE → destroyed stable video.
+
+- **QQ-3 grace period increased to 2000ms** (`OMIVideoPreviewView.m`) — After FORMAT_CHANGE, Metal needs up to 1.5s to stabilize. Previous 500ms grace was too short → PJ_EIGNORED during stabilization triggered recovery → GPU Timeout.
+
+- **Foreground recovery: PLI + show Metal** (`OMIVideoPreviewView.m`, Fix BG-8) — After background→foreground, SDK sends 2 PLIs (0ms + 500ms) and ensures Metal window visible. No hide, no loading, no re-INVITE. VT decoder gets fresh IDR frame and resumes in ~1s. Watchdog handles dead decoder case (5s fallback).
+
+- **Background Metal guard** (`OMIVideoPreviewView.m`, Fix BG-6) — `safeShowVideoWindow` and FIX AAA timer now check `UIApplicationState` before enabling Metal. Prevents catastrophic GPU penalty when FMCH timer fires during background transition.
+
+- **Timestamp reset on foreground** (`OMIVideoPreviewView.m`, Fix BG-1) — Reset `lastSuccessfulRenderTimestamp` and `lastFrameTimestamp` in `appWillEnterForeground`. Prevents watchdog FIX-OO false positive (stale timestamp → loading shown over working video).
+
+- **Timestamp init on executeShowVideoWindow** (`OMIVideoPreviewView.m`, Fix BG-7) — Initialize frame tracking timestamps when Metal window first shown. After cleanup+setup recovery, new view had timestamp=0 → watchdog false positive after 14s.
+
+### Call Handling
+
+- **Duplicate VoIP push guard** (`VoIPPushHandler.m`, Fix PUSH-1) — iOS can deliver same VoIP push 2+ times within milliseconds. Second push destroyed endpoint from first push → call died on accept. Now detects duplicate `callId` via `CallIDsManager` and skips.
+
+### Performance
+
+- **Production readiness optimizations** (`OMIVideoPreviewView.m`, `OMIVideoCallManager.m`) — Static variable converted to instance property for per-view debounce (C1), `dispatch_sync` replaced with `dispatch_async` for `presentsWithTransaction` (C2), strong self replaced with weak in cleanup timer (C3), 64 high-frequency log statements downgraded from INFO to DEBUG (H1).
+
+- **Double-dispatch fix in handleMetalStreamRestarted** (`OMIVideoPreviewView.m`, Fix DD-1) — `forceHideLoadingIndicator` called directly instead of nested in `dispatch_async(main_queue)`. Reduces loading hide from 2 runloop cycles to 1.
+
+- **Safety prepareForVideoDisplay fallback** (`OMIVideoCallManager.m`, Fix DD-2) — 1.5s delayed `prepareForVideoDisplay` call from `setupWithRemoteView` as safety net when `viewDidAppear` doesn't fire promptly (navigation push stalls during background→foreground).
+
+---
+
 ## [1.11.0](https://github.com/VIHATTeam/OmiKit.git) (15/03/2026)
 
 ### Fixed

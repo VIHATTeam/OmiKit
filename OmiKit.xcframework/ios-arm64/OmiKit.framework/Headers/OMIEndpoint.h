@@ -151,7 +151,11 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
      */
     OMIEndpointClosing,
 };
-#define OMIEndpointStateString(OMIEndpointState) [@[@"OMIEndpointStopped", @"OMIEndpointStarting", @"OMIEndpointStarted"] objectAtIndex:OMIEndpointState]
+// Safe accessor — returns "Unknown" for out-of-range values instead of NSRangeException crash
+#define OMIEndpointStateString(state) ({ \
+    NSArray *_states = @[@"OMIEndpointStopped", @"OMIEndpointStarting", @"OMIEndpointStarted", @"OMIEndpointClosing"]; \
+    (NSUInteger)(state) < _states.count ? _states[(NSUInteger)(state)] : @"Unknown"; \
+})
 
 // /**
 //  *  Possible states for the switchboard signal when make call or get call
