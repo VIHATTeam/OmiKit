@@ -2,7 +2,77 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.11.4](https://github.com/VIHATTeam/OmiKit.git) (19/03/2026)
+## [1.11.5](https://github.com/VIHATTeam/OmiKit.git) (27/03/2026)
+
+### Multi-Call Handling (2-layer rejection)
+
+- **Layer 1 — VoIP Push rejection** (`VoIPPushHandler.m`, FIX MULTI-CALL) — When push B arrives while call A is ringing, auto-reject with dummy CallKit report. Fully defensive: `@try/@catch`, nil checks, array copy for mutation safety. Fallback always allows push (never blocks user by mistake).
+
+- **Layer 2 — SIP INVITE rejection** (`OMIEndpoint.m`, FIX MULTI-CALL-2) — When INVITE B arrives on same TCP session (no push), reject with `486 Busy Here` if call A is ringing. Only rejects calls with `callId >= 0` (real INVITE matched) — push placeholders (`callId=-1`) are skipped to avoid rejecting the first call's own INVITE. Re-INVITE for same `call_id` also skipped.
+
+- **Rule**: Call A ringing → reject B (486). Call A confirmed → allow B (CallKit shows both, user decides). No existing call → proceed normally.
+
+### Audio
+
+- **Speaker toggle no longer kills call** (`OMIEndpoint.m`) — AUDIO-STORM threshold increased from 30→60, window decreased from 2.0s→0.5s. Speaker switch causes ~30 underflows in 0.3s (below new threshold). Real network death causes 100+ underflows (still detected). No grace period needed — pure threshold adjustment.
+
+### Diagnostic Logging
+
+- **Multi-call diagnostic in performEndCallAction** (`CallKitProviderDelegate.m`) — When ending a call with multiple calls active, logs all remaining calls (uuid, state, phone, callId) + auto-uploads log file. Helps diagnose "decline call 2 kills call 1" reports from customers.
+
+- **OMICloseCall diagnostic** (`OmiClient.m`) — Warning log when `closeAllCalls` runs with >1 active call. Helps trace unexpected multi-call teardown.
+
+- **Endpoint init tracking** (`OMIEndpoint.m`) — Logs endpoint creation with call count context (appendLog, no upload). Helps trace rapid endpoint restart cycles seen in customer logs.
+
+### Call Handling
+
+- **haveAnotherCall skip disconnected/disconnecting** (`OmiClient.m`) — `getNewestCall` check now allows new calls when existing call is already `disconnected` or `disconnecting` (OMISIP cleanup delay). Previously the most common customer complaint — user couldn't redial after call ended.
+
+- **Zombie call cleanup** (`OmiClient.m`, FIX STUCK-1/STUCK-2) — Outgoing calls stuck >60s in EARLY/CALLING/CONNECTING state are force-removed. Endpoint with stuck calls >90s are cleaned in `isSafeToRemoveSipEndpoint`. Prevents permanent "haveAnotherCall" block requiring app restart.
+
+- **haveAnotherCall diagnostic logging** (`OmiClient.m`) — All 3 exit paths (double-tap, existing call, waitForDisconnect fail) now log full context: SIP user, endpoint state, all active calls with uuid/state/phone/createDate. Auto-uploads log file for server-side analysis. Search `[HaveAnotherCall]` in logs.
+
+### Sample App
+
+- **CallingView timer fix** (`ViewController.m`) — Outgoing: reuse existing CallingView at CONFIRMED instead of creating new one. Incoming: start timer in present completion block. Timer now counts correctly for both directions.
+
+### CI/CD
+
+- Changed `s.changelog` in podspec to point to GitHub Releases page for better changelog display on CocoaPods
+
+---
+
+## [1.11.4](https://github.com/VIHATTeam/OmiKit.git) (23/03/2026)
+
+### Multi-Call Support
+
+- **New API: `endCallWithUUID:`** — End a specific call by UUID. Safe for multi-call scenarios: decline call 2 without affecting call 1.
+
+- **New API: `endCall:andAnswerCall:`** — End current call and answer incoming call with 500ms OMISIP cleanup delay. For "End & Answer" flow when user on call 1 wants to pick up call 2.
+
+- **New API: `getAllActiveCalls`** — Returns array of all active calls (uuid, state, phone, incoming, isVideo, isOnHold) for multi-call UI display.
+
+- **Multi-call diagnostic logging** (`CallKitProviderDelegate.m`) — When ending a call with other calls active, logs all call states before and 1s after action. POST-CHECK verifies surviving call is still alive. Writes to LogFileManager for server upload.
+
+- **`OMICloseCall` warning log** (`OmiClient.m`) — Logs warning with full call list when `OMICloseCall` is called with multiple active calls. Helps diagnose "decline call 2 kills call 1" customer reports.
+
+### Call Handling
+
+- **`haveAnotherCall` diagnostic in log file** (`OmiClient.m`) — `logHaveAnotherCallDiagnostic` now writes to `LogFileManager.appendLog` before upload. Previously diagnostic only went to CocoaLumberjack console — invisible in customer-uploaded log files.
+
+- **`haveAnotherCall` disconnected/disconnecting fix** (`OmiClient.m`) — `startCall` no longer rejects new calls when existing call is in `disconnected` or `disconnecting` state. OMISIP cleanup delay caused false "haveAnotherCall" when user called immediately after previous call ended.
+
+### Audio
+
+- **AUDIO-STORM speaker toggle fix** (`OMIEndpoint.m`) — Threshold increased from 30→60, window decreased from 2s→0.5s. Speaker switch causes ~30 audio underflows in 0.3s which false-triggered call termination. Real network death (100+ underflows) still detected.
+
+### ICE/STUN Configuration
+
+- **STUN/TURN provider visibility** (`OmiClient.m`) — `applyDynamicConfiguration` now logs matched STUN/TURN servers from API provider. Previously only proxy was logged, STUN/TURN was silently cached without visibility.
+
+### Sample App
+
+- **CallingView timer fix** (`ViewController.m`) — Outgoing: reuses existing CallingView on CONFIRMED instead of creating duplicate. Incoming: starts timer in present completion block since CONFIRMED notification fires before CallingView exists.
 
 ### CI/CD
 

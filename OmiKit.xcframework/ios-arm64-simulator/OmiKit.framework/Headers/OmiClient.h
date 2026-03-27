@@ -283,9 +283,34 @@
 + (void)handleExistingEndpoint:(NSString *)toNumber isVideo:(BOOL)isVideo retry:(int)retryTimes isFirstCall:(BOOL)isFirstCall result:(void (^)(OMIStartCallStatus status))completion;
 
 /**
- This func will check and auto close all call when user kill app.
- **/
+ Close all active calls. Use when user kills app or wants to end everything.
+ WARNING: This ends ALL calls. For multi-call scenarios, use endCallWithUUID: instead.
+ */
 + (void) OMICloseCall;
+
+/**
+ End a specific call by UUID. Safe for multi-call scenarios.
+ - Call 1 active + Call 2 incoming → endCallWithUUID:call2UUID → only call 2 ends, call 1 continues.
+ - Call 1 active + Call 2 incoming → endCallWithUUID:call1UUID → only call 1 ends.
+ @param uuid The UUID of the call to end (from OMICall.uuid or notification userInfo).
+ */
++ (void)endCallWithUUID:(NSUUID * _Nonnull)uuid;
+
+/**
+ End current active call and answer incoming call.
+ Typical flow: User on Call 1, Call 2 rings → user taps "End & Answer" →
+ Call 1 hangs up, Call 2 answers after 500ms delay (PJSIP cleanup time).
+ @param currentCallUUID UUID of the call to end (Call 1).
+ @param incomingCallUUID UUID of the call to answer (Call 2).
+ */
++ (void)endCall:(NSUUID * _Nonnull)currentCallUUID andAnswerCall:(NSUUID * _Nonnull)incomingCallUUID;
+
+/**
+ Get all active calls info for UI display (multi-call scenarios).
+ @return Array of NSDictionary with keys: uuid, state, phone, incoming, isVideo, isOnHold.
+ Returns empty array if no calls.
+ */
++ (NSArray<NSDictionary *> * _Nonnull)getAllActiveCalls;
 
 
 // isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
