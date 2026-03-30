@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.6](https://github.com/VIHATTeam/OmiKit.git) (30/03/2026)
+
+### OMISIP Framework Rebuild (sip_timer race fix)
+
+### Crash Fixes (Crashlytics v3.4.2 — 30-day report)
+
+- **[CRASH #2] `pjmedia_port_destroy` abort on NULL port** (`OMIRingback.m`) — `dealloc` called `pjmedia_port_destroy(NULL)` when `pjmedia_tonegen_create2` failed in `init` (e.g. pool exhaustion). Added NULL guard: early-return if `ringbackPort == NULL`. Also fixed memory leak: port was never destroyed when `conf_remove_port` failed on double-stop — now always destroys port if non-NULL.
+
+- **[CRASH #2] `OMICall` dealloc inside PJSIP C callback** (`OMIEndpoint.m`, `onTxStateChange`) — All 3 `OMICall` lookups inside `onTxStateChange` (CANCEL, BYE, ACK blocks) used `__weak OMICall *call`. ARC could release the call object mid-callback while PJSIP still holds execution. Changed to strong references to defer dealloc past the callback scope.
+
+- **[CRASH #6] `CXCallAction` nil UUID crash** (`OMIEndpoint.m`, `onTxStateChange`) — CANCEL and BYE dispatch blocks captured `call.uuid` lazily inside `dispatch_async`. By the time the block ran on main thread, `__weak call` was already nil. Fixed by capturing UUID into a strong local variable before the `dispatch_async` block, with nil guard inside the block.
+
+- **[CRASH #8] `NSRegularExpression` crash on nil input** (`OMIUtils.m`) — `isPhoneNumber:nil` and `formatPhoneNumber:nil` passed nil to `numberOfMatchesInString:options:range:`, which throws `NSInvalidArgumentException`. Added nil/empty guard at entry of both methods: return `NO`/`@""` immediately.
+
+- **[CRASH #9] `pjsua_conf_connect2` assertion on invalid port** (`OMICall.m`, `toggleMute:`) — Mute triggered on a call that was already ended: `conf_slot` was invalid (≤ 0) but code fell through and called `pjsua_conf_connect`. Added `pjsua_call_is_active` guard at entry, and `return` after `conf_slot <= 0` error log.
+
+- **[CRASH #10] `NSCFString` out-of-bounds in `wasCallMissed:`** (`OMIEndpoint.m`) — `__weak` reference to `OMICall` was released before `getCallerName:` accessed `callerName`, feeding a nil or freed string to regex. Changed to strong reference + nil guard before string operations.
+
+---
+
+
 ## [1.11.5](https://github.com/VIHATTeam/OmiKit.git) (27/03/2026)
 
 ### Multi-Call Handling (2-layer rejection)
