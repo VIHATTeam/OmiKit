@@ -92,6 +92,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)invalidatePendingRecoveryCallbacks;
 
+/**
+ * FIX BB: Re-show Metal window after GPU recovery re-INVITE (flag=0).
+ * With flag=0 re-INVITE, wid stays the same but Metal was hidden by FIX AA.
+ * The normal show path is blocked by hasShownWindow=YES — this method bypasses that guard.
+ * Only call 2+ seconds after re-INVITE to ensure 200 OK has been processed.
+ * @param wid PJSIP video window ID (must match current stored windowId or call is skipped)
+ */
+- (void)reshowWindowAfterGPURecovery:(int)wid;
+
 @end
 
 NS_ASSUME_NONNULL_END

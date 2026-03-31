@@ -190,6 +190,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (atomic, assign) NSTimeInterval lastRecoveryCompletedTime;
 
+/**
+ * FIX BB: Re-show Metal window 2s after flag=0 GPU recovery re-INVITE.
+ * With flag=0 re-INVITE, wid stays same but Metal was hidden by FIX AA.
+ * The normal notification-driven re-show path is blocked by hasShownWindow=YES.
+ * This method bypasses that guard directly, called from forceReinviteForGPURecovery.
+ */
+- (void)reshowMetalWindowAfterGPURecovery:(int)wid;
+
 @end
 
 NS_ASSUME_NONNULL_END

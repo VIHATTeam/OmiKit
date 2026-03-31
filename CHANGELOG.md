@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.7](https://github.com/VIHATTeam/OmiKit.git) (31/03/2026)
+
+### Audio Routing
+
+- **Video call forces speaker when Bluetooth/wired headset is connected** (`OMIAudioController.m`, `configureAudioSession`) — `DefaultToSpeaker` + `overrideOutputAudioPort:Speaker` were unconditionally applied to all video calls. Fixed by checking `availableInputs` for `BluetoothHFP` / `HeadsetMic` before applying speaker override. When external audio is detected, both overrides skipped and `overrideNone` set so iOS routes naturally.
+
+- **FIX BT-1: First outgoing video call ignores Bluetooth headset** (`CallKitProviderDelegate.m`, `handleAudioRouteChange:`) — TWS headsets (JBL, AirPods) take 10-16s to reconnect HFP after app launch. `configureAudioSession` runs at call start (~T+0.1s) before HFP is available → speaker forced. When HFP reconnects mid-call, `handleAudioRouteChange` only logged but never reconfigured audio. Fixed: when `NewDeviceAvailable` fires with BT HFP in `availableInputs` and current output is Speaker during active video call, auto-reconfigure audio session to switch to headset.
+
+### Video Recovery
+
+- **FIX A v2: Rapid-fire re-INVITE storm on poor network** (`OMIEndpoint.m`, `onCallMediaState`) — `onCallMediaState` unconditionally reset `_lastForceReinviteTimestamp = 0` after every re-INVITE 200 OK, bypassing the 15s cooldown. On bad network: VT decode cascade → re-INVITE → `onCallMediaState` resets cooldown → another trigger fires immediately → 3 concurrent re-INVITEs in 1.4s → SIP race condition. Fixed with conditional reset: if re-INVITE was sent recently (< 30s), refresh timestamp to `now` (keeps 15s cooldown active); if > 30s or never, reset to 0 (preserves Fix A original intent for cross-call scenarios).
+
+- **FIX BB: Blank remote video after GPU recovery re-INVITE** (`OMIVideoPreviewView.m`, `OMIVideoCallManager.m`, `OMIEndpoint.m`) — `flag=0` re-INVITE keeps same wid + same Metal view pointer. FIX AA hides Metal before re-INVITE, but `hasShownWindow=YES` on `remoteVideoView` never reset → all notification-driven re-show paths skip (same view + `hasShownWindow=YES`) → Metal stays hidden forever. Fixed: at T+2s after re-INVITE, `reshowMetalWindowAfterGPURecovery:` directly resets `hasShownWindow=NO` and calls `showVideoWindowWithId:`, bypassing the notification-driven path. Guards: `isSetup`, `isVideoStarted`, `isRecoveryInProgress`, wid-match prevent stale callbacks.
+
+---
+
 ## [1.11.6](https://github.com/VIHATTeam/OmiKit.git) (30/03/2026)
 
 ### OMISIP Framework Rebuild (sip_timer race fix)
