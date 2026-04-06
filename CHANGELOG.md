@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+
+## [1.11.8](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
+
+### Crash Fixes
+
+- **[CRASH A] `endSingleCall` NSRangeException** (`OMICallManager.m`) — `self.calls[0]` was read twice: once at call-site and once inside an async `dispatch_async(main_queue)` completion block. The array can be emptied between the two reads, making the second access out-of-bounds. Fixed: capture strong reference `callToEnd = self.calls[0]` before dispatch, add bounds check (`calls.count == 0`) and nil guard before subscripting.
+
+- **[CRASH B] `getCallIDGenerate:` NSGenericException in CallKit** (`CallIDsManager.m`) — A nil `callUUID` passed to `getCallIDGenerate:` caused the method to return nil. Callers pass this return value directly to `CXEndCallAction` / `CXSetMutedCallAction`; CallKit initializes these actions via `__NSSingleObjectEnumerator init` which throws `NSGenericException` when given nil. Stack: `getCallIDGenerate:` → `callStateChanged:` → `setCallState:` → `decline:` → `provider:performEndCallAction:`. Fixed: nil guard at entry of `getCallIDGenerate:` returns `[NSUUID UUID]` instead of nil. Also fixed `genCallIDGenerate:callName:` with nil guard to prevent storing nil strings in `callIDsArray`, which would corrupt future lookups. Added nil checks for dictionary values inside the lookup loop.
+
+---
+
+
 ## [1.11.7](https://github.com/VIHATTeam/OmiKit.git) (31/03/2026)
 
 ### Audio Routing
