@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 
 
+
+## [1.11.9](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
+
+
+### Registration Fix
+
+- **Registration fails with `OMISIP_EINVALIDURI` when UDP IPv4 STUN times out** (`OMIEndpoint.m`) — When STUN server is unreachable on UDP/IPv4 (e.g. blocked port), PJSIP falls back to UDP6 transport and sets `isV6Transport = YES`. TCP4 then creates successfully, but `isV6Transport` stays `YES`. Account Contact URI is built from UDP6 link-local (`fe80::`) instead of TCP4 IPv4 → PJSIP rejects as `Invalid URI (OMISIP_EINVALIDURI)` → registration never sends. Fixed: when TCP4 creates successfully in the has-valid-IPv4 path, reset `isV6Transport = NO` so Contact URI uses correct IPv4 address.
+
+---
+
+
 ## [1.11.8](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
 
 ### Crash Fixes
