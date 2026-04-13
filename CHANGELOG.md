@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.11.10](https://github.com/VIHATTeam/OmiKit.git) (13/04/2026)
+
+### Video Call — Resolution Change Fix (FIX QQ series)
+
+- **[ROOT CAUSE] Remote video permanently lost after resolution change** (`vid_toolbox.m`) — When remote switches resolution (e.g. 240x426 → 360x640), VideoToolbox callback detects the new size but the first decode attempt fails (err:220082, P-frame mismatch). The `FMT_CHANGED` event broadcast was inside the decode-success-only branch, so it **never fired** on decode failure. Result: vid_conf never learned the new resolution → buffer overflow (`supplied=153360, required=345600`) looped forever → VT decode cascade → re-INVITE → OMISIP mutex deadlock → video dead permanently. Fixed: moved `FMT_CHANGED` broadcast outside the success/failure branch — fires regardless of decode result. **(FIX QQ-7)**
+
+- **[BACKUP] Direct port format update on buffer overflow** (`vid_stream.c`) — When `get_frame()` detects buffer overflow, directly update decoder port format from `codec_param->dec_fmt` (already updated by VT callback). This lets vid_conf detect size mismatch via `cmp_size()` and resize buffer even if FMT_CHANGED event is delayed. Belt-and-suspenders for QQ-7. **(FIX QQ-6)**
+
+- **[SAFETY] Block all re-INVITE escalation from decode cascades** (`OMIEndpoint.m`) — Previously, 4 separate code paths could trigger `forceReinviteForGPURecovery`: buffer overflow handler, VT cascade >10s, FIX ZZ Phase 3 (20s), and IFRM cascade. re-INVITE destroys entire media session → SDP renegotiation often causes remote to stop sending video → OMISIP mutex deadlock. All 4 paths now send PLI + reset cascade instead. Only intentional re-INVITE (video bitrate adaptation) remains. **(FIX QQ-5)**
+
+- **[SAFETY] Prevent main thread deadlock from stats timer** (`OMICall.m`) — `calculateStats` and `checkIfAudioPresent` used `[OMIThread runSync:]` (dispatch_sync to global queue). When called from NSTimer on main thread during re-INVITE (OMISIP mutex held), main thread blocked indefinitely → all timers stopped → MOS loop died → no recovery possible. Changed to async `[OMIThread run:]`. **(FIX QQ-3)**
+
+### Diagnostic Logging
+
+- **SDP diagnostic logging in `onCallSdpCreated`** — Logs media direction, port, connection address for both local and remote SDP on every SDP creation (including re-INVITE).
+- **Media state diagnostic logging in `onCallMediaState`** — Logs per-media type, status, direction, window ID, and video RTP packet counters (rx/tx) after every media state change.
+
+---
+
 
 ## [1.11.9](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
 
