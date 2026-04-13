@@ -1,9 +1,18 @@
-# Changelog
+# CHANGELOG of OmiKit
 
-All notable changes to this project will be documented in this file.
+## [1.11.11] - 2026-04-13
 
+### Thread Safety
 
-## [1.11.10](https://github.com/VIHATTeam/OmiKit.git) (13/04/2026)
+- **Assertion crash: "Calling pjlib from unknown/external thread"** (`OMICall.m`, `OMIEndpoint.m`) — Two SDK functions call OMISIP C API directly without registering the calling thread:
+  1. `connectDuration` getter (`OMICall.m`) — calls `pjsua_call_get_info()`. Triggered when client app reads call duration from `DispatchQueue.global()` (SwiftUI `.onChange` after background→foreground).
+  2. `resetOpusCodecToDefault` (`OMIEndpoint.m`) — calls `pjsua_codec_get_param()`. Triggered from `NSNotificationCenter` observer on `[NSOperationQueue mainQueue]` during call cleanup (cuộc 1 kết thúc → cleanup → reset codec → assertion → cuộc 2 bị ảnh hưởng).
+  
+  Fixed: added `[OMIThread ensureThreadRegistered]` at entry of both functions. No-op for already-registered threads.
+
+---
+
+## [1.11.10] - 2026-04-13
 
 ### Video Call — Resolution Change Fix (FIX QQ series)
 
@@ -22,9 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.11.9](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
-
+## [1.11.9] - 2026-04-06
 
 ### Registration Fix
 
@@ -32,8 +39,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.11.8](https://github.com/VIHATTeam/OmiKit.git) (06/04/2026)
+## [1.11.8] - 2026-04-06
 
 ### Crash Fixes
 
@@ -43,8 +49,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.11.7](https://github.com/VIHATTeam/OmiKit.git) (31/03/2026)
+## [1.11.7] - 2026-03-31
 
 ### Audio Routing
 
@@ -60,9 +65,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.11.6](https://github.com/VIHATTeam/OmiKit.git) (30/03/2026)
+## [1.11.6] - 2026-03-30
 
 ### OMISIP Framework Rebuild (sip_timer race fix)
+
+- **[CRASH #3] `pjsip_timer_init_session` abort after ICE completion** (`pjsip/src/pjsip-ua/sip_timer.c:625`) — Race condition between ICE async callback and endpoint shutdown: user hangs up → `pjsip_timer_deinit_module()` sets `is_initialized=FALSE` → ICE timer fires late → `on_make_call_med_tp_complete` → `pjsip_timer_init_session` → `pj_assert(is_initialized)` → **SIGABRT**. Fixed by replacing `pj_assert(is_initialized)` with `PJ_ASSERT_RETURN(is_initialized, PJ_EINVALIDOP)` — converts fatal abort to graceful error return. Caller already handles `status != PJ_SUCCESS` via `goto on_error`. OMISIP framework rebuilt from source; all existing configuration preserved (video 1080p@30fps, VideoToolbox HW H.264, OpenH264, Opus 48kHz, ICE/STUN/TURN, TLS/SRTP, WebRTC AEC).
 
 ### Crash Fixes (Crashlytics v3.4.2 — 30-day report)
 
@@ -80,8 +87,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.11.5](https://github.com/VIHATTeam/OmiKit.git) (27/03/2026)
+## [1.11.5] - 2026-03-27
 
 ### Multi-Call Handling (2-layer rejection)
 
@@ -115,13 +121,9 @@ All notable changes to this project will be documented in this file.
 
 - **CallingView timer fix** (`ViewController.m`) — Outgoing: reuse existing CallingView at CONFIRMED instead of creating new one. Incoming: start timer in present completion block. Timer now counts correctly for both directions.
 
-### CI/CD
-
-- Changed `s.changelog` in podspec to point to GitHub Releases page for better changelog display on CocoaPods
-
 ---
 
-## [1.11.4](https://github.com/VIHATTeam/OmiKit.git) (23/03/2026)
+## [1.11.4] - 2026-03-23
 
 ### Multi-Call Support
 
@@ -153,14 +155,9 @@ All notable changes to this project will be documented in this file.
 
 - **CallingView timer fix** (`ViewController.m`) — Outgoing: reuses existing CallingView on CONFIRMED instead of creating duplicate. Incoming: starts timer in present completion block since CONFIRMED notification fires before CallingView exists.
 
-### CI/CD
-
-- Added GitHub Actions workflow for automated CocoaPods release (tag + lint + trunk push on version bump)
-- Added `s.changelog` URL to podspec for CocoaPods changelog display
-
 ---
 
-## [1.11.3](https://github.com/VIHATTeam/OmiKit.git) (19/03/2026)
+## [1.11.3] - 2026-03-19
 
 ### Crash Fixes (Crashlytics top crashes — ~503 crashes eliminated)
 
@@ -170,11 +167,11 @@ All notable changes to this project will be documented in this file.
 
 - **PushKit VoIP kill by iOS** (`VoIPPushHandler.m`, Crash #4 — 85 crashes) — Duplicate VoIP push detection (FIX PUSH-1) called `completion()` without `reportNewIncomingCall` → iOS killed app. Fixed: duplicate push path now calls `reportAndEndDummyCallWithCompletion` to satisfy PushKit requirement.
 
-- **pjsip_timer_init_session crash** (`OMICallManager.m`, Crash #5 — 91 crashes) — `startCallToNumberNoReg` created PJSIP session while endpoint transitioning to Closing state → session pool corrupt → crash. Fixed: added `pjsua_get_state() != PJSUA_STATE_RUNNING` guard before call creation.
+- **pjsip_timer_init_session crash** (`OMICallManager.m`, Crash #5 — 91 crashes) — `startCallToNumberNoReg` created OMISIP session while endpoint transitioning to Closing state → session pool corrupt → crash. Fixed: added `pjsua_get_state() != PJSUA_STATE_RUNNING` guard before call creation.
 
 ### Call Handling
 
-- **OMIHaveAnotherCall false positive** (`OmiClient.m`) — `getNewestCall != nil` rejected new calls even when existing call was already `disconnected`/`disconnecting` (PJSIP cleanup delay). Most common customer complaint. Fixed: added `callState` check — only reject if existing call is truly active (not disconnected/disconnecting).
+- **OMIHaveAnotherCall false positive** (`OmiClient.m`) — `getNewestCall != nil` rejected new calls even when existing call was already `disconnected`/`disconnecting` (OMISIP cleanup delay). Most common customer complaint. Fixed: added `callState` check — only reject if existing call is truly active (not disconnected/disconnecting).
 
 - **OMIHaveAnotherCall diagnostic logging** (`OmiClient.m`) — All 3 HaveAnotherCall exit paths now log full context (SIP user, endpoint state, all active calls with uuid/state/phone/createDate) and auto-upload log file. Search `[HaveAnotherCall]` on server to diagnose.
 
@@ -188,9 +185,9 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.11.2](https://github.com/VIHATTeam/OmiKit.git) (18/03/2026)
+## [1.11.2] - 2026-03-18
 
-### Video Call Stability (PJSIP Metal Renderer)
+### Video Call Stability (OMISIP Metal Renderer)
 
 - **CADisplayLink renderer replaces performSelectorOnMainThread** (`metal_dev.m`) — Metal rendering no longer competes with SwiftUI/RN/Flutter for main thread time. Frames render at display vsync via dedicated CADisplayLink, bypassing main thread entirely. Video stable 5+ minutes on SwiftUI client (was 5-8 seconds before).
 
@@ -226,13 +223,13 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.11.0](https://github.com/VIHATTeam/OmiKit.git) (15/03/2026)
+## [1.11.0] - 2026-03-15
 
 ### Fixed
 
-- **App freeze (deadlock) after FORMAT_CHANGE during video call** — ABBA deadlock between PJSIP decode thread (holding stream mutex, waiting for PJSUA_LOCK) and PLI retry thread (holding PJSUA_LOCK, waiting for stream mutex). `onCallMediaEvent` FMCH callback called `pjsua_call_get_info()` directly on decode thread → deadlock → app completely unresponsive.
+- **App freeze (deadlock) after FORMAT_CHANGE during video call** — ABBA deadlock between OMISIP decode thread (holding stream mutex, waiting for PJSUA_LOCK) and PLI retry thread (holding PJSUA_LOCK, waiting for stream mutex). `onCallMediaEvent` FMCH callback called `pjsua_call_get_info()` directly on decode thread → deadlock → app completely unresponsive.
 
-  **Fix II** (`OMIEndpoint.m`): Capture event data (`size`, `call_id`, `med_idx`) by value before async dispatch, then wrap all FMCH processing in `[OMIThread run:^{...}]` to execute on GCD queue with PJSIP thread registration instead of on the decode thread holding stream mutex.
+  **Fix II** (`OMIEndpoint.m`): Capture event data (`size`, `call_id`, `med_idx`) by value before async dispatch, then wrap all FMCH processing in `[OMIThread run:^{...}]` to execute on GCD queue with OMISIP thread registration instead of on the decode thread holding stream mutex.
 
 - **EXC_BAD_ACCESS crash after ~30s in video call** — `attemptViewSwapRecovery` called from `handlePJIgnoredBurstDetected` on GCD background thread created UIView and accessed `self.remoteContainerView.bounds` off main thread → crash at `objc_msgSend`.
 
@@ -244,7 +241,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.10.38](https://github.com/VIHATTeam/OmiKit.git) (15/03/2026)
+## [1.10.38] - 2026-03-15
 
 ### Fixed
 
@@ -254,7 +251,7 @@ All notable changes to this project will be documented in this file.
   1. VT decode cascade (15 errors / 0.5s) fires → `handleH264DecodeErrorBurst` (FIX PP) sets `hasMetalDrawableError=YES` + schedules 5000ms Metal recovery
   2. FMCH (format change 1920x1080→640x480) fires ~1.6s later → `handleMetalStreamRestarted` clears `hasMetalDrawableError=NO` + increments `keyframeRetryGeneration` (cancels 5000ms block) + schedules `dispatch_async(main_queue, ^{ hideLoadingIndicator })`
   3. Metal stream physically restarts immediately ("Starting Metal video stream gen=1")
-  4. Within the ~100-200ms stabilization window before drawable pool is fully initialized, PJSIP delivers frames → PJ_EIGNORED burst fires
+  4. Within the ~100-200ms stabilization window before drawable pool is fully initialized, OMISIP delivers frames → PJ_EIGNORED burst fires
   5. `handlePJIgnoredBurstDetected` sets `hasMetalDrawableError=YES` AGAIN
   6. `dispatch_async(main_queue, ^{ hideLoadingIndicator })` from step 2 arrives, sees `hasMetalDrawableError=YES` → BLOCKED → loading spinner stuck FOREVER → user sees frozen screen
 
@@ -262,7 +259,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.10.37](https://github.com/VIHATTeam/OmiKit.git) (12/03/2026)
+## [1.10.37] - 2026-03-12
 
 ### Fixed
 
@@ -274,7 +271,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [1.10.36](https://github.com/VIHATTeam/OmiKit.git) (12/03/2026)
+## [1.10.36] - 2026-03-12
 
 ### Fixed
 
@@ -294,8 +291,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.10.35](https://github.com/VIHATTeam/OmiKit.git) (10/03/2026)
+## [1.10.35] - 2026-03-10
 
 ### Fixed
 
@@ -303,7 +299,7 @@ All notable changes to this project will be documented in this file.
 
 - **Call immediately after hangup causes 3-5s silent freeze** — When endpoint is mid-destroy (`OMIEndpointClosing`) after previous call ended, `startOmiService` kicked off async config that raced with the ongoing destroy. Now `startCall2` detects `OMIEndpointClosing` and skips `startOmiService`, going directly to `handleEndpointNotAvailable` which properly waits for destroy completion before retrying (OmiClient.m)
 
-- **Declining incoming call B kills audio of active call A** — `performEndCallAction` called `deactivateSoundDevice` unconditionally for every end call action. `pjsua_set_no_snd_dev()` is GLOBAL — it closes the single shared audio device for all PJSIP calls. When user declines call B while call A is active, this killed call A's audio immediately. Fixed by checking if other active calls exist before deactivating; skips `deactivateSoundDevice` when other calls are still running (CallKitProviderDelegate.m). Secondary fix: `setCallState` Disconnected handler now uses account-agnostic `getAllCalls` check alongside `activeCallsForAccount` to prevent false-empty from account mismatch triggering redundant audio deactivation (OMICall.m)
+- **Declining incoming call B kills audio of active call A** — `performEndCallAction` called `deactivateSoundDevice` unconditionally for every end call action. `pjsua_set_no_snd_dev()` is GLOBAL — it closes the single shared audio device for all OMISIP calls. When user declines call B while call A is active, this killed call A's audio immediately. Fixed by checking if other active calls exist before deactivating; skips `deactivateSoundDevice` when other calls are still running (CallKitProviderDelegate.m). Secondary fix: `setCallState` Disconnected handler now uses account-agnostic `getAllCalls` check alongside `activeCallsForAccount` to prevent false-empty from account mismatch triggering redundant audio deactivation (OMICall.m)
 
 - **End call A + accept call B → audio lost on call B** — CallKit transition fires `AVAudioSessionInterruptionTypeBegan` temporarily. `audioInterruption:` unconditionally called `deactivateSoundDevice` → posted `OMIAudioControllerAudioInterrupted` → `OMICall.audioInterruption:` called `toggleHold` → re-INVITE with sendonly SDP → call B permanently on HOLD. Fixed by adding active-calls guard: when `InterruptionTypeBegan` fires and active calls exist, skip `deactivateSoundDevice` and do NOT post the interrupted notification (OMIAudioController.m)
 
@@ -315,24 +311,27 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
-## [1.10.34](https://github.com/VIHATTeam/OmiKit.git) (05/03/2026)
-
+## [1.10.34] - 2026-03-05
 
 ### Fixed
 
-- **Outgoing call disconnects immediately when remote answers** — Audio underflow storm detector (Fix N) was false-triggering on ringback teardown at `CONFIRMED` state. When the remote party answers, PJSIP disconnects the ringback tone port (`Conf disconnect: 1 -x- 0`) causing a brief `playdbuf/capdbuf` underflow burst (~30 underflows in 0.4s) — a normal, self-resolving audio glitch. This burst incorrectly matched the TCP RST storm threshold (30 underflows in 2s), causing `CXEndCallAction` to fire at `call_secs=0` and disconnect the call. Fixed by adding a 3-second suppression window after call enters `CONFIRMED`: underflow bursts within 3s of `CONFIRMED` are discarded and the counter reset. Real TCP RST storms (which occur after the call has been running for several seconds) are unaffected. Uses a file-scope `_lastCallConfirmedTimestamp` static (ARM64 atomic double) set in `onCallState` — safe to read from the audio thread without ObjC object access (OMIEndpoint.m)
+- **Outgoing call disconnects immediately when remote answers** — Audio underflow storm detector (Fix N) was false-triggering on ringback teardown at `CONFIRMED` state. When the remote party answers, OMISIP disconnects the ringback tone port (`Conf disconnect: 1 -x- 0`) causing a brief `playdbuf/capdbuf` underflow burst (~30 underflows in 0.4s) — a normal, self-resolving audio glitch. This burst incorrectly matched the TCP RST storm threshold (30 underflows in 2s), causing `CXEndCallAction` to fire at `call_secs=0` and disconnect the call. Fixed by adding a 3-second suppression window after call enters `CONFIRMED`: underflow bursts within 3s of `CONFIRMED` are discarded and the counter reset. Real TCP RST storms (which occur after the call has been running for several seconds) are unaffected. Uses a file-scope `_lastCallConfirmedTimestamp` static (ARM64 atomic double) set in `onCallState` — safe to read from the audio thread without ObjC object access (OMIEndpoint.m)
 
+---
 
-
-## [1.10.33](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
+## [1.10.33] - 2026-03-04
 
 ### Added
 
-- **DNS pre-warm for TURN/STUN servers** — Added `+prewarmDNSForHosts:` class method on `OMIEndpoint` that runs `getaddrinfo` on a HIGH priority background thread to warm the OS DNS cache before PJSIP needs to resolve TURN/STUN hostnames. Called automatically in `createAccountWithSipUser:` with the actual dynamic STUN/TURN servers from the account configuration (vary per country/network). Eliminates TURN DNS cold-start delay of 5+ seconds that caused `PJ_ETIMEDOUT` on first outgoing call after a cold app launch (OMIEndpoint.m, OMIEndpoint.h, OMISIPLib.m)
+- **DNS pre-warm for TURN/STUN servers** — Added `+prewarmDNSForHosts:` class method on `OMIEndpoint` that runs `getaddrinfo` on a HIGH priority background thread to warm the OS DNS cache before OMISIP needs to resolve TURN/STUN hostnames. Called automatically in `createAccountWithSipUser:` with the actual dynamic STUN/TURN servers from the account configuration (vary per country/network). Eliminates TURN DNS cold-start delay of 5+ seconds that caused `PJ_ETIMEDOUT` on first outgoing call after a cold app launch (OMIEndpoint.m, OMIEndpoint.h, OMISIPLib.m)
 
+### Fixed
 
-## [1.10.32](https://github.com/VIHATTeam/OmiKit.git) (04/03/2026)
+- **`logoutWithCompletion:` always returns YES** — HTTP device deregister request is best-effort cleanup. Local SIP session is always cleared regardless of HTTP result. Returning `NO` on HTTP failure caused callers to incorrectly believe logout failed and block re-login. Completion now always called with `YES` (OmiClient.m)
+
+---
+
+## [1.10.32] - 2026-03-04
 
 ### Added
 
@@ -342,935 +341,163 @@ All notable changes to this project will be documented in this file.
 
 - `logout` now internally delegates to `logoutWithCompletion:nil` — identical behavior, no breaking change
 
+---
 
-## [1.10.31](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
-
-### Added
-- **OmiClient: `isNetworkAvailable`** - New static method to check if network is available (WiFi or Cellular) before starting a call
-- **OMICall: `OMINoNetwork` status** - New `OMIStartCallStatus` enum value returned when attempting to start a call with no network connectivity
-
-### Improved
-- **OMIStartCallStatus enum formatting** - Code style cleanup in enum declaration
-
-## [1.10.29](https://github.com/VIHATTeam/OmiKit.git) (03/03/2026)
+## [1.10.31] - 2026-03-03
 
 ### Added
-- **VoIPPushHandler: `reportAndEndDummyCallWithCompletion:`** - New static method to report and end dummy CallKit call with completion handler, improving PushKit compliance when no valid incoming call is available
 
-### Fixed
-- **XCFramework: Info.plist library identifiers** - Fixed incorrect `LibraryIdentifier` mapping in XCFramework Info.plist. Correctly associates `ios-arm64-simulator` with simulator variant and `ios-arm64` with device
-
-## [1.10.28](https://github.com/VIHATTeam/OmiKit.git) (27/02/2026)
-
-### Added
-- **OMIEndpoint: `ensureVideoCodecsConfigured`** - Lazy initialization of video codecs on first video call. Calls `adjustVideoStreamConfig` only once, safe to call multiple times (no-op after first configuration)
-
-### Fixed
-- **Video: Codec initialization timing** - Prevent codec configuration race condition by deferring `adjustVideoStreamConfig` until first video call instead of during SDK startup
-
-## [1.10.27](https://github.com/VIHATTeam/OmiKit.git) (25/02/2026)
-
-### Fixed
-- **Video: CAMetalLayerDrawable corruption recovery** - Added `forceRestartVideoStreamForDrawableRecovery` method to OMIEndpoint for fast Metal video stream restart (~165ms) when `addPresentedHandler` errors occur. Resets codec cache to force fresh drawable pool without full re-INVITE (~2-5s)
-- **Video: VideoToolbox -12909 decode error cascade detection** - Added `isVTDecodeCascadeActive` method to OMIEndpoint to prevent false "resolved" detection when RTCP packets arrive but decoded frames are zero
-- **Video: Metal recovery coordination** - Added `isRecoveryInProgress` flag and `lastRecoveryCompletedTime` cooldown (2s) in OMIVideoCallManager to prevent overlapping recovery operations
-
-### Added
-- **OMIVideoPreviewView: `hasShownWindow` property** - Read-only property to check if PJSIP video window has been successfully shown (`pjsua_vid_win_set_show` called). Used to verify video is rendering before triggering recovery
-- **Example: Complete SIP end cause messages** - Added 27 status codes in `getEndCauseMessage` including standard SIP codes (200, 408, 480, 486, 487, 500, 503, 600-603) and OmiCall custom codes (850-865: call limits, DNC list, prefix routing, trial package limits, advertising time restrictions)
-- **Example: AppDelegate-based OMICallDealloc observer** - Moved observer from CallManagerV2 to AppDelegate with `handleCallEnded` forwarding for reliable notification delivery
-
-## [1.10.25](https://github.com/VIHATTeam/OmiKit.git) (11/02/2026)
-
-### Fixed
-- **Podspec: EXCLUDED_ARCHS for simulator** - Changed from `arm64` to `x86_64` to fix `pod lib lint` validation failure on Apple Silicon (arm64 simulator slice)
-- **Example: OMICallDeallocNotification observer not receiving events** - Moved observer registration from CallManagerV2 to AppDelegate using selector-based pattern (matching Objective-C example) for reliable notification delivery
-- **Example: Swift 6 Sendable warnings in notification observers** - Extract all data from `notification.userInfo` before entering `MainActor.assumeIsolated` context to prevent data race warnings
-- **Example: Logout not clearing saved credentials** - Added `UserDefaults.synchronize()` to force immediate save when clearing login credentials
-- **Example: Duplicate PushKitManager conflict** - Removed local PushKitManager.swift that conflicted with OmiKit SDK's built-in `PushKitManager.sharedInstance()`
-
-### Added
-- **Example: UUID + Phone login support** - Added `loginWithUUID(usrUuid:fullName:apiKey:phone:)` in CallManagerV2 with toggle UI in LoginView for switching between SIP and UUID login modes
-- **Example: Comprehensive README** - Added call flow diagrams (ASCII art), CallManager vs CallManagerV2 comparison, Swift 6 setup guide, and API reference
-- **Main README: Link to Example README** - Added section pointing to SwiftUI Example Project documentation
+- **Network check before startCall (fast-fail)** — Added `isNetworkAvailable` class method (singleton Reachability) to check network before attempting SIP registration. `startCall:` and `startCallWithUuid:` now return `OMINoNetwork` immediately (<1ms) when device has no connection, instead of waiting 10-32s for SIP registration timeout. New `OMINoNetwork` status added to `OMIStartCallStatus` enum (OmiClient.m, OmiClient.h, OMICall.h)
 
 ### Changed
-- **Example: Notification observer pattern** - OMICallDealloc uses selector-based observer in AppDelegate; CallKit and CallState observers use closure-based pattern with `queue: .main` in CallManagerV2
 
-## [1.10.24](https://github.com/VIHATTeam/OmiKit.git) (10/02/2026)
+- `OMIStartCallStatus` enum — Added `OMINoNetwork` value for explicit no-network error detection
+
+---
+
+## [1.10.29] - 2026-03-02
+
+### Critical Crash Fixes (Firebase Crashlytics)
+
+- **P0: Speaker button causes call disconnect on iOS 18** — `OMIAudioController.setOutput:` called `setCategory:PlayAndRecord mode:VoiceChat` (missing Bluetooth options, wrong mode for video) + `setActive:YES` (conflicts with CallKit audio session ownership). iOS 18 enforces strict CallKit → audio interruption → `deactivateSoundDevice` → call disconnect. Fixed by removing `setCategory` and `setActive:YES`, keeping only `overrideOutputAudioPort:` for speaker toggle. Bluetooth path uses `setPreferredInput:` separately (OMIAudioController.m)
+- **P0: pjmedia_codec_mgr_enum_codecs crash (17 crashes, 14 users)** — `pjmedia_codec_mgr` NULL during VoIP push cold start. `@try-@catch` cannot catch C-level EXC_BAD_ACCESS. Single 100ms delay insufficient. Fixed by: (1) NULL check `pjsua_get_pjmedia_endpt()` and `pjmedia_endpt_get_codec_mgr()` before `pjsua_enum_codecs`; (2) Retry mechanism `updateAudioCodecsWithRetry:` with delays 200ms→500ms→1000ms replacing single dispatch_after (OMIEndpoint.m)
+- **P0: PushKit kills app — "never posted incoming call" (14 crashes, 7 users)** — iOS requires `reportNewIncomingCall` for EVERY VoIP push. Multiple early-return paths (callId nil, UUID invalid, virtual push, provider nil) called `completion()` without reporting CallKit → iOS kills app. Fixed by adding `reportAndEndDummyCallWithCompletion:` — reports dummy incoming call then immediately ends it. All early-return paths in `VoIPPushHandler.handle` and `PushKitManager.didReceiveIncomingPush` now call this method (VoIPPushHandler.m, VoIPPushHandler.h, PushKitManager.m)
+
+### Changed
+
+- `updateAudioCodecs` return type changed from `void` to `BOOL` (returns NO if codec manager not ready)
+- Added `updateAudioCodecsWithRetry:` method with escalating delays for cold start reliability
+- Exposed `reportAndEndDummyCallWithCompletion:` as public class method on VoIPPushHandler
+
+---
+
+## [1.10.27] - 2026-02-25
+
+### Video Call - Critical Fixes
+
+- **Critical: VideoToolbox H.264 decode failures causing 43s video lag** - Old code assigned Level 3.0 profile (`42001e`) for portrait videos (width < 1280), but 480x854 = 409,920 pixels exceeds Level 3.0 max (345,600) → VideoToolbox rejected ALL frames → 435 decode failures. Fixed by always using Level 4.0 (`420028`) profile which handles all resolutions up to 2M pixels. Also removed `decoderSizeChanged` condition that triggered mid-call decoder changes causing Metal stream restart and GPU Timeout (OMIEndpoint.m)
+- **Critical: Incoming video call loading forever** - `reinviteWithVideoIfCalling` had wrong guard using `isVideoActive` instead of `checkIsVideoReceivingFrames`. `isVideoActive=YES` only means OMISIP opened media channel, NOT that frames are flowing (TURN CreatePermission can lag 2s+). Fixed by removing `isVideoActive` guard and relying solely on `checkIsVideoReceivingFrames` (real Metal frame count). Added 5s fallback timer after video window shown to force re-INVITE if no frames received (OMIEndpoint.m, OMIVideoCallManager.m)
+- **Critical: onCallState CONFIRMED not fired after ACK** - OMISIP fires `on_tsx_state(CONFIRMED)` when UAS receives ACK but does NOT fire `on_call_state(CONFIRMED)`. This caused remote video to stay on loading forever because `reinviteWithVideoIfCalling` was never triggered. Fixed by detecting UAS INVITE CONFIRMED in `on_tsx_state` callback and manually calling `callStateChanged:` (OMIEndpoint.m, OMIVideoCallManager.m)
+- **Critical: PJ_ETOOBIG (70017) → no video both sides on App→Web calls** - `reinviteWithVideoIfCalling` used `pjsua_call_update()` with `PJSUA_CALL_UPDATE_VIA` flag → triggered `OMISIP_CALL_REINIT_MEDIA` → destroyed all media BEFORE SDP generation → SDP with ICE candidates exceeded `OMISIP_MAX_PKT_LEN=4000` → PJ_ETOOBIG → media permanently lost. Fixed by: (1) Removing `pjsua_call_update()` entirely, using only `pjsua_call_reinvite2()` with flag=0; (2) Increasing outgoing call CONFIRMED delay from 2s to 5s; (3) Adding `OMISIP_MAX_PKT_LEN=8000` to config_site.h (OMIEndpoint.m, OMIVideoCallManager.m, config_site.h)
+- **Critical: vid_conf buffer overflow → outgoing video loading** - OMISIP vid_conf.c internally resizes decode buffer on FMT_CHANGED (1504x1504 → 480x360 → buffer shrinks to 259,200). When remote changes to 640x480, VideoToolbox needs 460,800 bytes → overflow. Fixed by detecting "not enough buffer" log message immediately and triggering `reinviteWithVideoIfCalling` with 8s cooldown (OMIEndpoint.m)
+- **Critical: VT-DECODE-ERROR cascade → 29s frozen video on outgoing calls** - 4th `onCallMediaState` (FreeSWITCH ICE renegotiation) triggered Metal addPresentedHandler errors → VT session malfunction (-12909) → cascade. Metal recovery hid/showed window creating 23s "lull" where no errors fired → normal escalation check missed it. Fixed by adding guaranteed 8s dispatch_after timer from cascade START. Also: reset `_lastForceReinviteTimestamp` in `onCallMediaState`, reduced reinvite cooldown from 30s to 15s with deferred retry, and added `isVTDecodeCascadeActive` method to prevent false RTCP-based cascade resolution (OMIEndpoint.m, OMIVideoPreviewView.m)
+- **Critical: Video freeze + app unresponsive after 15s (infinite re-INVITE loop)** - Level 5.1 decoder (2912x2912 Metal port) + FMT_CHANGED resize corruption + no cooldown caused infinite loop: re-INVITE → Level 5.1 → FMT_CHANGED → corruption → 8s timer → re-INVITE → repeat. Fixed by: (1) Changed decoder from Level 5.1 to Level 4.2 (~1500x1500 Metal port); (2) Reset cascade state in FMT_CHANGED handler; (3) Reduced max hard recovery attempts to 2 with 15s cooldown; (4) Always recreate Metal views during GPU recovery to prevent corrupted CAMetalLayer reuse (OMIEndpoint.m, OMIVideoCallManager.m, OMIVideoPreviewView.m)
+- **Critical: Transient VT -12909 triggers unnecessary re-INVITE → video lost + app freeze** - Single transient VT decode error (1-frame corrupt packet) triggered immediate re-INVITE → REINIT_MEDIA destroyed ALL media → ICE UPDATE → TCP RST → audio underflow storm → app freeze. Fixed by adding transient error gate: check `checkIsVideoReceivingFrames` first — if video IS receiving → send PLI burst instead of re-INVITE → wait 3s → check if cascade resolved. Only escalate to re-INVITE if cascade persists (OMIVideoPreviewView.m)
+- **Critical: GPU Timeout during PLI recovery wait** - Metal window stayed active during PLI recovery → OMISIP kept sending frames to corrupted Metal port → 350+ GPU Timeout errors in 5s → GPU entered "penalty box" → ALL Metal rendering rejected 30s+. Fixed by hiding Metal window immediately when entering PLI recovery (`pjsua_vid_win_set_show(PJ_FALSE)`) → stops frame delivery → no GPU commands → no GPU Timeout (OMIVideoPreviewView.m)
+- **Critical: SIP UPDATE → remote video disappears after ~1 minute** - Remote server sends SIP UPDATE with SDP renegotiation → OMISIP destroys old video stream → creates new stream with SAME window ID (wid=1) but NEW Metal UIView. Old guard `lastVideoWindowId != videoWindowId` → FALSE → notification skipped → new UIView never added to view hierarchy. Fixed by comparing OMISIP render view pointer (`pjsua_vid_win_get_info` → `wi.hwnd.info.ios.window`) instead of window ID. New `lastVideoRenderViewPtr` property detects stream recreation even when wid is unchanged (OMICall.m)
+- **Critical: Background→Foreground video failure (intermittent)** - 4 compounding bugs during background→foreground transition: (1) `forceReinviteForGPURecovery` dispatch_after on main queue never fires when main queue blocked → moved to global queue; (2) cooldown timestamp set before dispatch_after (never fires = cooldown blocks all retries 15s) → moved inside block; (3) stale `lastVideoWidth` on singleton across endpoint recreations → reset on startup; (4) `lastSuccessfulRenderTimestamp` guard 2.0s too generous for background→foreground → reduced to 0.5s (OMIEndpoint.m, OMIVideoPreviewView.m)
+- **Metal drawable error detection** - Metal "addPresentedHandler" errors go to stderr directly, not through OMISIP logCallBack → detection never fired. Fixed by piggybacking Metal recovery on H264 decode error burst notification (always co-occur) instead of relying on log detection (OMIVideoPreviewView.m)
+
+### Audio Call - Critical Fixes
+
+- **Critical: Audio underflow storm → app freeze, can't end call** - TCP RST kills SIP transport → audio device enters infinite underflow loop (50+ underflow messages in 30ms) → floods logCallBack → blocks OMISIP thread → app unresponsive. Fixed by: (1) Early return in logCallBack with static storm detection flag (skip ALL underflow messages once detected); (2) Count rapid underflow messages (threshold=30 in 2s) → force CallKit CXEndCallAction (works without OMISIP mutex) (OMIEndpoint.m)
+- **Critical: Hangup deadlock → app freeze + infinite audio loop** - Cascading PJSUA_LOCK deadlock: internal thread holds lock → `pjsua_call_hangup` blocks → `deactivateSoundDevice` blocks → `dispatch_after(100ms) removeCall` on main thread → `destroyEndpoint` → main thread blocked → UI freeze. Fixed by: (1) Removed `dispatch_after removeCall` from CallKitProviderDelegate; (2) Rewritten hangup to be fully async (no semaphore wait); (3) Emergency AVAudioSession deactivation on hangup failure; (4) 5s safety timeout with forced cleanup; (5) Removed synchronous `toggleMute:` from postCallCleanup (CallKitProviderDelegate.m, OMICall.m)
+- **Critical: EXC_BAD_ACCESS in handle_incoming_sip_message** - `rdata->msg_info.msg_buf` is a `char*` pointer that gets corrupted during OMISIP internal processing (ICE/TURN init + 100 Trying). `stringWithUTF8String:` tries to read from corrupted address → EXC_BAD_ACCESS (Mach exception, cannot be caught by @try-@catch). Fixed by using `rdata->pkt_info.packet` (fixed `char[]` array embedded in rdata struct) with bounds-safe `initWithBytes:length:encoding:` (OMIEndpoint.m)
+- **Critical: Spam check kills answered call ("call failed" on accept from background)** - Root cause chain: (1) OMISIP reuses rdata buffer during INVITE processing → `pkt_info.packet` overwritten by 401 REGISTER response; (2) `handle_incoming_sip_message` reads REGISTER instead of INVITE → `stateSignalSwitchBoard` not set; (3) spam check timer (2s) finds empty `stateSignalSwitchBoard` → sends CXEndCallAction; (4) `performEndCallAction` calls `decline:` on already-answered call (Connecting state). Fixed by: (1) Setting `stateSignalSwitchBoard = @"INVITE\r"` directly in `onIncomingCall` (always INVITE); (2) Changed decline condition to only decline in Early state (pre-answer), Connecting/Confirmed must use hangup; (3) Added logging for rdata corruption detection (OMIEndpoint.m, CallKitProviderDelegate.m)
+
+### Video Quality Improvements
+
+- **Remote video artifacts "hột mè sọc sọc" (macroblocking)** - Encoder bitrate was too low (600 Kbps for 480x640@20fps = 0.098 bits/pixel). Doubled bitrate for ALL MOS tiers: MOS>4.0: 1200/1500 Kbps, MOS>3.5: 900/1200 Kbps, MOS>3.0: 600/800 Kbps, MOS>2.0: 400/600 Kbps, MOS<2.0: 300/400 Kbps. Also removed per-MOS encoder profile overrides that broke Chrome compatibility (OMIEndpoint.m)
+
+### Changed
+
+- **VideoToolbox Hardware Codec (H.264 HW acceleration)** - Rebuilt OmiSIP with `PJMEDIA_HAS_VID_TOOLBOX_CODEC=1`. VideoToolbox "H264/98" (PT RSV1) now available alongside OpenH264 "H264/97" in SDP, with priority=230. Reduces encode/decode latency from ~100-280ms (OpenH264 software) to ~10-30ms (VideoToolbox hardware) (OmiSIP framework, config_site.h)
+- **Video glass-to-glass latency reduction (~150-400ms improvement)** - (1) Disabled OMISIP video stream rate control (`PJMEDIA_VID_STREAM_RC_NONE`) → frames sent immediately after encode (saves 50-100ms); (2) Reduced audio jitter buffer from 150ms to 60ms (`jb_init=20, jb_min_pre=20, jb_max_pre=40, jb_max=60`) → saves ~90ms A/V sync; (3) VideoToolbox HW codec → saves ~100-250ms codec latency (config_site.h, OMIEndpoint.m)
+- **OMISIP max packet length** - Increased `OMISIP_MAX_PKT_LEN` from 4000 to 8000 bytes to accommodate re-INVITE SDP with ICE candidates (config_site.h)
+- **Decoder profile standardization** - Always use Level 4.2 (`42002a`) for decoder instead of dynamic Level 3.0/3.1/5.1 which caused various issues (OMIEndpoint.m)
+- **Example app video call improvements** - Updated SampleVideoCallViewController with improved video UI handling (SampleVideoCallViewController.m, ViewController.m)
+
+---
+
+## [1.10.24] - 2026-02-10
 
 ### Security
 - **Disabled sensitive API body logging** in `sendAgentCustomerRequest` (OmiClient.m) and `HttpRequest.m` to prevent credential exposure in logs
 
 ### Fixed
-- **Critical: NSRangeException crash in lookupAccount** - Fixed thread safety issue where PJSIP thread reads `accounts` array while main thread deallocates via `removeAccount:`. Applied atomic property + NSLock + copy-inside-lock pattern (OMIEndpoint.m)
-- **Critical: NSRangeException crash in callWithCallId** - Fixed same thread safety pattern in OMICallManager for `calls` array during concurrent access from PJSIP and main threads (OMICallManager.m)
-- **Critical: pjmedia_codec_mgr_enum_codecs crash** - Fixed race condition when enumerating codecs before PJSIP codec manager fully initialized. Added 300ms delay, retry logic with exponential backoff, and NULL checks (OMIEndpoint.m)
+- **Critical: NSRangeException crash in lookupAccount** - Fixed thread safety issue where OMISIP thread reads `accounts` array while main thread deallocates via `removeAccount:`. Applied atomic property + NSLock + copy-inside-lock pattern (OMIEndpoint.m)
+- **Critical: NSRangeException crash in callWithCallId** - Fixed same thread safety pattern in OMICallManager for `calls` array during concurrent access from OMISIP and main threads (OMICallManager.m)
+- **Critical: EXC_BAD_ACCESS crash in getAllCalls** - Fixed use-after-free crash when iterating call list during CANCEL/BYE handling. Method now returns copy instead of direct reference to prevent deallocation race condition (OMICallManager.m)
+- **Critical: EXC_BAD_ACCESS in CANCEL/BYE handlers** - Added @try-@catch protection and property copying in logCallBack dispatch blocks to prevent crashes when call objects are deallocated during iteration (OMIEndpoint.m)
+- **Critical: pjmedia_codec_mgr_enum_codecs crash** - Fixed race condition when enumerating codecs before OMISIP codec manager fully initialized. Added 300ms delay, retry logic with exponential backoff, and NULL checks (OMIEndpoint.m)
 - **Critical: PushKit NSInternalInconsistencyException** - Fixed app termination due to unhandled exceptions in VoIP push handler. Wrapped async SIP/Audio setup in @try-@catch-@finally to prevent PushKit 20s timeout kill (VoIPPushHandler.m)
 - **Property update order in OMICall.updateCallInfo** - Reordered property updates to set `callState` LAST, preventing notification observers from receiving stale `lastStatus`/`lastStatusText` values (OMICall.m)
-- **OMICall dealloc notification timing** - Fixed strong reference cycles preventing timely deallocation. Use `__weak self` in dispatch_after blocks and cleanup `disconnectedSoundPlayer` before removeCall (OMICall.m)
+- **OMICall dealloc notification timing** - Fixed strong reference cycles preventing timely deallocation. Enhanced dealloc method to cleanup ALL timers, notification observers, audio players, and ringback objects. Timers and observers hold strong references to self preventing ARC deallocation (OMICall.m:443-490)
+- **Double removeCall cleanup pattern** - Removed redundant dispatch_after block in setCallState:Disconnected that caused double cleanup attempts. removeCall is now handled exclusively by OMICallManager.callStateChanged observer, enabling immediate deallocation after call ends (OMICall.m:584-595)
+- **audioCheckTimer strong reference cycle** - Fixed missing audioCheckTimer invalidation in setCallState:Disconnected. Timer holds strong reference to self (target:self), creating circular reference that prevented call object deallocation. Now invalidates BOTH startCallCheckTimer and audioCheckTimer (OMICall.m:555-563)
+- **Notification capture in dispatch_async blocks** - Fixed Example app ViewController capturing notification object in dispatch_async block. Extract call and callState BEFORE dispatch_async to prevent notification userInfo from holding strong reference to call object, enabling immediate deallocation (ViewController.m:367-373)
 - **refreshMiddlewareRegistration validation** - Added proper validation to only call API when user is logged in with Agent/Customer flow. Fixed stale session data causing API errors on app startup (OmiClient.m)
 - **UUID validation in refreshMiddlewareRegistration** - Made UUID optional (not required for refresh API) to fix false-positive validation failures
+- **Critical: Background crash when declining call before INVITE** - Fixed assertion failure `pjsua_call_answer2` when user declines incoming call (or remote cancels) before SIP INVITE arrives. Added callId validation in `decline:`, `declineWithBusyHere:`, and `dropCall:` methods to handle VoIP push scenario where call object exists but SIP session hasn't started yet (OMICall.m:2275-2400)
+- **Critical: pj_thread_this assertion crash in ensureThreadRegistered** - Fixed chicken-and-egg problem where `pj_thread_is_registered()` (a OMISIP API) was called from unregistered thread, causing assertion failure. Now checks custom tracking dictionary FIRST before calling OMISIP API to verify registration status. This prevents crash when remote CANCEL arrives and triggers audio deactivation from main thread (OMIThread.m:118-150)
+- **Critical: pj_thread_register EINVAL error (status 120022)** - Fixed error when thread is already registered with OMISIP but not in tracking dictionary (occurs after endpoint destroy/recreate cycle). Status 120022 (EINVAL) is now treated as success and thread is added to tracking. This prevents "Could not create OMISIP thread" errors during endpoint restart (OMIThread.m:173-195)
+- **Critical: Group lock assertion crash in onIncomingCall (immediate background crash)** - Fixed crash when incoming VoIP call arrives in background. Root cause: `handle_incoming_sip_message()` called synchronously within `onIncomingCall` callback (holding group lock) contains `dispatch_async` for notification posting (line 4104-4114). This creates race condition with OMISIP group lock owner thread → assertion failure `glock->owner == pj_thread_this()` in `grp_lock_unset_owner_thread`. Crash occurs immediately after UUID extraction, before 100 response is sent. Fixed by: (1) Removing `dispatch_async` from `handle_incoming_sip_message` and posting notification synchronously (fast operation, no async needed); (2) Dispatching answer 180 to main queue OUTSIDE callback context; (3) Wrapping entire `onIncomingCall` in @try-@catch-@finally for graceful exception handling (OMIEndpoint.m:4095-4114, 4310-4618)
+- **Critical: pj_thread_this crash in destroyEndpointInstanceWithCompletion** - Fixed crash when destroying endpoint with unregistered thread. Root cause: `pjsua_acc_set_registration(i, PJ_FALSE)` called BEFORE thread registration (line 1132), causing OMISIP logging to crash with "Calling pjlib from unknown/external thread". Thread registration was placed AFTER OMISIP API calls (line 1164). Fixed by moving `[OMIThread ensureThreadRegistered]` BEFORE any OMISIP API calls (OMIEndpoint.m:1125)
 
 ### Changed
+- **Call end status in state change notification** - Added `lastStatus` (OMINotificationEndCauseKey) and `lastStatusText` to OMICallStateChangedNotification userInfo when callState = Disconnected, so apps can get call end reason immediately without waiting for dealloc (OMICall.m:596-610)
 - Added `lastStatusText` to OMICallDeallocNotification userInfo dictionary for better call end status tracking
 - Added comprehensive logging for call state changes and dealloc events in ViewController for debugging
 - Improved error logging with status code descriptions (Busy, Declined, etc.)
-
-## [1.10.23](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
-- Remove Log
-
-
-## [1.10.22](https://github.com/VIHATTeam/OmiKit.git) (06/02/2026)
-- Update func for user
-- Add field isSkipDevices for func register 
-
-## [1.10.15, 1.10.16, 1.10.17, 1.10.18, 1.10.19](https://github.com/VIHATTeam/OmiKit.git) (04/02/2026)
-- add log debug call video
-
-## [1.10.14](https://github.com/VIHATTeam/OmiKit.git) (04/02/2026)
-- Fix, call video and crash pj_atomic
-
-
-## [1.10.12](https://github.com/VIHATTeam/OmiKit.git) (03/02/2026)
-- Rebuild SDK, optimizes call video
-
-
-## [1.10.11](https://github.com/VIHATTeam/OmiKit.git) (29/01/2026)
-- Remove key BGTaskSchedulerPermittedIdentifiers at example 
-
-
-## [1.10.9](https://github.com/VIHATTeam/OmiKit.git) (26/01/2026)
-- Add Turn/Sturn/ICE when calling 
-- Remove character "text" in switchboard SDP 
-
-## [1.10.8](https://github.com/VIHATTeam/OmiKit.git) (16/01/2026)
-
-### 🎉 Swift 6 Full Support
-
-**BREAKING CHANGE:** Now requires iOS 13.0+ (up from 11.0)
-
-This release brings complete Swift 6 compatibility with zero concurrency warnings!
-
-### Core SDK Changes
-
-- ✅ Fixed `dispatch_assert_queue_fail` crashes when using Swift 6 strict concurrency
-- ✅ Added `SWIFT_STRICT_CONCURRENCY = minimal` configuration to podspec
-- ✅ Added `OTHER_SWIFT_FLAGS` with `-Xfrontend -disable-availability-checking`
-- ✅ Automatically configures projects to use Swift 6 with proper concurrency settings
-- ✅ OmiKit (Objective-C) uses minimal concurrency checking
-- ✅ App code can use complete Swift 6 concurrency checking
-- ✅ No code changes required for apps using CocoaPods
-- ✅ Seamless integration with Swift 6 Language Mode
-
-### Example Project - CallManagerV2 (New)
-
-Added **CallManagerV2** - Modern async/await implementation with zero Swift 6 warnings:
-
-**File:** `Example/SwiftUI-OMICall-Example/Core/CallManagerV2.swift`
-
-**Features:**
-- ✅ Full async/await API (login, startCall, endCall, toggleMute, etc.)
-- ✅ Zero Swift 6 concurrency warnings
-- ✅ Zero data race risks
-- ✅ `@MainActor` isolation for thread safety
-- ✅ `@preconcurrency import OmiKit` for smooth interop
-- ✅ All NotificationCenter observers use `queue: .main`
-- ✅ Extract userInfo BEFORE MainActor.assumeIsolated to avoid Sendable warnings
-- ✅ Post notifications outside MainActor context
-- ✅ 137 lines removed (11% reduction from 1236 to 1099 lines)
-- ✅ Optimized notification handling with inline processing
-
-**Swift 6 Pattern Improvements:**
-```swift
-// OLD (caused warnings):
-) { [weak self] notification in
-    MainActor.assumeIsolated {
-        let userInfo = notification.userInfo  // ❌ Sendable warning
-    }
-}
-
-// NEW (zero warnings):
-) { [weak self] notification in
-    // Extract data BEFORE MainActor context
-    guard let userInfo = notification.userInfo,
-          let value = userInfo[key] as? Type
-    else { return }
-
-    // Now safely update @Published properties
-    MainActor.assumeIsolated {
-        self?.property = value
-    }
-}
-```
-
-**API Comparison:**
-
-| CallManager (Swift 5) | CallManagerV2 (Swift 6) |
-|----------------------|-------------------------|
-| `startCall(to:completion:)` | `try await startCall(to:)` |
-| `login(username:completion:)` | `try await login(username:)` |
-| Callbacks | Async/Await |
-| Manual DispatchQueue | Automatic @MainActor |
-| May have warnings | Zero warnings ✅ |
-
-### Example Project - CallManager (Updated)
-
-**File:** `Example/SwiftUI-OMICall-Example/Core/CallManager.swift`
-
-Remains available for Swift 5 compatibility:
-- Traditional callback-based pattern
-- Works on Swift 5.0+
-- Fully compatible with legacy codebases
+- Example app now logs call end status immediately from OMICallStateChangedNotification (ViewController.m:417-431)
 
 ### Documentation
+- Created comprehensive crash analysis documentation in `/plans/crash-analysis/`
+- Updated MEMORY.md with critical learnings about thread safety, property update order, and dealloc timing
 
-**New Files:**
-- ✅ `Example/SwiftUI-OMICall-Example/SWIFT6_SETUP.md` - Setup guide
-- ✅ `Example/SwiftUI-OMICall-Example/SWIFT6_FIX_SUMMARY.md` - Technical details
-- ✅ `Example/SwiftUI-OMICall-Example/CALLMANAGERV2_OPTIMIZATION.md` - Optimization summary
-- ✅ `Example/SwiftUI-OMICall-Example/docs/call-flow-diagram.svg` - Visual call flow diagram
+---
 
-**Updated Files:**
-- ✅ `README.md` - Added Swift 6 compatibility section
-- ✅ `Example/SwiftUI-OMICall-Example/README.md` - Comprehensive guide with:
-  - Call flow diagram (incoming/outgoing)
-  - CallManager vs CallManagerV2 comparison
-  - Migration guide Swift 5 → Swift 6
-  - Quick start for both versions
-  - API reference for both versions
-  - Decision matrix for choosing implementation
+## [Legacy Changes]
+1. Move all  ``` #import <pjsua.h> ``` from .h files to .m files.
 
-### Migration Guide
+2. Update VSLCall class, hidden functions with ```pjsua_call_info``` structure.
 
-**From Swift 5 → Swift 6:**
+move functions below
 
-1. Update Podfile to OmiKit >= 1.10.8
-2. Add post_install hook for Swift 6 configuration
-3. Choose implementation:
-   - Keep using `CallManager` (works on Swift 6)
-   - Migrate to `CallManagerV2` for async/await benefits
+```objective-c
 
-**CallManager → CallManagerV2 Migration:**
+- (void)callStateChanged:(pjsua_call_info)callInfo;
 
-```swift
-// Before (CallManager)
-CallManager.shared.login(username: "user", password: "pass", realm: "realm") { success in
-    print("Login: \(success)")
-}
+- (void)mediaStateChanged:(pjsua_call_info)callInfo;
 
-// After (CallManagerV2)
-do {
-    let success = try await CallManagerV2.shared.login(
-        username: "user",
-        password: "pass",
-        realm: "realm"
-    )
-    print("Login: \(success)")
-} catch {
-    print("Error: \(error)")
-}
 ```
 
-### Configuration
+to ``` VSLCall+Private.h ``` file
 
-**Podfile setup for Swift 6:**
+3. ```VSLEndPoint.h```
 
-```ruby
-platform :ios, '13.0'
+change ```pj_pool_t *``` to ```void *```, it will auto cast back in .m files, no need to public it.
 
-target 'YourApp' do
-  use_frameworks!
-  pod 'OmiKit', '~> 1.10.8'
-end
+4. Move headers into PublicHeader folder. Hide other internal headers.
 
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '6.0'
-
-      if target.name == 'OmiKit'
-        config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'minimal'
-      else
-        config.build_settings['SWIFT_STRICT_CONCURRENCY'] = 'complete'
-      end
-    end
-  end
-end
+```cpp
+CallKitProviderDelegate.h
+Constants.h
+OmiClient.h
+PjSipVideo.h
+PjSipVideoViewManager.h
+SipInvite.h
+VSLAccount.h
+VSLAccountConfiguration.h
+VSLAudioCodecs.h
+VSLAudioController.h
+VSLCall.h
+VSLCallManager.h
+VSLCallStats.h
+VSLCodecConfiguration.h
+VSLEndpoint.h
+VSLEndpointConfiguration.h
+VSLIceConfiguration.h
+VSLIpChangeConfiguration.h
+VSLLogging.h
+VSLNetworkMonitor.h
+VSLOpusConfiguration.h
+VSLRingback.h
+VSLRingtone.h
+VSLStunConfiguration.h
+VSLTransportConfiguration.h
+VSLTurnConfiguration.h
+VSLVideoCodecs.h
+VialerSIPLib.h
+VialerUtils.h
 ```
-
-### Testing
-
-All Swift 6 features tested on:
-- ✅ Xcode 15.0+
-- ✅ iOS 13.0 - 17.0
-- ✅ Swift Language Mode: 6.0
-- ✅ SWIFT_STRICT_CONCURRENCY: complete
-- ✅ Zero compiler warnings
-- ✅ Zero runtime crashes
-- ✅ All call flows (incoming, outgoing, transfer, hold)
-
-### Known Issues
-
-None. This release is production-ready for Swift 6.
-
-### Upgrade Instructions
-
-```bash
-# Update Podfile
-pod 'OmiKit', '~> 1.10.8'
-
-# Install
-pod install
-
-# Clean build
-rm -rf ~/Library/Developer/Xcode/DerivedData
-```
-
-## [1.10.7](https://github.com/VIHATTeam/OmiKit.git) (14/01/2026)
-- Fix force GPU Call Video
-
-## [1.10.1, 1.10.3, 1.10.4, 1.10.5](https://github.com/VIHATTeam/OmiKit.git) (13/01/2026)
-- Fix force GPU Call Video
-
-
-## [1.9.44, 1.9.45, 1.9.46, 1.9.47, 1.9.49](https://github.com/VIHATTeam/OmiKit.git) (13/01/2026)
-- Fix force GPU Call Video
-
-## [1.9.42, 1.9.43](https://github.com/VIHATTeam/OmiKit.git) (12/01/2026)
-- Fix force GPU Call Video
-
-## [1.9.41](https://github.com/VIHATTeam/OmiKit.git) (12/01/2026)
-- Fix GPU Call Video
-
-
-## [1.9.35, 1.9.36, 1.9.37](https://github.com/VIHATTeam/OmiKit.git) (09/01/2026)
-- Fix GPU SDK Call video
-
-## [1.9.31, 1.9.32, 1.9.33, 1.9.34](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Fix GPU SDK Call video
-
-## [1.9.29](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Giảm chất lượng video
-
-## [1.9.28](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Fix call video
-
-## [1.9.26, 1.9.27](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Fix call video
-
-
-## [1.9.25](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Tăng thời gian delay
-
-
-## [1.9.24](https://github.com/VIHATTeam/OmiKit.git) (08/01/2026)
-- Chặn điều chỉnh Opus khi cuộc gọi chưa nghe
-- Fix đứng màn hình remote call trên call video
-
-
-
-## [1.9.22, 1.9.23](https://github.com/VIHATTeam/OmiKit.git) (05/01/2026)
-- Tăng delay video call
-
-
-## [1.9.21](https://github.com/VIHATTeam/OmiKit.git) (30/12/2025)
-- Fix answer call at background off call video 
-
-## [1.9.18, 1.9.19](https://github.com/VIHATTeam/OmiKit.git) (29/12/2025)
-- Improve call video
-
-
-## [1.9.16, 1.9.17](https://github.com/VIHATTeam/OmiKit.git) (26/12/2025)
-- Improve call video
-
-
-
-## [1.9.14, 1.9.15](https://github.com/VIHATTeam/OmiKit.git) (25/12/2025)
-- Fix scale và zoom video 
-
-
-## [1.9.13](https://github.com/VIHATTeam/OmiKit.git) (24/12/2025)
-- Fix reload video chậm 
-
-## [1.9.12](https://github.com/VIHATTeam/OmiKit.git) (21/12/2025)
-- Fix bản tin re-invite vẫn gửi khi disconect call 
-
-## [1.9.9, 1.9.11](https://github.com/VIHATTeam/OmiKit.git) (20/12/2025)
-- Fix reload video chậm
-
-## [1.9.7, 1.9.8](https://github.com/VIHATTeam/OmiKit.git) (19/12/2025)
-- Tối ưu code flow nhận call
-- Tối ưu render Metal cho call video
-
-
-## [1.9.6](https://github.com/VIHATTeam/OmiKit.git) (18/12/2025)
-- Re-build Sip 2.16
-- Optimize call video
-
-## [1.9.5](https://github.com/VIHATTeam/OmiKit.git) (18/12/2025)
-- Update Sip 2.16
-- Optimize call video
-
-## [1.9.4](https://github.com/VIHATTeam/OmiKit.git) (08/12/2025)
-- Fix open call video from background 
-
-## [1.9.3](https://github.com/VIHATTeam/OmiKit.git) (05/12/2025)
-- Fix crash call video
-
-## [1.9.2](https://github.com/VIHATTeam/OmiKit.git) (04/12/2025)
-- Fix crash call video
-
-
-## [1.9.1](https://github.com/VIHATTeam/OmiKit.git) (04/12/2025)
-- Build new version OMISIP 2.16
-- Fix call video
-
-## [1.8.61](https://github.com/VIHATTeam/OmiKit.git) (28/11/2025)
-- Fix crash call video 
-
-
-## [1.8.58, 1.8.59](https://github.com/VIHATTeam/OmiKit.git) (25/11/2025)
-- Fix call video 
-
-## [1.8.56](https://github.com/VIHATTeam/OmiKit.git) (19/10/2025)
-- Fix crash when end call
-- Optimize call video
-
-## [1.8.54](https://github.com/VIHATTeam/OmiKit.git) (12/10/2025)
-- Fix ice, turn and fix re-invite switch board
-  
-
-## [1.8.52](https://github.com/VIHATTeam/OmiKit.git) (16/10/2025)
-- Update API remove devices info
-
-## [1.8.51](https://github.com/VIHATTeam/OmiKit.git) (15/10/2025)
-- Fix 4g network mobifone not send register to switch board
-
-## [1.8.48](https://github.com/VIHATTeam/OmiKit.git) (14/10/2025)
-- RollBack fix call 4g ios 
-
-## [1.8.47](https://github.com/VIHATTeam/OmiKit.git) (07/10/2025)
-- Hot fix crash incoming call at background 
-
-## [1.8.46](https://github.com/VIHATTeam/OmiKit.git) (06/10/2025)
-- Hot fix crash Thread SDK 
-
-## [1.8.45](https://github.com/VIHATTeam/OmiKit.git) (10/09/2025)
-- Fix lỗi crash khi nhận incomming call
-- Fix lỗi không wake up app khi có incomming call ở thiết bị yếu
-
-## [1.8.44](https://github.com/VIHATTeam/OmiKit.git) (22/07/2025)
-- Add API update action when accept, hangup, transfer call and func check show missed call 
-
-## [1.8.43](https://github.com/VIHATTeam/OmiKit.git) (16/07/2025)
-- Add API update action when accept, hangup, transfer call 
-
-## [1.8.42](https://github.com/VIHATTeam/OmiKit.git) (02/07/2025)
-- Hot fix missed omiId ở state early khi out going call 
-
-## [1.8.41](https://github.com/VIHATTeam/OmiKit.git) (27/06/2025)
-- Add mã check chặn show thông báo cuộc gọi nhỡ
-
-## [1.8.38, 1.8.40](https://github.com/VIHATTeam/OmiKit.git) (23/06/2025)
-- Fix crash khi mở từ background lên foreground  
-
-## [1.8.37](https://github.com/VIHATTeam/OmiKit.git) (11/06/2025)
-- Thêm func declineWithBusy 
-
-## [1.8.36](https://github.com/VIHATTeam/OmiKit.git) (11/06/2025)
-- Fix lỗi không kill cuộc gọi ở background 
-
-## [1.8.35](https://github.com/VIHATTeam/OmiKit.git) (10/06/2025)
-- Add cấu hình từ chối cuộc gọi 486-603. Mặc định 603
-- Add func DropCall vào OMIClient 
-
-## [1.8.34](https://github.com/VIHATTeam/OmiKit.git) (06/06/2025)
-- Add infor into user-agent for flow incoming call. 
-- Add func DropCall 
-
-## [1.8.33](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
-- Fix kịch bản tiêu chí
-
-## [1.8.27, 1.8.28, 1.8.31, 1.8.32](https://github.com/VIHATTeam/OmiKit.git) (02/06/2025)
-- Add func check show cuộc gọi nhỡ 
-  
-
-## [1.8.17](https://github.com/VIHATTeam/OmiKit.git) (12/05/2025)
-- Cập nhật func tính MOS cho cả OPUS
-- Thêm func reset giá trị OPUS mỗi khi end call 
-
-
-## [1.8.16](https://github.com/VIHATTeam/OmiKit.git) (25/03/2025)
-
-
-
-#### Changed
-- Re-build for 1.8.15
-
-## [1.8.15](https://github.com/VIHATTeam/OmiKit.git) (25/03/2025)
-
-#### Changed
-- Clean code and fix missed Call Name from partner 
-
-## [1.8.14](https://github.com/VIHATTeam/OmiKit.git) (21/03/2025)
-
-#### Changed
-- Update name caller when missed call from flow call ZCC
-  
-
-## [1.8.12](https://github.com/VIHATTeam/OmiKit.git) (19/03/2025)
-
-#### Changed
-- Try with update name caller when missed call from flow call ZCC
-  
-### ------------------------------
-
-## [1.8.11](https://github.com/VIHATTeam/OmiKit.git) (18/03/2025)
-
-#### Changed
-- Change STUN address
-  
-### ------------------------------
-
-
-## [1.8.10](https://github.com/VIHATTeam/OmiKit.git) (13/03/2025)
-
-#### Changed
-- Add log tracking start call failed 
-  
-### ------------------------------
-
-## [1.8.9](https://github.com/VIHATTeam/OmiKit.git) (27/02/2025)
-
-#### Changed
-- Fix change speaker in callkit 
-  
-### ------------------------------
-
-
-## [1.8.8](https://github.com/VIHATTeam/OmiKit.git) (26/02/2025)
-
-#### Changed
-- Add func toggle speaker 
-  
-### ------------------------------
-
-
-## [1.8.6](https://github.com/VIHATTeam/OmiKit.git) (26/02/2025)
-
-#### Changed
-- Fix audio port ios 
-  
-### ------------------------------
-
-
-## [1.8.5](https://github.com/VIHATTeam/OmiKit.git) (17/02/2025)
-
-#### Changed
-- Fix audio session when end call 
-  
-### ------------------------------
-
-## [1.8.4](https://github.com/VIHATTeam/OmiKit.git) (06/02/2025)
-
-#### Changed
-- Fix codec opus for out going 
-  
-### ------------------------------
-
-## [1.8.3](https://github.com/VIHATTeam/OmiKit.git) (05/02/2025)
-
-#### Changed
-- Fix codec opus for out going 
-  
-### ------------------------------
-
-## [1.8.2](https://github.com/VIHATTeam/OmiKit.git) (25/12/2024)
-
-#### Changed
-- Fix crash SDK
-  
-### ------------------------------
-
-## [1.8.1](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
-
-#### Changed
-- Optimize flow incoming call and fix prefix phone number
-  
-### ------------------------------
-
-## [1.7.41](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
-
-#### Changed
-- Fix space in phone number
-  
-### ------------------------------
-
-## [1.7.40](https://github.com/VIHATTeam/OmiKit.git) (07/10/2024)
-
-#### Changed
-- Update hide prefix phone number with CallKit
-  
-### ------------------------------
-
-#### Changed
-- Add SipNameNumber, projectId 
-
-## [1.7.39](https://github.com/VIHATTeam/OmiKit.git) (04/10/2024)
-
-- Optimize code Codes, media 
-
-## [1.7.38](https://github.com/VIHATTeam/OmiKit.git) (01/10/2024)
-
-
-- Add Sip_number for object OMICALL
-
-## [1.7.37](https://github.com/VIHATTeam/OmiKit.git) (24/09/2024)
-
-- Fix crash removeObjectKey 
-
-## [1.7.35](https://github.com/VIHATTeam/OmiKit.git) (16/09/2024)
-
-
-- Fix Show Phone CallKit 
-
-## [1.7.34](https://github.com/VIHATTeam/OmiKit.git) (23/08/2024)
-
-
-#### Changed
-
-- Fix message code error when turn off number internal 
-
-## [1.7.33](https://github.com/VIHATTeam/OmiKit.git) (22/08/2024)
-
-#### Changed
-
-- Add message for destination ads
-
-## [1.7.32](https://github.com/VIHATTeam/OmiKit.git) (15/08/2024)
-
-#### Changed
-
-- Fix secret show phone number in UI Callkit
-
-## [1.7.31](https://github.com/VIHATTeam/OmiKit.git) (14/08/2024)
-
-#### Changed
-
-- Fix same call Id Omi 
-
-## [1.7.30](https://github.com/VIHATTeam/OmiKit.git) (07/08/2024)
-
-
-#### Changed
-
-- Update code SwitchBoard
-
-## [1.7.29](https://github.com/VIHATTeam/OmiKit.git) (31/07/2024)
-
-
-
-- Update code SwitchBoard
-
-## [1.7.28](https://github.com/VIHATTeam/OmiKit.git) (30/07/2024)
-
-#### Changed
-
-- Update code SwitchBoard
-
-## [1.7.27](https://github.com/VIHATTeam/OmiKit.git) (29/07/2024)
-
-
-#### Changed
-
-- Add log tracking log in/out
-
-## [1.7.26](https://github.com/VIHATTeam/OmiKit.git) (23/07/2024)
-
-#### Changed
-
-- Rollback code and fix missed OMI_ID
-
-## [1.7.25](https://github.com/VIHATTeam/OmiKit.git) (20/06/2024)
-
-
-#### Changed
-
-- Fix missing omi_id off incoming call 
-
-## [1.7.24](https://github.com/VIHATTeam/OmiKit.git) (19/06/2024)
-
-#### Changed
-- Add function clear call when close Callkit false 
-
-## [1.7.23](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
-
-
-#### Changed
-- Fix wrong call_id when get push incoming call second
-- Reduce time start call  
-
-## [1.7.22](https://github.com/VIHATTeam/OmiKit.git) (13/06/2024)
-
-
-#### Changed
-
-- Revert code add mission file Omikit.h
-
-## [1.7.21](https://github.com/VIHATTeam/OmiKit.git) (06/06/2024)
-
-
-#### Changed
-
-- Update new core SDK 
-
-## [1.7.20](https://github.com/VIHATTeam/OmiKit.git) (30/05/2024)
-
-
-#### Changed
-
-
-- Fix crash in coming call when transfer call
-
-## [1.7.18](https://github.com/VIHATTeam/OmiKit.git) (21/05/2024)
- 
-
-#### Changed
-
-- Fix call id off func answerIncommingCall for SDK React Native 
-
-## [1.7.17](https://github.com/VIHATTeam/OmiKit.git) (15/05/2024)
-
-
-#### Changed
-
-- Fix hang when canceling calls, 
-- Fix error of not being able to call continuously, add UDP connection
-
-## [1.5.90](https://github.com/VIHATTeam/OmiKit.git) (17/10/2023)
-
-
-
-## [1.0.0](https://github.com/VIHATTeam/OmiKit.git) (15/06/2020)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Create Library
-- Provide all function of Omicall for Voip: call inbound/outbound, setup Endpoint, Login system
-
-## [1.0.4](https://github.com/VIHATTeam/OmiKit.git) (15/09/2020)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Update Video function
-- Fix bug
-
-## [1.0.6](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Ddd callback for call directly
-- Fix bug
-
-## [1.0.7](https://github.com/VIHATTeam/OmiKit.git) (12/12/2020)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug multi call incomming
-
-## [1.0.8](https://github.com/VIHATTeam/OmiKit.git) (03/05/2022)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug video call
-
-#### Changed
-
-- Fix bug multi call incomming
-
-## [1.0.15](https://github.com/VIHATTeam/OmiKit.git) (08/08/2022)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug get CurrentCall
-- Add Get newest call
-
-## [1.0.16](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug get Newest call
-- Fix event Toggle Muted
-
-## [1.0.20](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Update version IOS
-
-## [1.5.2](https://github.com/VIHATTeam/OmiKit.git) (21/03/2023)
-
-## [1.5.18](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug 2 call receive cause crash
-- Optimize quality Video call depend on network
-- Add more function util process audio
-- Add callback when mute/hold call
-
-Released on Monday, June 15, 2020.
-
-#### Changed
-
-- Fix bug video call
-- Fixing bud multicall cause get wrong active2
-
-## [1.5.26](https://github.com/VIHATTeam/OmiKit.git) (12/12/2022)
-
-Released on Friday, April 21, 2023.
-
-#### Changed
-
-- Fix bug
-- Optimize quality Video call depend on network
-
-## [1.5.27](https://github.com/VIHATTeam/OmiKit.git) (25/04/2023)
-
-Released on April 25, 2023.
-
-#### Changed
-
-- Return transaction id
-
-## [1.5.28](https://github.com/VIHATTeam/OmiKit.git) (29/04/2023)
-
-Released on April 29, 2023.
-
-#### Changed
-
-- Return more informations for `getUser` function
-
-## [1.5.29](https://github.com/VIHATTeam/OmiKit.git) (30/04/2023)
-
-Released on April 30, 2023.
-
-#### Changed
-
-- Optimize call function
-
-## [1.5.30](https://github.com/VIHATTeam/OmiKit.git) (04/05/2023)
-
-Released on May 04, 2023.
-
-#### Changed
-
-- Support custom notifiaction icon
-
-## [1.5.31](https://github.com/VIHATTeam/OmiKit.git) (11/05/2023)
-
-Released on May 11, 2023.
-
-#### Changed
-
-- Return employee sip number in script call.
-
-## [1.5.32](https://github.com/VIHATTeam/OmiKit.git) (16/05/2023)
-
-Released on Friday, May 16, 2023.
-
-#### Changed
-
-- Fix login for api key case
-- Support to custom incoming notification title
-
-## [1.5.35](https://github.com/VIHATTeam/OmiKit.git) (16/05/2023)
-
-Released on May 16, 2023.
-
-#### Changed
-
-- Optimate `logout` function. We removed all sip service when user called `logout` function.
-
-## [1.5.43](https://github.com/VIHATTeam/OmiKit.git) (31/05/2023)
-
-Released on May 31, 2023.
-
-#### Changed
-
-- Optimate `startCall` function. We return `OMIStartCallStatus` error enum.
-
-## [1.5.46](https://github.com/VIHATTeam/OmiKit.git) (05/06/2023)
-
-Released on June 05, 2023.
-
-#### Changed
-
-- Optimate `startCall` function. We check it on background thread.
-
-## [1.5.47](https://github.com/VIHATTeam/OmiKit.git) (08/06/2023)
-
-Released on June 08, 2023.
-
-#### Changed
-
-- Support to check same with owner sip number. We don't allow to your self.
-
-## [1.5.48](https://github.com/VIHATTeam/OmiKit.git) (08/06/2023)
-
-Released on June 08, 2023.
-
-#### Changed
-
-- Optimate `startCall` function. We don't allow to start call if user have a another call.
-
-## [1.5.52](https://github.com/VIHATTeam/OmiKit.git) (12/06/2023)
-
-Released on June 12, 2023.
-
-#### Changed
-
-- Optimate core and improve performance for call holding.
-
-## [1.5.53](https://github.com/VIHATTeam/OmiKit.git) (13/06/2023)
-
-Released on June 13, 2023.
-
-#### Changed
-
-- Support to get current sip.
-
-## [1.5.54](https://github.com/VIHATTeam/OmiKit.git) (16/06/2023)
-
-Released on June 16, 2023.
-
-#### Changed
-
-- Improve audio function. User can listen audio change in UI.
-
-## [1.5.55](https://github.com/VIHATTeam/OmiKit.git) (21/06/2023)
-
-Released on June 21, 2023.
-
-#### Changed
-
-- Fix `startCall` with video params. When user start call, incoming user receive audio notification.
