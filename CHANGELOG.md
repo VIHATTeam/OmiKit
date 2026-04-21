@@ -1,5 +1,31 @@
 # CHANGELOG of OmiKit
 
+## [1.11.12] - 2026-04-20
+
+
+### Bug Fix — Multi-call: Active call dropped when second incoming call is cancelled by caller
+
+- **[BUG] Active call (call 1) forced disconnect when incoming call (call 2) is CANCEL'd by caller** (`OMIEndpoint.m`) — `logCallBack` CANCEL/BYE detector runs on the PJSIP transport thread as a deadlock-safe fallback for `onTxStateChange`. It iterates all calls and disconnects **the first non-disconnected call found** — with no knowledge of which call the CANCEL belongs to. With 2 active calls, call 1 (CONFIRMED) is encountered first and incorrectly forced to DISCONNECTED. `onTxStateChange` (which has the correct `call_id`) also handles the CANCEL moments later, but the damage is already done. User-initiated decline via CallKit is unaffected because it routes through `performEndCallAction` with the exact UUID. Fixed: added multi-call guard — if `getAllCalls.count > 1`, skip the logCallBack fallback and let `onTxStateChange` handle it with the correct call_id.
+
+
+### Crash Fixes (v3.4.6 Production Crashes)
+
+- **[CRASH] `pjsip_timer_init_session.cold.2` — 55 crashes, 27 users** (`sip_timer.c`) — ICE completion callback fires on OMISIP worker thread `pjsua_0` after hangup triggers `pjsip_timer_deinit_module()` → `is_initialized=FALSE`. `pjsip_timer_init_session` asserts `is_initialized` → `abort()` → SIGABRT. Fix already existed in source (`PJ_ASSERT_RETURN` → graceful return) but was in a build not yet deployed. Included in this OMISIP rebuild.
+
+- **[CRASH] `op_disconnect_ports.cold.3` — 1 crash** (`OMIRingback.m`) — `OMIRingback dealloc` called from `onCallState` OMISIP callback (holds PJSUA_LOCK) → `OMICall dealloc` → `self.ringback = nil` → `[OMIThread runSync:]` dispatches to global queue and waits → `pjsua_conf_remove_port` needs PJSUA_LOCK → **deadlock** → timeout → `op_disconnect_ports` assertion → SIGABRT. Fixed: changed `runSync` to `runNonBlock` in `OMIRingback dealloc` — fire-and-forget, never blocks the caller.
+
+- **[CRASH] `cancel_timer.cold.1` — 1 crash** (`pjsua_core.c`) — `pjsua_update_stun_servers(wait=false)` called during cold start (VoIP push) while `pjsua_init`'s own async STUN resolution is still running (`stun_status==PJ_EPENDING`). Both sessions race to `pj_stun_sock_destroy` → `cancel_timer` assertion inside timer heap poll → SIGABRT. Root cause fixed in OMISIP C layer: `pjsua_update_stun_servers` now checks `stun_status==PJ_EPENDING` before calling `resolve_stun_server` — if pending, only updates the server list and returns (the in-flight session will complete naturally). ObjC layer unchanged.
+
+- **[CRASH] `pj_leave_critical_section.cold.1` — 1 crash** (`OMISIPLib.m`) — `startEndpoint` dispatches to `dispatch_get_global_queue` which is a GCD thread not registered with OMISIP. `pjsua_transport_create` internally acquires/releases `pj_mutex` → `pj_mutex_unlock` asserts unregistered thread → SIGABRT. Fixed: added `[OMIThread ensureThreadRegistered]` inside the `dispatch_sync` block before calling `startEndpointWithEndpointConfiguration`.
+
+- **[CRASH] `pjsip_endpt_unregister_module.cold.1` — 2 crashes** — Same root cause as `pj_leave_critical_section`: GCD thread calling OMISIP during endpoint init without thread registration. Covered by the same `ensureThreadRegistered` fix in `OMISIPLib.m`.
+
+- **[CRASH] `pjmedia_vid_stream_pause.cold.1` — 9 crashes** (`OMIVideoCallManager.m`) — `triggerVideoRecoveryAfterMediaError` waits 300ms + 200ms before calling `pjsua_call_set_vid_strm(STOP_TRANSMIT)`. During this 500ms window the call can be hung up, destroying the video stream. `pjmedia_vid_stream_pause` asserts on destroyed stream → SIGABRT. Fix (media-active guard before STOP_TRANSMIT) was already in source but not yet deployed. Included in this build.
+
+- **[CRASH] `objc_release`/`objc_release_x0` EXC_BAD_ACCESS — 4 crashes** (`os_core_unix.c`) — OMISIP worker thread `pjsua_0` exits without `@autoreleasepool` wrapper. Autoreleased ObjC objects accumulate on the thread-local pool. When thread exits, `_pthread_tsd_cleanup` drains the pool but some objects may already be deallocated elsewhere → `objc_release` on dangling pointer → `EXC_BAD_ACCESS (KERN_INVALID_ADDRESS)`. Fixed: wrapped `worker_thread` body in `@autoreleasepool { }` inside `thread_main` in OMISIP C layer (`#ifdef __OBJC__`).
+
+---
+
 ## [1.11.11] - 2026-04-13
 
 ### Thread Safety
