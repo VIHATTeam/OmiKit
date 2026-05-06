@@ -1,5 +1,13 @@
 # CHANGELOG of OmiKit
 
+## [1.11.16] - 2026-05-05
+
+### Bug Fix — Incoming call SDP contains `sprop-maxcapturerate=24000` after app suspension
+
+- **[BUG] Opus codec stuck at 24kHz on incoming call 30+ min after previous bad-MOS call** (`OMIEndpoint.m`) — When a previous call ended with low MOS (MOS < 3), the SDK correctly set `opus_cfg.sample_rate = 24000` for adaptive quality. On call disconnect, `lastMOS` is reset to 0 (`checkNetworkMonitoring`). However, if the user received a new incoming call 30+ minutes later (app suspended by iOS between calls), the OMISIP endpoint lifecycle may have been reset with `endpointAvailable = NO`. In that state, `VoIPPushHandler.establishConnection` skips the 48kHz codec reset (guarded by `endpointAvailable` check) → PJSIP builds the 200 OK SDP with `sprop-maxcapturerate=24000` → PBX may reject or degrade audio quality. Fixed: added an inline Opus reset block at the top of `onIncomingCall`, the guaranteed last checkpoint before `pjsua_call_answer(180)` and `pjsua_call_answer2(200 OK)` generate any SDP. The block only fires when `opus_cfg.sample_rate != 48000` (no-op on correctly configured endpoints). Runs on the OMISIP worker thread — no additional locking required.
+
+---
+
 ## [1.11.15] - 2026-05-04
 
 ### Bug Fixes — Mute/unmute state desync (4 bugs in `CallKitProviderDelegate.m`, `OMICall.m`, `CallingView.m`)
