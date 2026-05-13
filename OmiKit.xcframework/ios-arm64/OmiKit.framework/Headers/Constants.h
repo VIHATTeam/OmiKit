@@ -33,6 +33,20 @@ static NSString * KEY_LOG_LEVEL = @"omicall/logLevel";
 static NSString * OMICALL_TRANSFERED = @"omicall/call/transfer";
 static NSString * OMICALL_CALL_ID = @"omicall/call/callID";
 static NSString * OMICALL_IS_PARTIAL_PHONE_NUMBER = @"omikit/isPartialPhoneNumber";
+static NSString * OMICALL_PHONE_MASK_POLICY = @"omikit/phoneMaskPolicy";
+
+/**
+ * How the SDK masks a phone number when displaying it on CallKit / native UI.
+ * - OMIPhoneMaskPolicyKeepLeading3 (default): "0987654321" -> "090*******"
+ * - OMIPhoneMaskPolicyHideLast3            : "0987654321" -> "0987654***"
+ *
+ * Set via [OmiClient setPhoneMaskPolicy:]; app must opt-in to
+ * OMIPhoneMaskPolicyHideLast3, otherwise the SDK keeps the previous behavior.
+ */
+typedef NS_ENUM(NSInteger, OMIPhoneMaskPolicy) {
+    OMIPhoneMaskPolicyKeepLeading3 = 0,
+    OMIPhoneMaskPolicyHideLast3    = 1,
+};
 static NSString * KEY_OMI_DECLINE_CALL_USE_BUSY_HERE = @"omicall/declineCallUseBusyHere";
 static NSString * KEY_ENABLE_CONFIG_SEND_ACTION_CALL = @"omicall/hasEnableConfigSendActionCall";
 

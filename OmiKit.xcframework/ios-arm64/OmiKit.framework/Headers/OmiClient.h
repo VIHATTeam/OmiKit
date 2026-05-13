@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OMISIPLib.h"
+#import "Constants.h"
 #import <AVFoundation/AVFoundation.h>
 
 
@@ -318,6 +319,15 @@
 
 // isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit
 + (BOOL)isPartialPhoneNumber;
+
+/// Set the masking style used by the SDK when displaying a phone number on
+/// CallKit. Only takes effect when `isPartialPhoneNumber` is YES. Default is
+/// `OMIPhoneMaskPolicyKeepLeading3`, which matches the previous SDK behavior.
++ (void)setPhoneMaskPolicy:(OMIPhoneMaskPolicy)policy;
+
+/// Current SDK masking policy. Defaults to `OMIPhoneMaskPolicyKeepLeading3`
+/// when the app has never set one.
++ (OMIPhoneMaskPolicy)phoneMaskPolicy;
 
 /**
  * Kiểm tra cuộc gọi có được trả lời hay không.
