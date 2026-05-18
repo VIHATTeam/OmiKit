@@ -116,6 +116,28 @@
 + (NSString *)getPhone:(NSString *_Nonnull)toUuid;
 
 + (id)getAccountInfo:(NSString *_Nonnull)sipAccount;
+
+/**
+ *  Fetch OMI devices info for the current user from server
+ *  @return NSArray of device dictionaries; empty array if no data or on error
+ */
++ (NSArray<NSDictionary *> *_Nonnull)getOmiDevices;
+
+/**
+ *  Check whether the current device is already registered on the backend
+ *  for the current SIP user.
+ *  @return YES if a matching device_id exists in the fetched device list.
+ */
++ (BOOL)isCurrentDeviceRegistered;
+
+/**
+ *  Determine whether the user should be forced to logout and login again.
+ *  Returns YES when a SIP user is set locally but no matching device is
+ *  registered on the backend (e.g. backend state was lost, app reinstalled,
+ *  or device info diverged).
+ *  @return YES if re-login is required, NO otherwise.
+ */
++ (BOOL)needsReLogin;
 /**
  *  Start call with Uuid (use for api key)
  */

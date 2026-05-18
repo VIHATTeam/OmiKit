@@ -1,5 +1,23 @@
 # CHANGELOG of OmiKit
 
+## [1.11.19] - 2026-05-18
+
+### Feature — Backend device registration check APIs
+
+- **[FEATURE] `+ getOmiDevices`** (`OmiClient.h`, `OmiClient.m`) — New public API that fetches the list of devices currently registered on the OMI backend for the active SIP user. Internally calls `GET /mobile_sdk/internal_phone/device_infos` (same auth pattern as `URL_ADD_DEVICE`). Returns `NSArray<NSDictionary *>` with a compact, normalized shape per device: `device_id`, `token`, `device_type` (mapped to `"ios"` / `"android"` instead of raw int), `voip_token`, `app_id`, `created_time`, `sipNumber` (injected from `getCurrentSip`), `project_id`. Empty array on logout, empty payload, network failure, or parse error — never returns `nil`.
+
+- **[FEATURE] `+ isCurrentDeviceRegistered`** (`OmiClient.h`, `OmiClient.m`) — Helper that calls `getOmiDevices` and checks whether the local `device_id` + `app_id` pair appears in the returned device list. Returns `NO` early when not logged in (`getCurrentSip` nil) or `device_id` empty, avoiding unnecessary HTTP. Intended for clients to verify their device record was not lost on the backend (e.g. after reinstall or backend cleanup).
+
+- **[FEATURE] `+ needsReLogin`** (`OmiClient.h`, `OmiClient.m`) — Convenience guard built on top of `isCurrentDeviceRegistered`. Returns `YES` when a SIP user is set locally but no matching device exists on backend — i.e. the local session is stale and the user must logout + login again to re-register. Returns `NO` when not logged in (nothing to recover) or when registration is intact. Clients should call this on app foreground or before initiating critical operations.
+
+### Notes
+
+- No caching implemented in this version — each call performs a fresh HTTP request. Recommended usage: call once after login / on app foreground, not in tight loops. Caching may be added in a future version if production telemetry shows excessive call volume.
+- These APIs are read-only diagnostics: the SDK never auto-logouts or auto-cleans up backend records. Client apps must decide the recovery action (typically: show alert → call `logoutWithCompletion:` → prompt user to login again).
+- `device_type` field is normalized from the raw integer (`KEY_OMI_APP_DEVICE_TYPE_IOS = 2`) to a stable string (`"ios"` / `"android"`) so consumers do not need to know the internal enum.
+
+---
+
 ## [1.11.18] - 2026-05-14
 
 ### Bug Fix — Compile error `Expected a type` when importing `OmiClient.h` directly
