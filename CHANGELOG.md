@@ -1,5 +1,34 @@
 # CHANGELOG of OmiKit
 
+## [1.11.22] - 2026-06-03
+
+### Bug Fix — `setDisplayName:forCallUUID:` still showed raw userId after 1.11.21
+
+- **[BUG] UUID mismatch between app and CallKit** (client log, OMICall Contact Center 2026-06-03, 14:48:09). Even after 1.11.21 fixed the `CXHandle.value` issue, the app still saw the raw Zalo userId `2188926975485803225` on lockscreen. Root cause:
+  - The VoIP push payload carries `callId = 77716170-FE8B-418D-8D13-A95DD7BDDB4B`. This is what `OMICall.uuid` and `OMICallStateChanged` notifications expose to the app.
+  - But `VoIPPushHandler` reports CallKit with a SEPARATE UUID generated via `[CallIDsManager genCallIDGenerate:callName:]` (in the log: `callGen = 98D6ED94-B39D-443D-A003-1F5415AF6302`).
+  - The app correctly called `[OmiClient setDisplayName:@"Nhat Tien Nguyen" forCallUUID:77716170-…]` (the only UUID it had), so the store wrote the mapping under the origin UUID. The 4-arg `prepareCallUpdateWithVideo` was called with `callUUID = 98D6ED94-…` (the gen UUID used for CallKit reporting) → lookup miss → fell back to the raw remoteName from SIP (empty) → CallKit kept the raw userId.
+
+- **[FIX] Mirror the mapping onto both UUIDs + cross-lookup in resolver** (`OmiClient.m`, `OMIUtils.m`):
+  1. `setDisplayName:forCallUUID:` now mirrors the mapping onto **both** the origin and the generated UUID (resolved via `CallIDsManager getCallIDOrigin:` / `getCallIDGenerate:`). Whether the app passes the origin UUID or the gen UUID, both keys end up in the store.
+  2. The same method also resolves the gen UUID before invoking `reportCallWithUUID:updated:` — CallKit only knows the gen UUID, so refreshing with the origin UUID was a silent no-op.
+  3. `prepareCallUpdateWithVideo:callNumber:remoteName:callUUID:` does a second lookup through the alternate UUID via `CallIDsManager` if the first lookup misses. Defensive belt-and-braces against any other call site that might pass the "other" UUID variant.
+
+### Impact
+
+- Zalo userId resolved to a friendly name now actually appears on lockscreen / banner — the visible bug clients reported.
+- Both incoming-push and outbound-call display-name flows hit the store regardless of which UUID variant the caller uses.
+- No new public API. No breaking changes. `OMIDisplayNameStore` semantics unchanged — the only change is that we now write two entries per call instead of one when both UUID variants exist.
+- Auto-cleanup on call disconnect (added in 1.11.20) already removes both UUID variants thanks to the existing `removeDisplayNameForCallUUID:` calls in `CallKitProviderDelegate`, so no leak.
+
+### Files touched
+
+- `OmiKit/Classes/OmiClient.m` — `setDisplayName:forCallUUID:` (dual-UUID mirror + gen-UUID refresh).
+- `OmiKit/Classes/SIPCore/OMIUtils.m` — `prepareCallUpdateWithVideo:callNumber:remoteName:callUUID:` (cross-UUID lookup).
+- No header change. No call-site change anywhere else.
+
+---
+
 ## [1.11.21] - 2026-06-03
 
 ### Bug Fix — CallKit silently rejected `CXCallUpdate` when display name contained letters / spaces
