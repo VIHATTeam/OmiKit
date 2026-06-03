@@ -67,6 +67,21 @@
                                   callNumber:(NSString *)callNumber
                                   remoteName:(NSString *)remoteName ;
 
+/// INTERNAL USE ONLY — SDK consumers should call `[OmiClient setDisplayName:forCallUUID:]`
+/// to override the CallKit display name; the SDK then routes through this
+/// builder automatically. Direct usage from app code is unsupported and the
+/// signature may change between versions.
+///
+/// Same behaviour as the 3-arg variant but also consults the per-call-UUID
+/// display-name mapping (set via `[OmiClient setDisplayName:forCallUUID:]`).
+/// Used by the SDK when reporting a known active call so the lockscreen
+/// reflects the app-injected name on every CallKit refresh (answered,
+/// connected, etc.).
++ (CXCallUpdate *)prepareCallUpdateWithVideo:(BOOL)isVideo
+                                  callNumber:(NSString *)callNumber
+                                  remoteName:(NSString *)remoteName
+                                     callUUID:(nullable NSUUID *)callUUID;
+
 /*
  Check if IPv6 is available on cellular network
  */

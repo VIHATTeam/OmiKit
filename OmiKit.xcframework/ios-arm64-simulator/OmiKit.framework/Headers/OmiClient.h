@@ -138,6 +138,42 @@
  *  @return YES if re-login is required, NO otherwise.
  */
 + (BOOL)needsReLogin;
+
+#pragma mark - CallKit Display Name
+
+/**
+ *  Set a display name for a phone number / userId. The SDK will use this
+ *  name when reporting the call to CallKit (lockscreen, banner, in-call UI)
+ *  instead of the raw value. Typical use case: resolve a Zalo userId to a
+ *  human-friendly name and inject it before/after the call is reported.
+ *
+ *  @param displayName  Human-friendly name. Pass nil/empty to clear the mapping.
+ *  @param phoneNumber  Phone number or userId the name applies to.
+ */
++ (void)setDisplayName:(NSString * _Nullable)displayName
+              forPhone:(NSString * _Nonnull)phoneNumber;
+
+/**
+ *  Set a display name bound to a specific call UUID. Takes priority over
+ *  the phone-number mapping. Use this when the app fetched the name AFTER
+ *  CallKit was already reported (typical Zalo VoIP-push flow) — the SDK
+ *  will push a CXCallUpdate to refresh the name on lockscreen.
+ *
+ *  @param displayName  Human-friendly name. Pass nil/empty to clear the mapping.
+ *  @param uuid         Call UUID returned by the SDK / push payload.
+ */
++ (void)setDisplayName:(NSString * _Nullable)displayName
+           forCallUUID:(NSUUID * _Nonnull)uuid;
+
+/// Remove the display-name mapping for one phone number.
++ (void)removeDisplayNameForPhone:(NSString * _Nonnull)phoneNumber;
+
+/// Remove the display-name mapping for one call UUID.
++ (void)removeDisplayNameForCallUUID:(NSUUID * _Nonnull)uuid;
+
+/// Wipe every display-name mapping. Typically called on logout.
++ (void)clearAllDisplayNames;
+
 /**
  *  Start call with Uuid (use for api key)
  */

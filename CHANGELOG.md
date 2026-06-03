@@ -1,5 +1,55 @@
 # CHANGELOG of OmiKit
 
+## [1.11.21] - 2026-06-03
+
+### Bug Fix — CallKit silently rejected `CXCallUpdate` when display name contained letters / spaces
+
+- **[BUG] `setDisplayName:forCallUUID:` did not refresh the lockscreen / banner — `OMIUtils.m:prepareCallUpdateWithVideo:`** (client report from OMICall Contact Center, 2026-06-03). The previous implementation wrote the human-readable name into BOTH `CXCallUpdate.localizedCallerName` AND `CXCallUpdate.remoteHandle.value`. Apple's `CXHandle` validates `value` against the declared `type`: for `CXHandleTypePhoneNumber` only digits / `+` / `-` / `(` / `)` / `.` / space are accepted. A name like `"Nhat Tien Nguyen"` or `"Trần Hoài Hưng"` contains letters → iOS silently rejected the entire update with no exception and no log. Result: the lockscreen kept showing the raw Zalo userId reported on the initial `reportNewIncomingCall`, even though `[provider reportCallWithUUID:updated:]` returned successfully.
+
+- **[FIX]** Split the two fields per Apple semantics: `remoteHandle.value` always carries the raw phone number / userId (matches the declared type), `localizedCallerName` carries the free-form display label that overrides the visible name on lockscreen / banner / recents. The masking branch (`isPartialPhoneNumber`) now mutates the display label, never the handle value.
+
+### Impact
+
+- Vietnamese / Unicode contact names (e.g. `"Trần Hoài Hưng"`) now render correctly on lockscreen, banner, and the in-call CallKit overlay.
+- Names resolved from a Zalo userId (`setDisplayName:forCallUUID:` flow described in 1.11.20) actually appear on the lockscreen after the app injects them.
+- The recents list in the system Phone app now stores the raw number / userId in the handle (so "Call Back" dials the correct endpoint) while the visible row label uses the friendly name.
+- Backward compatible: callers that never set a display name see the same behaviour as before (handle value = phone number = visible label).
+
+### Files touched
+
+- `OmiKit/Classes/SIPCore/OMIUtils.m` — `+prepareCallUpdateWithVideo:callNumber:remoteName:callUUID:` only. No public API change; no header change; no other call site touched.
+
+---
+
+## [1.11.20] - 2026-06-02
+
+### Feature — CallKit display-name override (Zalo userId → human name)
+
+- **[FEATURE] `+ setDisplayName:forPhone:`** (`OmiClient.h`, `OmiClient.m`) — Inject a human-friendly name for a phone number / userId. When the SDK reports the call to CallKit (lockscreen, banner, in-call UI), it shows the injected name instead of the raw value (e.g. `"Trần Hoài Hưng"` instead of `"3483125729905074927"`). Mapping is in-memory only; pass `nil` to clear a single entry.
+
+- **[FEATURE] `+ setDisplayName:forCallUUID:`** (`OmiClient.h`, `OmiClient.m`) — Bind a name to a specific call UUID (higher priority than the phone mapping). Designed for the **Zalo VoIP push** flow where the app needs to resolve the name AFTER `reportNewIncomingCall` was already fired. The SDK automatically pushes a fresh `CXCallUpdate` via `reportCallWithUUID:updated:` so the lockscreen refreshes without waiting for the next CallKit event.
+
+- **[FEATURE] `+ removeDisplayNameForPhone:` / `+ removeDisplayNameForCallUUID:` / `+ clearAllDisplayNames`** (`OmiClient.h`, `OmiClient.m`) — Remove individual mappings or wipe everything (call on logout).
+
+- **[INTERNAL] `OMIDisplayNameStore`** (`OmiKit/Classes/Utils/OMIDisplayNameStore.{h,m}`) — Thread-safe singleton holding two dictionaries: `phoneMap` and `uuidMap`. Reads use a concurrent dispatch queue; writes use `dispatch_barrier_async` so lookups during a CallKit report never block. Lookup order: uuid → phone → nil (fallback to raw value).
+
+- **[INTERNAL] `+ prepareCallUpdateWithVideo:callNumber:remoteName:callUUID:`** (`OMIUtils.h`, `OMIUtils.m`) — New overload that consults the per-UUID mapping in addition to the phone-number mapping. Existing 3-arg overload delegates to the 4-arg version with `callUUID=nil` — 100% backward compatible.
+
+- **[INTERNAL] Updated call sites** to pass the call UUID into `prepareCallUpdateWithVideo`:
+  - `CallKitProviderDelegate.reportIncomingCall:` (now uses `generatedUUID` for the mapping lookup before reporting the update)
+  - `VoIPPushHandler` (the VoIP push entry point — push payload UUID is passed in)
+  - `OmiClient` incoming-call branch around line 1226
+
+### Notes
+
+- Mapping is **in-memory only** — it's cleared on app launch and on `clearAllDisplayNames`. No `NSUserDefaults` persistence, since the app re-resolves names per session anyway.
+- Per-UUID mapping wins over per-phone mapping when both exist for the same call (the UUID is the unambiguous key).
+- `setDisplayName:forCallUUID:` is the recommended path for VoIP push: report CallKit immediately with the raw userId (mandatory to avoid iOS killing the app), resolve the name async, then call this API — the lockscreen updates within ~100ms.
+- Avatar is **out of scope** for v1.11.20. CallKit cannot render per-call avatars; the in-call UI overlay is the app's responsibility.
+- App should call `clearAllDisplayNames` on logout to drop stale entries.
+
+---
+
 ## [1.11.19] - 2026-05-18
 
 ### Feature — Backend device registration check APIs
