@@ -1,5 +1,71 @@
 # CHANGELOG of OmiKit
 
+## [1.11.23] - 2026-06-08
+
+### Feature — On-premise endpoint configuration
+
+Allow customers to route SDK traffic to their own on-premise infrastructure (HTTP backends, SIP proxy, STUN, TURN) without forking the SDK. Each field is optional — set it to override, leave nil to keep the SDK default.
+
+#### Public API
+
+```objc
+// Call ONCE in -application:didFinishLaunchingWithOptions: BEFORE any initWith… call.
++ (void)setOnPremiseInfoWithMobileSdkHost:(nullable NSString *)mobileSdkHost
+                            callEventHost:(nullable NSString *)callEventHost
+                            publicApiHost:(nullable NSString *)publicApiHost
+                             pushInfoHost:(nullable NSString *)pushInfoHost
+                              app2AppHost:(nullable NSString *)app2AppHost
+                            logUploadHost:(nullable NSString *)logUploadHost
+                                 sipProxy:(nullable NSString *)sipProxy
+                                stunServer:(nullable NSString *)stunServer
+                                turnServer:(nullable NSString *)turnServer
+                              turnUsername:(nullable NSString *)turnUsername
+                              turnPassword:(nullable NSString *)turnPassword;
+
++ (void)clearOnPremiseInfo;  // revert to SDK defaults
+```
+
+#### Behavior
+
+- SDK swaps **only scheme + host** of internal endpoint URLs; path and query parameters are preserved 100%. Example: `https://omisdk-v1-stg.omicrm.com/mobile_sdk/internal_phone/devices/add?utm_source=ios_sdk` → `https://omisdk-v1-stg-callcenter.<customer>.com.vn/mobile_sdk/internal_phone/devices/add?utm_source=ios_sdk`.
+- Config persisted in `NSUserDefaults` (key `omicall/onpremise_config_v1`) so it survives app relaunch — customers don't need to call the setter on every launch after the first.
+- Override priority for SIP / media: **on-premise > dynamic API provider (network-ice-provider/list) > hardcoded default**. For HTTP: **on-premise > hardcoded default**.
+- All 6 HTTP host groups, plus SIP proxy, STUN, TURN server + credentials, are independently overridable.
+
+#### Internal refactor — endpoints centralized
+
+- New header `OMIEndpoints.h` — single source of truth for all 19 hardcoded endpoint URL constants (previously scattered across `OmiClient.m` and `LogFileManager.m`).
+- New singleton `OMIOnPremiseConfig` (`+sharedInstance`) — stores overrides, persists to NSUserDefaults, and exposes `+rewriteURL:` which transparently swaps the host of a default URL when an override is configured for that group.
+- All 17 HTTP callsites in `OmiClient.m` and the log upload site in `LogFileManager.m` now go through `[OMIOnPremiseConfig rewriteURL:URL_*]`. When no override is configured, `rewriteURL:` returns the input string unchanged — zero overhead, zero behaviour change.
+- SIP / STUN / TURN integration points (`OMIUtils.getProxy`, `OMIEndpoint` STUN setup, `OMIAccountConfiguration` STUN/TURN, `OMIICEProvider.createDefaultViettelProvider`) all check on-premise first and fall back to existing logic.
+
+#### Backward compatibility
+
+- 100% backward compatible. **Clients that do not call `setOnPremiseInfo…` see byte-for-byte identical behavior** — same URLs, same SIP proxy (`171.244.138.14:5222`), same STUN/TURN (`stun.omicrm.com:3478`, `turn.omicrm.com:2222`), same `vh.omicrm.com` migration logic in `OMIUtils.saveProxy:` / `getProxy`.
+- No existing public API changed. Only two methods added.
+- Independently audited for break changes — confirmed safe to release.
+
+#### Files touched
+
+- **NEW**: `OmiKit/Classes/OMIEndpoints.h` — 19 URL constants centralized.
+- **NEW**: `OmiKit/Classes/OMIOnPremiseConfig.h` / `OMIOnPremiseConfig.m` — config store + URL resolver.
+- `OmiKit/Classes/PublicHeaders/OmiClient.h` — declare `setOnPremiseInfoWith…` + `clearOnPremiseInfo`.
+- `OmiKit/Classes/OmiClient.m` — extract URL constants, implement public methods, wire 17 callsites + `sendAgentCustomerRequest` helper through `rewriteURL:`.
+- `OmiKit/Classes/SIPCore/LogFileManager.m` — wire log upload URL through `rewriteURL:`.
+- `OmiKit/Classes/SIPCore/OMIUtils.m` — `+getProxy` checks on-premise SIP proxy first.
+- `OmiKit/Classes/SIPCore/OMIEndpoint.m` — STUN endpoint config checks on-premise first.
+- `OmiKit/Classes/SIPCore/Configurations/OMIAccountConfiguration.m` — per-account STUN/TURN checks on-premise first (higher priority than dynamic API provider).
+- `OmiKit/Classes/SIPCore/Configurations/OMIICEProvider.m` — `+createDefaultViettelProvider` checks on-premise overrides.
+- `Example/OmiKitSample/AppDelegate.m` — example usage in `-application:didFinishLaunchingWithOptions:`.
+
+#### Notes for integrators
+
+- To revert config: call `[OmiClient clearOnPremiseInfo]`. The persisted NSUserDefaults entry is removed.
+- Default TURN credentials (`vihat` / `834610100`) are still embedded in the SDK as before — only relevant when on-premise TURN is NOT configured. Customers deploying on-premise should always provide their own TURN credentials.
+- iOS Simulator cannot fully exercise CallKit outbound flow; verify end-to-end calls on a real device.
+
+---
+
 ## [1.11.22] - 2026-06-03
 
 ### Bug Fix — `setDisplayName:forCallUUID:` still showed raw userId after 1.11.21

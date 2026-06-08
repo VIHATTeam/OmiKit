@@ -12,6 +12,64 @@
 @class OMICallInfo, OMICallInfoItem;
 @interface OmiClient : NSObject
 
+#pragma mark - On-premise configuration
+
+/**
+ * Configure on-premise endpoints. Call ONCE in `didFinishLaunchingWithOptions`
+ * BEFORE any `initWith...` call.
+ *
+ * Each parameter is OPTIONAL: pass the customer-provided value to override the
+ * SDK default; pass `nil` (or empty string) to keep the SDK default.
+ *
+ * SDK swaps only the scheme+host of internal endpoint URLs — path and query
+ * params are preserved 100%.
+ *
+ * Persisted in NSUserDefaults so the config survives app relaunch.
+ *
+ * Example (Chailease):
+ * @code
+ * [OmiClient setOnPremiseInfoWithMobileSdkHost:@"omisdk-v1-stg-callcenter.chailease.com.vn"
+ *                                callEventHost:@"call-event-v2-stg-callcenter.chailease.com.vn"
+ *                                publicApiHost:@"public-v1-stg-callcenter.chailease.com.vn"
+ *                                 pushInfoHost:@"push-info-v2-stg-callcenter.chailease.com.vn"
+ *                                  app2AppHost:@"app-2-app-stg-callcenter.chailease.com.vn"
+ *                                logUploadHost:@"elastic-v2-stg-callcenter.chailease.com.vn"
+ *                                     sipProxy:@"sig-callcenter.chailease.com.vn:5222"
+ *                                   stunServer:@"stun-callcenter.chailease.com.vn:3478"
+ *                                   turnServer:@"turn-callcenter.chailease.com.vn:2222"
+ *                                 turnUsername:nil
+ *                                 turnPassword:nil];
+ * @endcode
+ *
+ * @param mobileSdkHost  Replaces omisdk-v1-stg.omicrm.com (devices, extensions, network info, ICE provider, rtp log)
+ * @param callEventHost  Replaces call-event-v2-stg.omicrm.com (call-action APIs)
+ * @param publicApiHost  Replaces public-v1-stg.omicrm.com (init call API)
+ * @param pushInfoHost   Replaces push-info-v2-stg.omicrm.com (has-answered)
+ * @param app2AppHost    Replaces app-2-app-stg.omicrm.com (agent/customer login)
+ * @param logUploadHost  Replaces elastic-v2-stg.omicrm.com (log upload)
+ * @param sipProxy       SIP proxy "host:port" (nil = SDK default)
+ * @param stunServer     STUN "host:port" (nil = SDK default)
+ * @param turnServer     TURN "host:port" (nil = SDK default)
+ * @param turnUsername   TURN username (nil = SDK default)
+ * @param turnPassword   TURN password (nil = SDK default)
+ */
++ (void)setOnPremiseInfoWithMobileSdkHost:(NSString *_Nullable)mobileSdkHost
+                            callEventHost:(NSString *_Nullable)callEventHost
+                            publicApiHost:(NSString *_Nullable)publicApiHost
+                             pushInfoHost:(NSString *_Nullable)pushInfoHost
+                              app2AppHost:(NSString *_Nullable)app2AppHost
+                            logUploadHost:(NSString *_Nullable)logUploadHost
+                                 sipProxy:(NSString *_Nullable)sipProxy
+                               stunServer:(NSString *_Nullable)stunServer
+                               turnServer:(NSString *_Nullable)turnServer
+                             turnUsername:(NSString *_Nullable)turnUsername
+                             turnPassword:(NSString *_Nullable)turnPassword;
+
+/**
+ * Clear all on-premise overrides — revert SDK to default endpoints/STUN/TURN/proxy.
+ */
++ (void)clearOnPremiseInfo;
+
 /**
  *  Init user name/password for endpoint, ussually this step need to be init
  * when app open firstime or login
