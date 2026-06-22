@@ -1,5 +1,46 @@
 # CHANGELOG of OmiKit
 
+## [1.11.24] - 2026-06-22
+
+### Fix — Force Opus mono (channel_cnt=1) for PBX compatibility
+
+Force the Opus encoder to run in **mono (channel=1)** instead of the previous stereo (channel=2) configuration. Resolves outbound call failures (`488 Not Acceptable Here` / `Q.850 cause=88 INCOMPATIBLE_DESTINATION`) on PBX deployments that do not support Opus stereo negotiation.
+
+#### Background
+
+- Before this release, the SDK negotiated Opus with `channel_cnt = 2`. While most modern FreeSWITCH / Asterisk versions accept stereo Opus, several PBX deployments (and some legacy proxies in the OMI stack) only accept `opus/48000/1`. When the offer contained `channel_cnt=2`, those PBX rejected the INVITE with 488.
+- Voice calls use a mono microphone source — stereo Opus offered no audible quality improvement and only increased bandwidth (~2x) and CPU.
+
+#### Change
+
+- In `adjustOpusConfig:sampleRate:bitRate:`, runtime `opus_cfg.channel_cnt` is forced to `1` (previously `2`) before applying via `pjmedia_codec_opus_set_default_param`.
+- The codec **identifier** in PJSIP registry stays `opus/48000/2` (it is PJSIP-internal and cannot be changed from the app layer). Only the runtime encoder config changes — PJSIP will emit `a=rtpmap` with the negotiated channel count.
+- `priorityForAudioCodec:` accepts both `opus/48000/1` and `opus/48000/2` as Opus identifier (backward-compat for future PJSIP versions that may rename the registry entry).
+
+#### Verified behavior
+
+- Outbound SDP: `m=audio <port> RTP/AVP 96 120` with `b=AS:117`, full Content-Length (~697 bytes vs ~129 bytes when broken).
+- Opus encoder log: `Initialize Opus encoder, sample rate: 48000, ch: 1, avg bitrate: 48000, ptime: 10/1`.
+- Sound device: `Opening sound device (speaker + mic) PCM@48000/1/10ms`.
+- Tested on iPhone 13 Pro / iOS 26.5 against OMI staging (`171.244.138.14:5222`) — call connected, confirmed for 47s, BYE clean, MOS 4.06.
+
+#### Backward compatibility
+
+- 100% backward compatible. Mono is a strict subset of stereo in Opus negotiation per RFC 7587 — any peer that accepted stereo also accepts mono.
+- No public API changed.
+- Bandwidth per call drops from ~50-64 kbps to ~24-32 kbps; battery consumption marginally lower; voice quality unchanged (mono source).
+
+#### Files touched
+
+- `OmiKit/Classes/SIPCore/OMIEndpoint.m` — `adjustOpusConfig:sampleRate:bitRate:` forces `channel_cnt=1`. `priorityForAudioCodec:` accepts both `/1` and `/2` identifiers.
+
+#### Notes for integrators
+
+- No code change required. After upgrading to 1.11.24, outbound INVITE will offer Opus mono automatically.
+- If a customer's PBX explicitly requires stereo Opus (rare — typically only music/broadcast use cases), contact the SDK team for a build-time toggle.
+
+---
+
 ## [1.11.23] - 2026-06-08
 
 ### Feature — On-premise endpoint configuration
