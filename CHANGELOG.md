@@ -1,5 +1,46 @@
 # CHANGELOG of OmiKit
 
+## [1.11.25] - 2026-07-10
+
+### Fix — Missed-call callback not fired for cancelled-while-ringing calls + duplicate "Unknown Caller" in Recents
+
+Two related regressions for incoming calls cancelled by the caller while still ringing (caller hangs up before the callee answers):
+
+1. The `missedCallBlock` registered via `setMissedCallBlock:` was never invoked, so consumers (including the OMICall React Native SDK) could not surface the missed call.
+2. The device call history (Recents) showed a duplicate, handle-less **"Unknown Caller"** entry alongside the real missed call.
+
+#### Root cause
+
+- **Missed callback:** For a caller-cancel while ringing, the real CANCEL is caught first by the transport-log safety-net in `logCallBack` (which bypasses the SIP mutex deadlock). That path forced the call to `Disconnected` directly and never ran the missed-call detector. The packet-parsing detector (`wasCallMissed:`) only runs from `onTxStateChange`, whose CANCEL branch early-returns during the endpoint teardown that follows (the account lookup returns nil) — so the block was never delivered.
+- **Duplicate Recents:** On a duplicate VoIP push (iOS can deliver the same push 2+ times within milliseconds), `VoIPPushHandler` reported a *dummy* CallKit call — with `CXHandleTypeGeneric value:@""` — purely to satisfy PushKit's "every push must report an incoming call" requirement. CallKit stored that handle-less dummy as an "Unknown Caller" row. A second contributor: `CallKitProviderDelegate` reported incoming never-answered calls via `reportOutgoingCallWithUUID:`, creating another handle-less entry.
+
+#### Change
+
+- `OMIEndpoint.m` — the `logCallBack` CANCEL safety-net now delivers the missed-call event. Added a shared helper `+ fireMissedCallBlockForCall:reason:` (mirrors `wasCallMissed:`'s caller-name handling) invoked from both the `logCallBack` CANCEL path (with the strong `OMICall*` it already holds) and the existing `wasCallMissed:` path. Removed the failing direct `CXEndCallAction` (was erroring with `CXErrorCodeRequestTransactionError` Code=4) and the redundant object-less notification from that block — the `setCallState:` → `OMICallStateDisconnected` transition already posts `OMICallStateChangedNotification` carrying the `OMICall`, which `CallKitProviderDelegate` observes to end the CallKit call.
+- `OMICall.m` / `OMICall+Private.h` — added a `missedCallReported` flag (associated object) so the block fires at most once even if both detection paths run.
+- `CallKitProviderDelegate.m` — `callStateChanged:` DISCONNECTED handling now branches on `call.isIncoming`: outgoing never-connected calls keep the existing `reportOutgoingCallWithUUID:` + end flow; incoming never-answered calls just end the existing CallKit record (which already carries the real `CXHandle` from `reportNewIncomingCallWithUUID:`), instead of reporting a duplicate handle-less entry.
+- `VoIPPushHandler.m` — on the duplicate-push path, if push #1 has already created the `OMICall` (i.e. already reported to CallKit), the duplicate now returns without reporting anything — no dummy, no extra Recents row, and the real missed-call entry is preserved. Only when push #2 races ahead of push #1 (no `OMICall` yet) does it fall back to a dummy, now tagged with the caller's phone number (`CXHandleTypePhoneNumber`) instead of an empty generic handle, so even that fallback never shows as "Unknown Caller".
+
+#### Verified behavior (iPhone 13 Pro / iOS 26.5, on-device)
+
+- Incoming call cancelled while ringing: `missedCallBlock` fires exactly once with `terminateReason == OMICallTerminateReasonOriginatorCancel`.
+- Recents shows a single entry with the correct caller number — no duplicate, no "Unknown Caller".
+- Call answered locally: `missedCallBlock` not fired (no false missed-call).
+- Duplicate VoIP push no longer creates a spurious Recents row; no `CXErrorCodeRequestTransactionError`.
+- No regression to the CANCEL mutex-deadlock safety-net or the duplicate-push kill guard.
+
+#### Backward compatibility
+
+- No public API changed. The `missedCallBlock` signature and `terminateReason` values are unchanged — this restores the block firing for the cancelled-while-ringing case. Existing consumers (e.g. the RN SDK's `setMissedCall`) need no changes.
+
+#### Files touched
+
+- `OmiKit/Classes/SIPCore/OMIEndpoint.m`
+- `OmiKit/Classes/SIPCore/OMICall.m`
+- `OmiKit/Classes/SIPCore/OMICall+Private.h`
+- `OmiKit/Classes/SIPCore/CallKitProviderDelegate.m`
+- `OmiKit/Classes/Utils/VoIPPushHandler.m`
+
 ## [1.11.24] - 2026-06-22
 
 ### Fix — Force Opus mono (channel_cnt=1) for PBX compatibility
