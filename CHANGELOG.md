@@ -1,5 +1,57 @@
 # CHANGELOG of OmiKit
 
+## [1.11.26] - 2026-07-20
+
+### TURN relay overhaul — on-premise two-way audio, per-server transport, and a TCP tear-down crash fix
+
+This release makes TURN relay work reliably for on-premise deployments (fixing carrier-grade-NAT two-way audio loss), lets each deployment pick its TURN transport, and fixes a use-after-free crash that occurred when ending a TURN-over-TCP call.
+
+#### 1. On-premise TURN enabled + sourced from config (fixes two-way audio loss)
+
+- **Problem:** On-premise deployments on carrier-grade NAT (e.g. LTE / enterprise firewalls) lost two-way audio. TURN was hard-disabled (`enableTurn = NO`, left over from an earlier crash workaround), so ICE only gathered host + srflx candidates — no relay candidate — and media had no viable path to the on-prem PBX.
+- **Change:** TURN is enabled by default for all accounts as a safe relay fallback (`OMIAccountConfiguration`). On-premise reads its TURN server, credentials, and transport **only** from the customer config (`setOnPremiseInfoWith…turnServer:`) — it no longer calls the dynamic `network-ice-provider/list` API (that endpoint doesn't exist on-prem and its result was ignored anyway). Only OMI cloud fetches per-network TURN dynamically.
+- **Fallback:** when the API is unavailable or the network is unknown (provider list empty), the SDK falls back to the default TURN server instead of dropping the relay.
+
+#### 2. TURN transport follows the server's published `?transport=`
+
+- New `OMITurnConnType` enum (Auto / UDP / TCP / TLS) + `connType` property on `OMITurnConfiguration`, plus `+connTypeFromURL:` / `+normalizeServerURL:` helpers.
+- The App↔TURN-server transport is parsed from the TURN URL's `?transport=` parameter (or the `turns:` scheme for TLS), then the URL is normalized to bare `host:port` before it reaches the SIP stack. OMI cloud reads this from the dynamic API provider list; on-premise reads it from the configured `turnServer` (e.g. `turn-host:2222?transport=tcp`). When no transport is specified, UDP is used.
+- This is independent of the SIP signaling transport and of the media/RTP transport (RTP always flows UDP through the relay once allocated).
+
+#### 3. Fix — TURN-over-TCP use-after-free crash on END CALL (EXC_BAD_ACCESS)
+
+- **Symptom:** Ending a call that used TURN over TCP crashed on an OMISIP worker thread — reproduced reliably on the on-premise relay (higher-latency internal path) and on END CALL from background via CallKit. Did not occur on UDP.
+- **Root cause (OMISIP / underlying SIP stack):** a single TCP `recv()` can carry two back-to-back packets. Processing the first — a TURN REFRESH(lifetime=0) success response during hangup — synchronously drove the TURN session to destruction and freed it (all within the same event-pump stack, under the recursive group lock). The socket read loop then fed the second packet to the now-freed session, dereferencing freed memory.
+- **Fix:** the TURN socket read loop now re-checks the session on every iteration (not just once before the loop), so a session destroyed while processing an earlier packet in the same buffer is never dereferenced again. Additional defensive guards were added on the sibling data-connection reader and the session-destroy path. Source-only change to the underlying stack; the prebuilt `OmiSIP.framework` was rebuilt.
+
+#### 4. Diagnostics & tooling
+
+- `[TURN-DIAG]` relay logging now reports from the ICE-transport layer (authoritative) — it logs `RELAY ALLOCATED` / `RELAY FAILED` when the relay is actually (de)allocated, instead of parsing the SDP body in `onCallSdpCreated` (which fires before ICE injects candidates and always read relay=0, a false negative).
+- `HttpRequest` gained a runtime-toggleable API logger: `+ setAPILogEnabled:` (master switch — method + URL + status + elapsed) and `+ setAPILogBodyEnabled:` (also headers + request/response body). Both default OFF for release; sensitive headers (password / token / api-key / authorization) are masked. Added `[API-CHECK]` logging to `getOmiDevices` for API-health diagnostics.
+
+#### Verified behavior (iPhone 13 Pro / iOS 26.5, on-device)
+
+- On-premise (Chailease) over TURN **UDP** and **TCP**: relay candidate allocated, two-way audio, MOS ~4.0, packet loss ~0%.
+- OMI cloud over TURN **TCP** on real 5G: outgoing + incoming (VoIP-push background) calls, END CALL from CallKit background — no crash across repeated calls, clean teardown (`OMISIP DESTROY COMPLETE`).
+- The TURN-over-TCP tear-down crash no longer reproduces on the background END-CALL scenario that previously crashed every time.
+
+#### Backward compatibility
+
+- **No breaking changes.** No public API signature changed and the framework ABI is unchanged — existing SDK consumers need no code changes. The new `OMITurnConnType` enum, `connType` property, and class methods on `OMITurnConfiguration` / `HttpRequest` are purely additive.
+- The TURN fix only adds fail-safe guards on the tear-down path; normal call flow (especially UDP) is unaffected.
+
+#### Files touched
+
+- `OmiKit/Classes/PublicHeaders/OMITurnConfiguration.h`, `OmiKit/Classes/SIPCore/Configurations/OMITurnConfiguration.m`
+- `OmiKit/Classes/SIPCore/Configurations/OMIAccountConfiguration.m`
+- `OmiKit/Classes/SIPCore/OMIAccount.m`
+- `OmiKit/Classes/SIP/OmiSipUser.m`, `OmiKit/Classes/SIPCore/OMISIPLib.m`
+- `OmiKit/Classes/SIPCore/OMIEndpoint.m`, `OmiKit/Classes/SIPCore/OMICall.m`, `OmiKit/Classes/SIPCore/OMICallCleanupCoordinator.m`
+- `OmiKit/Classes/OmiClient.m`
+- `OmiKit/Classes/SIPCore/HttpRequest.m`, `OmiKit/Classes/PublicHeaders/OMIUtils.h`
+- `OmiKit/Classes/SIPCore/OMIUtils.m` (SDK_VERSION → 1.11.26)
+- `OmiKit/Frameworks/OmiSIP/OmiSIP.framework` (rebuilt with the TURN-over-TCP tear-down fix)
+
 ## [1.11.25] - 2026-07-10
 
 ### Fix — Missed-call callback not fired for cancelled-while-ringing calls + duplicate "Unknown Caller" in Recents
