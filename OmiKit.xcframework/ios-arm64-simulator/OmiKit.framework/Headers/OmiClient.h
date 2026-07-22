@@ -333,6 +333,21 @@
 + (void)setLogLevel:(int)level;
 
 /**
+ * Dev/proxy mode. When set to YES, the SDK does NOT apply the STUN/TURN/proxy
+ * values returned by the dynamic `network-ice-provider/list` API — it behaves
+ * like on-premise in that respect, so your own custom proxy/ICE config is not
+ * overwritten by the server response. Default is NO (dynamic API applied, normal
+ * cloud behaviour). Call this BEFORE login / init if you need it.
+ * @param value YES to skip applying the dynamic ICE-provider list, NO for default.
+ */
++ (void)setProxyDev:(BOOL)value;
+
+/**
+ * Current value of the dev/proxy mode set via `setProxyDev:`. Defaults to NO.
+ */
++ (BOOL)isProxyDev;
+
+/**
  *Use to change information of Call in Callkit like CallerName, Caller Number
  * @Param: call: object call need to update
  */

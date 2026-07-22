@@ -1,5 +1,19 @@
 # CHANGELOG of OmiKit
 
+## [1.11.27] - 2026-07-22
+
+### New API — `setProxyDev:` to keep a custom proxy / ICE config from being overwritten
+
+Adds an opt-in flag so integrators using their own SIP proxy (passed via `initWithUsername:password:realm:proxy:`) can prevent the dynamic `network-ice-provider/list` API from replacing their proxy / STUN / TURN with the server's values.
+
+- **New public API:** `+ (void)setProxyDev:(BOOL)value;` and `+ (BOOL)isProxyDev;` (default **NO**). Additive only — no change to existing behaviour when unset.
+- **Behaviour when `YES`:** the SDK skips the dynamic ICE-provider list entirely — same effect on-premise already has:
+  1. does not fetch `network-ice-provider/list`,
+  2. does not apply the dynamic proxy (`applyDynamicConfiguration` returns early, so a stale cached provider can't overwrite the custom proxy either),
+  3. does not read STUN / TURN from the provider cache — the app owns the full ICE / proxy config.
+- **Usage:** call `[OmiClient setProxyDev:YES]` **before** login / `initWithUsername:…` (the init immediately triggers registration, which reads this flag). The value is persisted in `NSUserDefaults`, so subsequent launches honour it as well.
+- **Note:** on cloud without this flag, the dynamic API still owns proxy / ICE — this flag is the supported way to keep a hand-supplied proxy authoritative without going full on-premise.
+
 ## [1.11.26] - 2026-07-20
 
 ### TURN relay overhaul — on-premise two-way audio, per-server transport, and a TCP tear-down crash fix

@@ -34,6 +34,7 @@ static NSString * OMICALL_TRANSFERED = @"omicall/call/transfer";
 static NSString * OMICALL_CALL_ID = @"omicall/call/callID";
 static NSString * OMICALL_IS_PARTIAL_PHONE_NUMBER = @"omikit/isPartialPhoneNumber";
 static NSString * OMICALL_PHONE_MASK_POLICY = @"omikit/phoneMaskPolicy";
+static NSString * OMICALL_IS_PROXY_DEV = @"omikit/isProxyDev";
 
 /**
  * How the SDK masks a phone number when displaying it on CallKit / native UI.
