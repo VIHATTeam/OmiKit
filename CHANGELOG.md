@@ -1,5 +1,16 @@
 # CHANGELOG of OmiKit
 
+## [1.11.28] - 2026-07-22
+
+### Fix — custom SIP proxy (hostname or IP) is now honored + normalized
+
+Follows up on `setProxyDev:` (1.11.27): the custom proxy passed to `initWithUsername:password:realm:proxy:` now actually takes effect, including a **hostname** proxy, and any proxy string is cleaned up before use.
+
+- **Bug:** a custom proxy given as a hostname (e.g. `pbx-test.omicrm.com:5222`) was silently dropped and the SDK fell back to the default proxy. The init path ran the proxy through `extractIPAddress:`, which only accepts a numeric IP (or a `<sip:…>` URI) and returned `nil` for a hostname; `saveProxy` then stored `DEFAULT_PROXY` instead. Only a raw IP worked before.
+- **Fix:** the init path stores the caller's proxy directly (no `extractIPAddress:`), and `saveProxy` was rewritten around a new normalizer that accepts **both IP and hostname** and cleans up common variations: strips a scheme (`sip:` / `sips:` / `http(s)://`), a leading `<`, and any trailing path / SIP params / query; keeps an explicit port as-is (e.g. `:8080`) and appends `:5222` only when no port is present. A hostname is preserved (not resolved to a fixed IP), so the SIP stack resolves it via DNS at send time — keeping DNS failover and correct TLS SNI.
+- **On-premise** `sipProxy` (`setOnPremiseInfoWith…sipProxy:`) now runs through the same normalizer, so an on-prem proxy given without a port / with a scheme is handled consistently. Existing well-formed values (e.g. `host:5222`) are unchanged.
+- **No behaviour change** for existing integrations that already pass a valid `host:port` or IP; the legacy `vh.omicrm.com` → default mapping is preserved.
+
 ## [1.11.27] - 2026-07-22
 
 ### New API — `setProxyDev:` to keep a custom proxy / ICE config from being overwritten
