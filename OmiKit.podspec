@@ -8,13 +8,13 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OmiKit'
-  s.version          = '1.11.28'
+  s.version          = '1.11.29'
   s.homepage         = "https://omicall.com/"
   s.summary          = "OMICall Framework"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Hoang Quoc Viet' => 'viethq@vihat.vn' }
 
-  s.description      = "Omicall easy to make call/video call app2app, app2phone"
+  s.description      = "OMICall easy to make call/video call app2app, app2phone"
   s.documentation_url = "https://api.omicall.com/web-sdk/mobile-sdk"
   s.changelog        = "https://github.com/VIHATTeam/OmiKit/releases"
 

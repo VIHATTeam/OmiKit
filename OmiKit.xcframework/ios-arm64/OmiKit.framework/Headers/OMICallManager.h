@@ -284,6 +284,22 @@
 - (void)startCheckSpamCalls:(NSInteger)retry;
 - (void)startCheckSpamCalls:(NSInteger)retry forCallUUID:(NSUUID *_Nullable)callUUID;
 
+/**
+ *  Mark that a VoIP push for a real incoming call has just been received.
+ *  Used to keep the endpoint alive through its destroy grace window: a forwarded /
+ *  back-to-back incoming call (OMI forward flow) can land while the previous call's
+ *  endpoint is still tearing down, and destroying it then forces a slow recreate that
+ *  makes the next call show CallKit without ringing. Recording the push timestamp lets
+ *  the grace window defer the destroy until the incoming INVITE has had time to arrive.
+ */
+- (void)markIncomingPushReceived;
+
+/**
+ *  YES if a real incoming VoIP push arrived recently (within the forward grace window),
+ *  signalling that an incoming call is imminent and the endpoint should not be destroyed.
+ */
+- (BOOL)hasRecentIncomingPush;
+
 - (__weak OMICall * _Nullable)updateNameCaller:(NSString *_Nonnull)name callId:(NSInteger *_Nonnull)callId;
 
 - (__weak OMICall * _Nullable)findCallWithCallId:(NSInteger *_Nonnull)callId;

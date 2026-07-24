@@ -1,5 +1,17 @@
 # CHANGELOG of OmiKit
 
+## [1.11.29] - 2026-07-24
+
+### Fix — incoming call rings then ends early / crash, in the OMI forward flow
+
+Hardens the OMI "no-answer → forward-to-self" flow (a call rings, is forwarded, and the same call is re-pushed as a new leg). Several races could make the second push ring only a few seconds and then end, or — in one case — kill the app.
+
+- **Ring-then-end (endpoint torn down under a live call):** when the previous call ended, the endpoint's destroy grace window could elapse and destroy the endpoint at the exact moment a new INVITE was already sitting in it. The new call then had to recreate + re-register the endpoint (~5s), its INVITE arrived too late, and it was ended. The destroy is now deferred while a live SIP call is present (checked via the OMISIP call count), a recent incoming push is pending, or an app-level call exists. The forward grace window was also widened (5s → 8s) to match real PBX forward timing.
+- **Ring-then-end (spam-check ran before the endpoint was ready):** if the previous call had fully destroyed the endpoint, an incoming push must recreate and re-register it before the PBX can route the INVITE (flow: push → register → INVITE). The spam-check timer could fire during that window and end a genuine call. Spam-check now waits until the endpoint is available **and** the account is registered before it can classify a call as spam; a real spam / virtual push is still ended once the endpoint is ready and no INVITE arrives.
+- **Crash — `Killing app because it never posted an incoming call…`:** when a call had already ended and the **same** callId was re-pushed (PBX forward/retry), the duplicate-push guard skipped reporting to CallKit because a (now-disconnected) call object still lingered. iOS had already torn down that CallKit UI, so the re-push went unreported and PushKit killed the app. The guard now only skips when the prior call is **still live**; a re-push for an already-ended call reports to satisfy PushKit.
+- **Per-leg identification:** each VoIP push carries a distinct `uuid` even when `callId` is reused across forward legs. That `uuid` is now recorded on the call (`OMICall.pushDialogUuid`) so two legs sharing a callId can be told apart. On an INVITE whose UUID doesn't match, the SDK now binds it to the call that has no OMISIP call handle yet (the leg this INVITE creates) instead of a blind last-object fallback.
+- **No behaviour change** for normal single calls; all changes are additive / fail-safe and do not alter answer/hangup/media or any OMISIP call operation. Public API is additive only.
+
 ## [1.11.28] - 2026-07-22
 
 ### Fix — custom SIP proxy (hostname or IP) is now honored + normalized

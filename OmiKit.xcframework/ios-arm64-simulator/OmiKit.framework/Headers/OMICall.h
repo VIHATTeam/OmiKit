@@ -366,6 +366,16 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (nonatomic) NSString * _Nullable omiId;
 
 /**
+ * Per-leg push identifier. The VoIP push payload carries a `uuid` field that is DISTINCT for
+ * every push, whereas `callId` (which backs the `uuid` property below) is REUSED across the
+ * legs of an OMI no-answer → forward flow. Recording the per-push uuid lets us tell two legs
+ * that share the same callId apart. This is auxiliary bookkeeping only — call routing, CallKit
+ * reporting and all PJSIP operations still key off `uuid` / `callId` exactly as before; nothing
+ * about the SIP dialog or PJSIP call depends on this value.
+ */
+@property (nonatomic) NSString * _Nullable pushDialogUuid;
+
+/**
  * sipNumber is selected number for called out/in
  */
 @property (nonatomic) NSString * _Nullable sipNumber;
