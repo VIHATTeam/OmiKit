@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "OMICall.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -78,6 +79,12 @@ NS_ASSUME_NONNULL_BEGIN
  * @return YES if set_show was called, NO if skipped (already visible or invalid)
  */
 - (BOOL)safeShowVideoWindow:(int)wid reason:(NSString *)reason;
+
+/**
+ * Show/hide the built-in connection overlay for the remote video (main thread).
+ * Called by OMIVideoCallManager; apps normally do not call it directly.
+ */
+- (void)updateRemoteConnectionState:(OMIRemoteConnectionState)state;
 
 /**
  * FIX-LL: Centralized gatekeeper for pjsua_vid_win_set_show(FALSE).

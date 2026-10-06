@@ -1,5 +1,55 @@
 # CHANGELOG of OmiKit
 
+## [1.11.30] - 2026-10-06
+
+### Video calls — Picture-in-Picture, sharper video, connection-state UI, and stability fixes
+
+Tested with Zalo/ZCC, web (WebRTC) ↔ mobile and mobile ↔ mobile (iOS / Android) through the OMICALL PBX.
+
+#### 1. New — system Picture-in-Picture (iOS 15+)
+
+- **API (`OMIVideoCallManager`):** `pictureInPictureEnabled` (default **NO**), `isPictureInPictureSupported`, `isPictureInPictureActive`, `startPictureInPicture`, `stopPictureInPicture`, optional delegate `videoCallManager:pictureInPictureDidChange:`.
+- With `pictureInPictureEnabled = YES` the remote video moves into a floating PiP window when the app goes to the background during a video call, with a small **self-view** (what the other party receives) in the corner. Tapping it returns to the call screen with a seamless hand-over (no stale frozen frame).
+- PiP closes automatically when the call ends — including while the app is in the background.
+- Rendering uses `AVSampleBufferDisplayLayer` fed directly from the H.264 stream (new OMISIP access-unit taps), so it keeps working in the background where the regular renderer and decoder are suspended by iOS.
+- **App requirements:** `audio` in `UIBackgroundModes` (VoIP apps already have it). To keep **sending** your camera while in PiP, add the **Multitasking Camera Access** capability (`com.apple.developer.avfoundation.multitasking-camera-access`, iOS 16+) to your App ID / target and explain it in App Review notes. Without it the camera pauses in PiP: the other party sees your video paused, audio continues, and the self-view hides itself.
+
+#### 2. New — remote connection state + default overlay
+
+- `OMIRemoteConnectionState` (`OMICall.remoteConnectionState`), `OMICallRemoteConnectionNotification` (keys: state, duration, call, call UUID string) and delegate `videoCallManager:remoteConnectionDidChange:duration:`.
+- States: `Connected`, `VideoPaused`, `Weak`, `Reconnecting`, `LocalReconnecting`, `NetworkSwitching` (our Wi-Fi ↔ cellular switch interrupts media), `UplinkPoor` (the other party reports heavy loss of our media).
+- The SDK shows a default overlay on the remote video (last frame dimmed + text; a small top banner for the mild states). The text is Vietnamese — set `showsRemoteConnectionOverlay = NO` to draw your own UI from the notification/delegate. The SDK never hangs up on its own.
+- ⚠️ New enum values (5, 6): Swift `switch` statements over `OMIRemoteConnectionState` need a `default`/new cases; React Native / Flutter bridges should map them.
+
+#### 3. Sharper video
+
+- **Outgoing calls used to send a 352x288 picture upscaled** (the preview camera was opened with an incomplete format and the call reused it). The preview now opens the camera at the encoder's format.
+- Good network (MOS > 4): encoder **540x960** (was 480x640), 1.5–2.0 Mbps. iOS has no 960x540 camera preset — OMISIP now picks the nearest larger preset (1280x720) and scales down instead of falling back to the smallest one.
+- Received video is upscaled with linear filtering (was nearest-neighbour → blocky/soft full-screen).
+
+#### 4. Stability fixes
+
+- **UI froze ~2.5 s when starting an outgoing video call:** the camera opened while CallKit was activating the audio session. The camera now opens after the audio session is active; camera start/stop also run off the main thread.
+- **Crash when switching Wi-Fi ↔ 4G during a video call:** removed a renderer "view swap" recovery that always crashed on iOS; video recovery (and re-INVITE) is no longer attempted while media is stalled by the network or the other party.
+- **App frozen ~20 s after a re-INVITE:** the local camera view was recreated with a blocking call on the main thread (deadlock with the camera driver). Now asynchronous; the camera is also never started for a call that already ended.
+- **Call duration / stats stopped after any re-INVITE or hold:** the stats timer was invalidated whenever media was briefly inactive. Fixed — note `call_secs` now keeps counting during hold.
+- Keep the last good frame on screen while video is frozen / returning from background, instead of black or a broken picture; keyframe requests also sent via SIP INFO (`picture_fast_update`).
+- OMISIP (OMI SIP stack): video NACK retransmission retry and PLI throttling, VideoToolbox decoder recovery after background, and upstream fixes for H.264 packetizer memory safety (security advisories), RTP/RTCP and transport races, and a SIP session use-after-free.
+
+#### 5. PBX configuration (recommended)
+
+- Offer **`a=rtcp-mux`** on audio and video in SDP sent to the app. The app uses a single media port per stream (one TURN relay); without rtcp-mux, RTCP (NACK / PLI / receiver reports) cannot reach either side, so lost packets are never recovered and video freezes longer. Outgoing calls already offer rtcp-mux from the SDK.
+- Optional: `b=TIAS` on video to cap the app's send bitrate centrally.
+
+#### 6. Diagnostics
+
+- Logs: `[SDP-MEDIA]` full SDP attributes, `[CODEC-NEGOTIATED]`, `[VIDEO-RATE]` (per-second send/receive rate, loss, RTCP RR, RTT), `[REMOTE-HEALTH]`, `[CONN-OVERLAY]`, `OMISIP CAM-TIMING`, `🪟 [PiP]`.
+
+#### Integration notes
+
+- Run `pod install` (new source files).
+- Public API changes are additive. Behaviour changes: default connection overlay ON, `call_secs` includes hold time, 540x960 outgoing video on good networks.
+
 ## [1.11.29] - 2026-07-24
 
 ### Fix — incoming call rings then ends early / crash, in the OMI forward flow

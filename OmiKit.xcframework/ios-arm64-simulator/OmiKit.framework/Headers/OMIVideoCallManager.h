@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "OMICall.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,6 +33,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Called when there's an error with video
 - (void)videoCallManager:(OMIVideoCallManager *)manager didFailWithError:(NSError *)error;
+
+/// Called (main thread) when the other party's media health changes — e.g. they lost
+/// network (Reconnecting), turned the camera off / went to background (VideoPaused).
+/// @param duration seconds the previous problem state lasted (0 when entering one).
+/// The SDK never hangs up on its own; decide in the app (e.g. after N seconds Reconnecting).
+- (void)videoCallManager:(OMIVideoCallManager *)manager
+    remoteConnectionDidChange:(OMIRemoteConnectionState)state
+                     duration:(NSTimeInterval)duration;
+
+/// Called (main thread) when system Picture-in-Picture starts / stops.
+- (void)videoCallManager:(OMIVideoCallManager *)manager
+    pictureInPictureDidChange:(BOOL)active;
 
 @end
 
@@ -71,6 +84,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Delegate for optional UI callbacks
 @property (nonatomic, weak, nullable) id<OMIVideoCallManagerDelegate> delegate;
+
+/// Built-in overlay on the remote video for connection problems (last frame dimmed +
+/// spinner + short Vietnamese text). Default YES. Set NO to draw your own UI from
+/// videoCallManager:remoteConnectionDidChange:duration: / OMICallRemoteConnectionNotification.
+@property (nonatomic, assign) BOOL showsRemoteConnectionOverlay;
+
+/// System Picture-in-Picture for the remote video (iOS 15+). Default NO.
+/// When YES, the remote video moves into a floating PiP window automatically when
+/// the app goes to the background during a video call, and returns when the app
+/// becomes active. Requires `audio` in UIBackgroundModes. To keep SENDING your
+/// camera while in PiP the app also needs the entitlement
+/// com.apple.developer.avfoundation.multitasking-camera-access (iOS 16+); without
+/// it the other party sees your video paused while audio continues.
+@property (nonatomic, assign) BOOL pictureInPictureEnabled;
+
+/// YES when this device/OS supports system Picture-in-Picture.
+@property (nonatomic, readonly) BOOL isPictureInPictureSupported;
+
+/// YES while the PiP window is showing.
+@property (nonatomic, readonly) BOOL isPictureInPictureActive;
+
+/// Start / stop PiP manually (needs pictureInPictureEnabled and an active video call).
+- (void)startPictureInPicture;
+- (void)stopPictureInPicture;
 
 /// Whether camera is currently on
 @property (nonatomic, readonly) BOOL isCameraOn;

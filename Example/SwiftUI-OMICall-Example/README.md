@@ -1000,6 +1000,18 @@ NotificationCenter.default.addObserver(
 }
 ```
 
+#### Picture-in-Picture (iOS 15+, OmiKit 1.11.30+)
+
+```swift
+let videoManager = OMIVideoCallManager.shared()
+if videoManager.isPictureInPictureSupported {
+    // Remote video moves into the system PiP window when the app goes to background
+    videoManager.pictureInPictureEnabled = true
+}
+```
+
+Requires `audio` in `UIBackgroundModes`. To keep sending the camera while in PiP, also add the **Multitasking Camera Access** capability (iOS 16+). See [Picture-in-Picture](../../README.md#picture-in-picture-ios-15) in the main README for details.
+
 ### 12. Missed Call Notifications
 
 #### Show Local Notification for Missed Calls

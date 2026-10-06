@@ -42,6 +42,45 @@ extern NSString * _Nonnull const OMICallIPChangeNotification;
  */
 extern NSString * _Nonnull const OMICallNetworkQualityNotification;
 
+/**
+ *  Media health of the OTHER party, derived from the RTP packets actually received.
+ *  OMICallNetworkQualityNotification cannot report a dropped peer: its MOS/jitter/loss
+ *  only change while packets keep arriving.
+ */
+typedef NS_ENUM(NSInteger, OMIRemoteConnectionState) {
+    /** Audio (and video, if any) arriving normally. */
+    OMIRemoteConnectionConnected = 0,
+    /** Audio arriving, video stopped (remote camera off / app in background). */
+    OMIRemoteConnectionVideoPaused = 1,
+    /** Remote audio arriving at a clearly reduced rate — unstable connection. */
+    OMIRemoteConnectionWeak = 2,
+    /** No media from the other party while our own network is up — they dropped. */
+    OMIRemoteConnectionReconnecting = 3,
+    /** Our own device has no network. */
+    OMIRemoteConnectionLocalReconnecting = 4,
+    /** Our device just switched network (Wi-Fi ↔ cellular) and media is interrupted. */
+    OMIRemoteConnectionNetworkSwitching = 5,
+    /** The other party reports heavy loss of OUR media, or stopped reporting it —
+     *  they may not see/hear us well, while their media still reaches us fine. */
+    OMIRemoteConnectionUplinkPoor = 6,
+};
+
+/**
+ *  Posted on the main queue when OMIRemoteConnectionState changes (not every second).
+ *  userInfo: OMINotificationRemoteConnectionStateKey (NSNumber OMIRemoteConnectionState),
+ *            OMINotificationRemoteConnectionDurationKey (NSNumber, seconds the previous
+ *            problem state lasted; 0 when entering a problem state),
+ *            OMINotificationRemoteConnectionCallKey (OMICall).
+ *  The SDK never hangs up on its own — use the state/duration to decide in the app.
+ */
+extern NSString * _Nonnull const OMICallRemoteConnectionNotification;
+extern NSString * _Nonnull const OMINotificationRemoteConnectionStateKey;
+extern NSString * _Nonnull const OMINotificationRemoteConnectionDurationKey;
+extern NSString * _Nonnull const OMINotificationRemoteConnectionCallKey;
+/** Call UUID string — use this one when bridging to React Native / Flutter
+ *  (the OMICall object under OMINotificationRemoteConnectionCallKey is not serializable). */
+extern NSString * _Nonnull const OMINotificationRemoteConnectionCallUUIDKey;
+
 
 
 /**
@@ -428,6 +467,12 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
  *  All created calls get an unique ID.
  */
 @property (readonly, nonatomic) NSUUID * _Nonnull uuid;
+
+/**
+ *  Current health of the other party's media (see OMIRemoteConnectionState).
+ *  Read it when a call UI (re)mounts — the notification is only posted on change.
+ */
+@property (readonly, nonatomic) OMIRemoteConnectionState remoteConnectionState;
 
 /**
  *  The OMIAccount the call belongs to.

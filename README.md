@@ -17,6 +17,7 @@ Official iOS SDK for [OMICall](https://omicall.com/) — embed audio/video VoIP 
 | Xcode | 14.0 |
 | Swift | 5.7 / 6.0 |
 | Objective-C | Fully supported |
+| Picture-in-Picture (optional) | iOS 15.0 — iOS 16.0 to keep sending camera while in PiP |
 
 ---
 
@@ -60,7 +61,7 @@ Or add to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/VIHATTeam/OmiKit.git", from: "1.11.14")
+    .package(url: "https://github.com/VIHATTeam/OmiKit.git", from: "1.11.30")
 ]
 ```
 
@@ -413,6 +414,7 @@ PushKitManager *pushkitManager;
 | `OMICallSwitchBoardAnswerNotification` | Switchboard SIP answered |
 | `OMICallNetworkQualityNotification` | Network quality update |
 | `OMICallVideoInfoNotification` | Video stream state change |
+| `OMICallRemoteConnectionNotification` | Other party's media health change (see [Remote connection state](#remote-connection-state)) |
 
 ---
 
@@ -449,6 +451,85 @@ PushKitManager *pushkitManager;
 ```
 
 Full Objective-C video call example: [IOS-Objective-VideoCall-Example](https://github.com/VIHATTeam/IOS-Objective-VideoCall-Example)
+
+### Picture-in-Picture (iOS 15+)
+
+Since **v1.11.30**, `OMIVideoCallManager` can move the remote video into the system Picture-in-Picture window when the app goes to the background during a video call. A small self-view (what the other party receives) is shown in the corner. Tapping the PiP window returns to the call screen; PiP closes automatically when the call ends, even while the app is in the background.
+
+PiP is **off by default**. Enable it once, before or during the video call:
+
+```objc
+OMIVideoCallManager *manager = [OMIVideoCallManager shared];
+[manager setupWithRemoteView:self.remoteContainerView localView:self.localContainerView];
+manager.delegate = self;
+
+if (manager.isPictureInPictureSupported) {
+    manager.pictureInPictureEnabled = YES;   // auto-start when the app goes to background
+}
+
+// Optional — start / stop manually (needs pictureInPictureEnabled and an active video call)
+[manager startPictureInPicture];
+[manager stopPictureInPicture];
+
+// Optional delegate callback (main thread)
+- (void)videoCallManager:(OMIVideoCallManager *)manager pictureInPictureDidChange:(BOOL)active {
+    // e.g. hide in-app controls while PiP is showing
+}
+```
+
+```swift
+let manager = OMIVideoCallManager.shared()
+if manager.isPictureInPictureSupported {
+    manager.pictureInPictureEnabled = true
+}
+```
+
+**App requirements**
+
+| Requirement | Why |
+|---|---|
+| `audio` in `UIBackgroundModes` (Info.plist) | Required for PiP. VoIP apps usually have it already. |
+| **Multitasking Camera Access** capability — entitlement `com.apple.developer.avfoundation.multitasking-camera-access` (iOS 16+) | Keeps **sending** your camera while in PiP. Add it to the App ID / target and explain the use in App Review notes. |
+
+Without the Multitasking Camera Access entitlement PiP still works, but your camera pauses while in PiP: the other party sees your video paused, audio continues, and the self-view hides itself.
+
+### Remote connection state
+
+Since **v1.11.30** the SDK reports the health of the other party's media (based on the RTP packets actually received) and shows a default overlay on the remote video (last frame dimmed + short text). The overlay text is Vietnamese — set `showsRemoteConnectionOverlay = NO` to draw your own UI. The SDK never hangs up on its own; decide in the app (e.g. end the call after N seconds of `Reconnecting`).
+
+| `OMIRemoteConnectionState` | Meaning |
+|---|---|
+| `OMIRemoteConnectionConnected` | Audio (and video) arriving normally |
+| `OMIRemoteConnectionVideoPaused` | Audio arriving, remote video stopped (camera off / app in background) |
+| `OMIRemoteConnectionWeak` | Remote audio arriving at a clearly reduced rate |
+| `OMIRemoteConnectionReconnecting` | No media from the other party while our network is up |
+| `OMIRemoteConnectionLocalReconnecting` | Our device has no network |
+| `OMIRemoteConnectionNetworkSwitching` | Our device switched Wi-Fi ↔ cellular and media is interrupted |
+| `OMIRemoteConnectionUplinkPoor` | The other party reports heavy loss of our media |
+
+```objc
+[OMIVideoCallManager shared].showsRemoteConnectionOverlay = NO;   // optional: custom UI
+
+// Delegate (main thread). duration = seconds the previous problem state lasted (0 when entering one)
+- (void)videoCallManager:(OMIVideoCallManager *)manager
+    remoteConnectionDidChange:(OMIRemoteConnectionState)state
+                     duration:(NSTimeInterval)duration {
+}
+
+// Or notification (posted on change only — read call.remoteConnectionState when the UI (re)mounts)
+[[NSNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(remoteConnectionChanged:)
+                                             name:OMICallRemoteConnectionNotification
+                                           object:nil];
+
+- (void)remoteConnectionChanged:(NSNotification *)notification {
+    NSNumber *state    = notification.userInfo[OMINotificationRemoteConnectionStateKey];
+    NSNumber *duration = notification.userInfo[OMINotificationRemoteConnectionDurationKey];
+    NSString *callUUID = notification.userInfo[OMINotificationRemoteConnectionCallUUIDKey];
+}
+```
+
+> ⚠️ New enum values may be added over time — Swift `switch` statements over `OMIRemoteConnectionState` should include `default` (or `@unknown default`).
 
 ---
 
@@ -494,7 +575,7 @@ A complete SwiftUI example is included under [Example/SwiftUI-OMICall-Example](E
 
 See [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
-**Latest: v1.11.14** — crash fixes for `OMISIP_timer_init_session`, `NSRangeException` in multi-call, and unmute audio restoration bug.
+**Latest: v1.11.30** — video calls: system [Picture-in-Picture](#picture-in-picture-ios-15) (iOS 15+), [remote connection state](#remote-connection-state) + default overlay, sharper video (540x960 on good networks), and stability fixes (UI freeze on outgoing video, crash on Wi-Fi ↔ 4G switch, freeze after re-INVITE).
 
 ---
 
