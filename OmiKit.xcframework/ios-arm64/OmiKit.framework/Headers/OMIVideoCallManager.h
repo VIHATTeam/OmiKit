@@ -90,6 +90,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// videoCallManager:remoteConnectionDidChange:duration: / OMICallRemoteConnectionNotification.
 @property (nonatomic, assign) BOOL showsRemoteConnectionOverlay;
 
+/// Localized text for the remote-connection overlay. Called on the main queue every
+/// time the overlay updates (so a runtime language change needs no re-assignment).
+/// Return nil (or an empty string) to use the built-in Vietnamese text.
+/// Not called for OMIRemoteConnectionConnected (no overlay). Dim / last-frame freeze /
+/// spinner / banner layout stay per state.
+/// Swift: OMIVideoCallManager.shared().remoteConnectionOverlayTextProvider = { state in ... }
+@property (nonatomic, copy, nullable) NSString * _Nullable (^remoteConnectionOverlayTextProvider)(OMIRemoteConnectionState state);
+
 /// System Picture-in-Picture for the remote video (iOS 15+). Default NO.
 /// When YES, the remote video moves into a floating PiP window automatically when
 /// the app goes to the background during a video call, and returns when the app

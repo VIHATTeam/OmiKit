@@ -1,5 +1,16 @@
 # CHANGELOG of OmiKit
 
+## [1.11.31] - 2026-10-06
+
+### New API — localized text for the remote-connection overlay
+
+- `OMIVideoCallManager.remoteConnectionOverlayTextProvider` — a block `(OMIRemoteConnectionState) -> NSString?` that supplies the overlay text per state (multi-language apps, e.g. vi / en / km). It is called on the main queue every time the overlay updates, so a runtime language change needs no re-assignment.
+- Return nil or an empty string to keep the built-in Vietnamese text. Not called for `OMIRemoteConnectionConnected` (no overlay).
+- Only the text changes: dim, last-frame freeze, spinner and the top-banner layout of the mild states (`Weak`, `UplinkPoor`) stay per state. A `\n` in the text is allowed (two lines).
+- Swift: `OMIVideoCallManager.shared().remoteConnectionOverlayTextProvider = { state in … }`.
+- To draw a fully custom UI instead, keep using `showsRemoteConnectionOverlay = NO` with `OMICallRemoteConnectionNotification` / the delegate.
+- Additive only — no behaviour change when the provider is not set.
+
 ## [1.11.30] - 2026-10-06
 
 ### Video calls — Picture-in-Picture, sharper video, connection-state UI, and stability fixes
