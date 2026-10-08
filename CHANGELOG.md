@@ -1,5 +1,14 @@
 # CHANGELOG of OmiKit
 
+## [1.11.32] - 2026-10-06
+
+### Fix — video call answered from the locked screen: no audio + endless "Reconnecting"
+
+- **No audio for the whole call:** right after CallKit activated the audio session, opening the sound device failed for every sample rate (`AUIOClient_StartIO failed`, the camera was starting at the same time) and the SDK never tried again. The sound device is now retried up to 3 times (0.4 s / 0.8 s / 1.5 s), stopping if the call is ending. Log: `[SND-1] Retrying sound device`.
+- **"Reconnecting" + frozen frame over live video:** the remote-connection state treated "no audio received" as "the other party dropped" even while their video kept arriving — so a local audio problem showed `Reconnecting` with the last frame frozen for the rest of the call. Arriving video now counts as connected: `Reconnecting` / `NetworkSwitching` are only reported when audio **and** video have stopped.
+- **Root cause of the missing audio (locked screen / app killed):** the audio session was configured only when the VoIP push arrived; with the app in the background and the device locked iOS refuses the PlayAndRecord category (`'!int'`), so the session stayed in the default category (no recording) and the sound device could never open. The audio session is now (re)configured when the call is answered via CallKit and again when CallKit activates the session, before the sound device opens.
+- No API change.
+
 ## [1.11.31] - 2026-10-06
 
 ### New API — localized text for the remote-connection overlay
