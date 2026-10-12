@@ -90,6 +90,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// videoCallManager:remoteConnectionDidChange:duration: / OMICallRemoteConnectionNotification.
 @property (nonatomic, assign) BOOL showsRemoteConnectionOverlay;
 
+/// Distance (points) from the bottom safe-area edge to the bottom of the small banner shown
+/// for the mild states (Weak, UplinkPoor) — keep it above your call controls. Default 160.
+/// Capped at half of the remote video view's height.
+@property (nonatomic, assign) CGFloat remoteConnectionBannerBottomInset;
+
 /// Localized text for the remote-connection overlay. Called on the main queue every
 /// time the overlay updates (so a runtime language change needs no re-assignment).
 /// Return nil (or an empty string) to use the built-in Vietnamese text.

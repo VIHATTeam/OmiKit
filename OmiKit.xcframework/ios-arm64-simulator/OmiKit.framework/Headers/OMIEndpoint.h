@@ -374,6 +374,12 @@ typedef NS_ENUM(NSInteger, OMIEndpointState) {
 - (void)ensureVideoCodecsConfigured;
 
 /**
+ *  Apply the audio codec configuration now if the startup pass has not run yet.
+ *  Call on an OMISIP-registered thread before creating an SDP offer.
+ */
+- (void)ensureAudioCodecsConfigured;
+
+/**
  *  Check if video subsystem has been initialized.
  *
  *  @return YES if video devices are ready to use.

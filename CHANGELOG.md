@@ -1,5 +1,73 @@
 # CHANGELOG of OmiKit
 
+## [1.11.33] - 2026-10-09
+
+### Fix — no audio on either side when calling right after the SDK (re)started
+
+- **Symptom:** a call placed shortly after the SDK started (for example the first call after the previous one ended) connected, but neither side heard anything. Video worked.
+- **Cause:** the SDK applies its audio codec configuration (Opus preferred) about 200 ms after it starts. A call placed before that sent the default codec list, and the PBX chose PCMU. The codec configuration then removed PCMU, so the follow-up offer sent after the media path was set up (SIP UPDATE) offered only Opus. The PBX rejected the audio stream (`m=audio 0`).
+- **Fix:** the audio codec configuration is now applied before an outgoing INVITE is sent and before an incoming call is answered.
+
+### Change — Opus preferred, with PCMU/PCMA fallback
+
+- Every SDP offer now lists **Opus first, then PCMU, then PCMA**. Previously offers listed Opus only, or PCMU only after a call from a peer without Opus.
+- A peer that supports Opus uses Opus. Otherwise the call uses PCMU, then PCMA. Later re-INVITE/UPDATE offers always include the codec the call is using, so the PBX can no longer reject the audio stream with `m=audio 0`.
+- Before each outgoing call the order is restored, so codec choices made for a previous incoming call no longer carry over. No API change.
+
+### Fix — app freezes after a video call ends
+
+- **Symptom:** when a video call ended (seen after a dropped call, SIP 408), the app froze completely: the call screen stayed on a blank background with a spinner and no taps were handled.
+- **Cause:** `OMIVideoCallManager.cleanup` (called by the app on the main thread when the call ends) waited synchronously while the SDK stopped the camera. Stopping the camera needs the main thread to remove its preview layer, so the two waited for each other. This path became reachable in this release, because the camera indices are now detected correctly (see "switch camera" below).
+- **Fix:** when `cleanup` runs on the main thread, the camera and video windows are stopped in the background without blocking the main thread. No API change.
+
+### Fix — audio quality dropped after a network change
+
+- **Symptom:** after switching between Wi-Fi and 4G, call statistics showed packet loss of 200–880 % and MOS 0 although the network was clean. The SDK then lowered Opus to its lowest setting (12 kbps) for the rest of the call.
+- **Cause:** the re-INVITE that moves the call to the new network restarts the RTP counters, and the peer's first RTCP reports for the new stream carry a meaningless cumulative loss and jitter. The SDK used these values directly.
+- **Fix:** call statistics now take a fresh reference when the stream restarts and ignore impossible jumps in reported loss (more than one second of audio per sample) and in reported jitter. Real packet loss is still measured as before. No API change.
+
+### Fix — call does not recover after switching from Wi-Fi to 4G (or back)
+
+- **Symptom:** during a call, turning Wi-Fi off so the phone moved to 4G: the phone was online again within ~3 s and the SIP account re-registered on the new IP, but no audio or video came back for the rest of the call.
+- **Cause:** the SDK's network-change handling never started, because the lookup of calls for the SIP account ignored the account with id 0. The media path was therefore never moved to the new IP address.
+- **Fix:** when the phone comes back on a different network type (Wi-Fi ↔ cellular) during a call, the SDK now runs the IP-change flow: new SIP transport and contact, then a re-INVITE that rebuilds the media path on the new IP. Reconnecting to the same type of network is unchanged. No API change.
+
+### Fix — remote video stays frozen on the last frame after the network comes back
+
+- **Symptom:** after a network drop, the remote view kept showing the last frame from before the drop, even though video packets were arriving again and the other side (iPhone 13 Pro) was fine.
+- **Cause:** the SDK keeps the last frame on screen while reconnecting and removes it once new packets arrive. On reconnect the call renegotiates media, which restarts the packet counter from zero; the SDK compared the new count with the count from before the drop, so the frozen frame stayed until the counter caught up (about 40 s) or the call ended.
+- **Fix:** when the counter restarts, the SDK takes the new count as the reference. The live video now replaces the frozen frame about 1 s after it is decoded again. No API change.
+
+### Fix — two loading spinners on the remote video while reconnecting
+
+- While the "reconnecting" overlay (with its spinner) was shown, the SDK's video loading spinner could appear at the same time. The SDK now shows only the overlay spinner in that case. No API change.
+
+### Fix — switch camera does nothing on devices not set to English
+
+- **Symptom:** tapping switch camera showed no change; repeated taps did nothing either.
+- **Cause:** the SDK told the front and back cameras apart by the English words "Front"/"Back" in the camera names, but iOS localizes those names (e.g. "Camera mặt trước" / "Camera mặt sau"). On such devices both cameras were treated as the default one, so every switch re-selected the camera already in use.
+- **Fix:** cameras are now classified by their real position (front/back) and type, independent of the device language. No API change.
+
+### Fix — remote video stays blank for the whole call (OMISIP video renderer)
+
+- **Symptom (seen on iPhone 8 Plus):** the call connected, audio worked and video packets arrived, but the remote view never showed a picture.
+- **Cause:** when the remote video changed format, the renderer's stop step waited for the busy main thread while the restart had already run; the stop then finished and switched the renderer off again, so every frame afterwards was rejected.
+- **Fix:** a stop that is overtaken by a newer start now leaves the renderer running. Also, after a restart the renderer again pauses while the app is in the background (the background/foreground observers were lost on the first restart). No API change.
+
+### Fix — local camera view goes blank after the remote video changes format
+
+- **Symptom (seen on iPhone 8 Plus / iOS 16, outgoing video):** a few seconds into the call the local camera view kept only its frame, no picture, for the rest of the call. The camera itself kept sending (the other party and the PiP self-view still saw us).
+- **Cause:** when the remote video changed format, the SDK refreshed the video views and restarted the local preview by first stopping "the other" camera. On devices where the front/back camera indices are not detected, "the other" camera is the same default device, so the stop tore down the native preview of the camera in use; the restart then only reused the existing window and never recreated the preview.
+- **Fix:** never stop the camera that is about to be (re)started. No API change.
+
+### Change — connection banner moved to the bottom
+
+- The small banner for the mild states (`Weak`, `UplinkPoor`) is now shown near the bottom, above the call controls, instead of at the top. New `OMIVideoCallManager.remoteConnectionBannerBottomInset` (points above the bottom safe area, default **160**) lets apps match their control bar height; it is capped at half the remote video view. The centered overlay of the other states is unchanged.
+
+### Fix — false "Kết nối của người kia không ổn định" (weak connection) banner
+
+- The remote-connection detector took its audio-rate baseline from the first sample after the call was answered, which counted all packets since the stream started (e.g. 133/s instead of the real 50/s). Normal audio then looked like < 50% of the baseline and the weak-connection banner stayed up for the rest of the call. The first sample is no longer used for the baseline.
+
 ## [1.11.32] - 2026-10-06
 
 ### Fix — video call answered from the locked screen: no audio + endless "Reconnecting"
