@@ -1,5 +1,19 @@
 # CHANGELOG of OmiKit
 
+## [1.11.34] - 2026-10-13
+
+### Fix — local camera preview rotated 90° after switching to the back camera (iOS 16 and earlier)
+
+- **Symptom (seen on iPhone 8 Plus / iOS 16):** after switching to the back camera, our own camera preview was shown rotated 90°. The other party received correctly oriented video. iOS 17+ was not affected.
+- **Cause:** on iOS before 17 the SDK set the camera orientation only for the video sent to the other party. The on-screen preview has its own setting, which iOS resets to the back camera's default (landscape) when the camera is switched.
+- **Fix (OMISIP video capture):** on iOS before 17 the preview orientation is kept across a camera switch, so the preview looks exactly as before the switch. Nothing else changes. No API change.
+
+### Change — local camera preview is no longer flipped a second time
+
+- **Before:** the camera preview is iOS's own preview, which already mirrors the front camera and not the back camera. `OMILocalVideoView` flipped it horizontally once more, so the front camera was **not** mirrored and the back camera **was** mirrored (text read backwards). Apps had to flip it back.
+- **Now:** `OMILocalVideoView.mirrorHorizontally` defaults to `NO`. The front camera is mirrored like a selfie and the back camera is shown as is, like FaceTime. The video sent to the other party is unchanged.
+- **Action for apps:** if your app flips the local preview itself (for example `scaleX: -1` on the local view), remove that flip. Otherwise the preview will look reversed. Apps that need the old look can set `mirrorHorizontally = YES`.
+
 ## [1.11.33] - 2026-10-09
 
 ### Fix — no audio on either side when calling right after the SDK (re)started

@@ -32,7 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setVideoView:(UIView *)view;
 
 /**
- * Mirror the video horizontally (default: YES for front camera selfie view)
+ * Apply an extra horizontal flip to the local preview (default: NO).
+ * The preview already mirrors the front camera and not the back camera (like FaceTime),
+ * so leave this NO unless you need a different look.
  */
 @property (nonatomic, assign) BOOL mirrorHorizontally;
 
