@@ -3,6 +3,7 @@
 //  Copyright © 2022 OMICALL. All rights reserved.
 //
 
+#import "OmiConsult.h"
 #import <Foundation/Foundation.h>
 #import "OMISIPLib.h"
 #import "Constants.h"
@@ -439,10 +440,43 @@
 
 /**
  Get all active calls info for UI display (multi-call scenarios).
- @return Array of NSDictionary with keys: uuid, state, phone, incoming, isVideo, isOnHold.
+ @return Array of NSDictionary with keys: uuid, state, phone, incoming, isVideo, isOnHold, isConsult.
  Returns empty array if no calls.
  */
 + (NSArray<NSDictionary *> * _Nonnull)getAllActiveCalls;
+
+// ═══════════════════════════════════════════════════════════════════════
+// Consult (attended) transfer — same names and behaviour as the Android SDK 2.9.1.
+// Events: OMIConsultStateChangedNotification, OMITransferStatusNotification,
+// OMICallHoldChangedNotification (see OmiConsult.h). CallKit shows the consult as a second
+// call (the SDK allows it for the consult even when maxCall is 1).
+// ═══════════════════════════════════════════════════════════════════════
+
+/**
+ Hold the customer (CONFIRMED audio call) and call `extension`. The INVITE carries
+ X-Original-Caller and X-Parent-Call-ID (SDK values override `extraHeaders`).
+ @param callback called on the main queue with the start status.
+ */
++ (void)startConsultCall:(NSString * _Nonnull)extension
+            extraHeaders:(NSDictionary<NSString *, NSString *> * _Nullable)extraHeaders
+                callback:(void (^ _Nullable)(OmiConsultStartStatus status))callback
+    NS_SWIFT_NAME(startConsultCall(_:extraHeaders:callback:));
+
+/**
+ Consult answered: hang up the consult, then blind-transfer the customer to the same extension
+ (`extraHeaders` go on the REFER). The customer is taken off hold if the transfer fails or has no
+ result within 30 s. Returns NO when the consult is not answered or the customer already ended.
+ */
++ (BOOL)completeConsultTransfer:(NSDictionary<NSString *, NSString *> * _Nullable)extraHeaders
+    NS_SWIFT_NAME(completeConsultTransfer(_:));
+
+/// End the consult and take the customer off hold. Hanging up the customer is not a cancel.
++ (BOOL)cancelConsult;
++ (BOOL)isConsulting;
+/// The customer hung up while the consult is still running (complete is refused then).
++ (BOOL)isConsultOriginalEnded;
+/// Live calls with hold state and the consult flag, sorted by call id.
++ (NSArray<OmiCallSummary *> * _Nonnull)getActiveCalls;
 
 
 // isPartialPhoneNumber lưu trữ giá trị ẩn hay hiện thị số điện thoại ở callkit

@@ -1,5 +1,40 @@
 # CHANGELOG of OmiKit
 
+## [1.12.0] - 2026-10-15
+
+### New — consult (attended) transfer, same API as the Android SDK 2.9.1
+
+The agent can talk to a colleague before handing a customer over, like on the web app.
+
+- `[OmiClient startConsultCall:extraHeaders:callback:]`: puts the customer (an answered audio call) on hold and calls an extension. The INVITE carries `X-Original-Caller` (the agent's extension) and `X-Parent-Call-ID` (the customer call's transaction id); these SDK values override `extraHeaders`. The callback returns `OmiConsultStartStatus`:
+  - `Success`
+  - `EmptyExtension`, `CanNotCallYourself`, `SameAsCustomer`
+  - `SwitchboardNotConnected`, `MissingAudioPermission`
+  - `NoActiveCall`, `ConsultInProgress`, `VideoCallNotSupported`
+- `[OmiClient completeConsultTransfer:]`: only once the colleague has answered. Hangs up the consult call, then transfers the customer to the same extension (`extraHeaders` go on the REFER). If the transfer is rejected, cannot be sent, or has no result within 30 s, the customer is taken off hold and the call continues.
+- `[OmiClient cancelConsult]`: ends the consult call and takes the customer off hold. The same happens automatically when the colleague rejects or does not answer.
+- `isConsulting`, `isConsultOriginalEnded`, `getActiveCalls` (live calls with hold state and an `isConsult` flag). `getAllActiveCalls` dictionaries gain an `isConsult` key.
+- Events, posted on the main queue (keys in `OmiConsult.h`), each with the call id and UUID:
+  - `OMIConsultStateChangedNotification`: dialing, ringing, answered, ended, plus the SIP code.
+  - `OMITransferStatusNotification`: REFER progress.
+  - `OMICallHoldChangedNotification`: hold state of any call.
+- Rules:
+  - The consult call does not post `OMICallStateChangedNotification` and is never returned as the current call, so it does not replace the customer's call screen, record or video.
+  - Hanging up during a consult ends the **customer** call, as on the web. Once only the consult is left, hanging up cancels it.
+  - If the customer hangs up during a consult, the consult call continues, `isConsultOriginalEnded` becomes YES, and completing is refused.
+  - While consulting, manual hold is ignored, and mute and DTMF go to the consult call once it is answered.
+- **CallKit:** the consult call is shown as a second call. When the app configured `maxCall: 1`, the SDK raises CallKit's limit to 2 for the consult only and restores it afterwards; no app change is needed.
+  - Before the consult call starts, the customer call is marked as holdable in CallKit and held there by the SDK. Otherwise iOS ends a call that cannot be held as soon as the second call is answered. If CallKit refuses that hold, the consult is not placed and the customer is taken off hold. After the consult the customer is resumed in CallKit too. Ordinary calls are unchanged.
+  - Known: the consult call appears in the iPhone Recents list as a call to the extension. On Android it does not appear in the call log.
+
+### Fix — CallKit hold request for a call already in that state no longer toggles it
+
+- A CallKit "hold" or "resume" for a call that was already held or resumed used to flip its state, for example putting a call back on hold. It is now accepted without change.
+
+### Fix — call end no longer unregisters the account while another call is still live
+
+- When one of two calls ended (call waiting, or a consult), the SDK reset the codec settings and unregistered the SIP account even though the other call was still connected. Both are now skipped until the last call ends.
+
 ## [1.11.34] - 2026-10-13
 
 ### Fix — local camera preview rotated 90° after switching to the back camera (iOS 16 and earlier)

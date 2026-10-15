@@ -563,6 +563,12 @@ typedef NS_ENUM(NSInteger, OMICallTerminateReason) {
 @property (readonly, nonatomic) BOOL onHold;
 
 /**
+ *  YES for the consult leg created by `[OmiClient startConsultCall:...]`. Such a call never posts
+ *  OMICallStateChangedNotification and is never returned as the current call.
+ */
+@property (readonly, nonatomic) BOOL isConsult;
+
+/**
  *  The statie in which the transfer of the call currently is.
  */
 @property (readonly, nonatomic) OMICallTransferState transferStatus;

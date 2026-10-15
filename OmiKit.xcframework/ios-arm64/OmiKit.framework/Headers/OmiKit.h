@@ -52,4 +52,7 @@ FOUNDATION_EXPORT const unsigned char OmiKitVersionString[];
 #import "OMIPictureInPictureManager.h"
 #import "OMIUtils.h"
 #import "LogFileManager.h"
+#import "OmiConsult.h"
+#import "OMIConsultController.h"
+#import "OMIConsultHeaders.h"
 
